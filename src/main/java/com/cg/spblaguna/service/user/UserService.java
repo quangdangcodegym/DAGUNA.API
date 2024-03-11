@@ -33,4 +33,5 @@ public class UserService implements IUserServiceImpl {
     public void deleteById(Long id) {
         iUserRepository.deleteById(id);
     }
+
 }

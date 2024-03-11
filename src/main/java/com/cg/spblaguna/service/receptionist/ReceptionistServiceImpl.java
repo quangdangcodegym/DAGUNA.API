@@ -8,6 +8,8 @@ import com.cg.spblaguna.model.dto.res.RoomResDTO;
 import com.cg.spblaguna.model.enumeration.ELockStatus;
 import com.cg.spblaguna.model.enumeration.ERole;
 import com.cg.spblaguna.repository.IReceptionistRepository;
+import com.cg.spblaguna.service.user.IUserServiceImpl;
+import com.cg.spblaguna.service.user.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -26,6 +29,8 @@ public class ReceptionistServiceImpl implements IReceptionistService{
 
     @Autowired
     private IReceptionistRepository receptionistRepository;
+    @Autowired
+    private IUserServiceImpl userService;
 
 
     @Override
@@ -36,6 +41,11 @@ public class ReceptionistServiceImpl implements IReceptionistService{
     @Override
     public Page<User> findUsersByRole(ERole eRole, Pageable pageable) {
         return receptionistRepository.findUsersByERole(eRole, pageable);
+    }
+
+    @Override
+    public ResponseEntity<?> create(ReceptionistReqDTO receptionistReqDTO) {
+        return null;
     }
 
     @Override
@@ -56,24 +66,18 @@ public class ReceptionistServiceImpl implements IReceptionistService{
         receptionistRepository.save(user);
     }
 
-    @Override
-    public ResponseEntity<?> create(ReceptionistReqDTO receptionistReqDTO) {
 
-//        String password = RandomCode.generateRandomCode(6);
-        // Tạo tiêu đề và nội dung email
-//        String title = "Chúc mừng! Tài khoản đã được tạo thành công";
-//        String body = SendEmail.EmailRegisterDoctor(receptionistReqDTO.getReceptionistName(), password, receptionistReqDTO.getEmail());
-        User user = new User();
-        user.setEmail(receptionistReqDTO.getEmail());
-        user.setDob(receptionistReqDTO.getDob());
-        user.setReceptionistName(receptionistReqDTO.getReceptionistName());
-        user.setCreateAt(LocalDate.now());
-        user.setPhone(receptionistReqDTO.getPhone());
-        user.setReceptionistInfo(receptionistReqDTO.getReceptionistInfo());
-        user.setAddress(receptionistReqDTO.getAddress());
-        user.setERole(ERole.RECEPTIONIST);
-        user.setUnlock(true);
-        User savedUser = receptionistRepository.save(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
+    public ResponseEntity<?> updateReceptionists(@PathVariable Long id, ReceptionistReqDTO receptionistReqDTO) {
+        User user = userService.findById(id).get();
+        user.setReceptionistInfo(receptionistReqDTO.getReceptionistInfo())
+                .setReceptionistName(receptionistReqDTO.getReceptionistName())
+                .setDob(receptionistReqDTO.getDob())
+                .setAddress(receptionistReqDTO.getAddress())
+                .setPhone(receptionistReqDTO.getPhone())
+                .setEmail(receptionistReqDTO.getEmail())
+                .setCreateAt(LocalDate.now())
+                .setUserImages(receptionistReqDTO.getAvatarImgId());
+        userService.save(user);
+        return new ResponseEntity<>( HttpStatus.OK);
     }
 }

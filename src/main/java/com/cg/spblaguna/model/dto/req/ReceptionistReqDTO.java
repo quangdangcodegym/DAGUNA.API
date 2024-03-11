@@ -1,5 +1,6 @@
 package com.cg.spblaguna.model.dto.req;
 
+import com.cg.spblaguna.model.Image;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,6 +10,8 @@ import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -26,7 +29,7 @@ public class ReceptionistReqDTO {
     @NotBlank(message = "địa chỉ không được để trống")
     private String address;
     private LocalDate createAt;
-    private String avatarImgId;
+    private List<Image> avatarImgId;
     @NotBlank(message = "Hãy thêm tiểu sử của lễ tân")
     private String receptionistInfo;
 
