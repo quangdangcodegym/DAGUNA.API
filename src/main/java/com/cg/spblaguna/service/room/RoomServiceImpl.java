@@ -30,7 +30,7 @@ public class RoomServiceImpl implements IRoomService {
     private IRoomRepository roomRepository;
 
     @Autowired
-    private IKindOfRoomRespository kindOfRoomRespository;
+    private IKindOfRoomRepository kindOfRoomRepository;
 
     @Autowired
     private IPerTypeRepository perTypeRepository;
@@ -47,7 +47,7 @@ public class RoomServiceImpl implements IRoomService {
     }
 
     public RoomResDTO save(RoomReqDTO roomReqDTO) throws RuntimeException {
-        KindOfRoom kindOfRoom = kindOfRoomRespository.findById(roomReqDTO.getKindOfRoomId())
+        KindOfRoom kindOfRoom = kindOfRoomRepository.findById(roomReqDTO.getKindOfRoomId())
                 .orElseThrow((Supplier<RuntimeException>) () -> new ResourceNotFoundException("KindOfRoom not found"));
 
 
@@ -79,7 +79,7 @@ public class RoomServiceImpl implements IRoomService {
     }
 
     public RoomResDTO update(RoomReqDTO roomReqDTO){
-        KindOfRoom kindOfRoom = kindOfRoomRespository.findById(roomReqDTO.getKindOfRoomId()).get();
+        KindOfRoom kindOfRoom = kindOfRoomRepository.findById(roomReqDTO.getKindOfRoomId()).get();
         PerType perType = perTypeRepository.findById(roomReqDTO.getPerTypId()).get();
         Room room = roomRepository.findById(roomReqDTO.getId()).orElseThrow();
         room.setName(roomReqDTO.getName());
