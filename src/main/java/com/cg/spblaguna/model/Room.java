@@ -41,8 +41,8 @@ public class Room {
     private EViewType viewType;
 
     @ManyToOne
-    @JoinColumn(name = "king_of_room_id", nullable = false)
-    private KindOfRoom kingOfRoom;
+    @JoinColumn(name = "kind_of_room_id", nullable = false)
+    private KindOfRoom kindOfRoom;
 
     @Column(name = "price_perNight")
     private BigDecimal pricePerNight;
@@ -86,7 +86,7 @@ public class Room {
         this.sleep = sleep;
         this.description = description;
         this.utilitie = utilitie;
-        this.kingOfRoom = kindOfRoom;
+        this.kindOfRoom = kindOfRoom;
         this.rate = rate;
         this.perType = perType;
     }
@@ -101,7 +101,7 @@ public class Room {
         this.sleep = sleep;
         this.description = description;
         this.utilitie = utilitie;
-        this.kingOfRoom = kindOfRoom;
+        this.kindOfRoom = kindOfRoom;
         this.perType = perType;
     }
 
@@ -115,8 +115,8 @@ public class Room {
         roomResDTO.setRoomType(roomType);
         roomResDTO.setStatusRoom(statusRoom);
         roomResDTO.setViewType(viewType);
-        roomResDTO.setKindOfRoom(kingOfRoom);
-        roomResDTO.setPerType(perType);
+        roomResDTO.setKindOfRoom(kindOfRoom.toKindOfRoomResDTO());
+        roomResDTO.setPerType(perType.toPerTypeResDTO());
         roomResDTO.setPricePerNight(pricePerNight);
         roomResDTO.setAcreage(acreage);
         roomResDTO.setSleep(sleep);

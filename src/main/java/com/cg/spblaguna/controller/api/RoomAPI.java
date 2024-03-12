@@ -2,10 +2,15 @@ package com.cg.spblaguna.controller.api;
 
 import com.cg.spblaguna.model.Room;
 import com.cg.spblaguna.model.dto.req.RoomReqDTO;
+import com.cg.spblaguna.model.dto.req.SearchBarRoomReqDTO;
+import com.cg.spblaguna.model.dto.res.RoomResDTO;
 import com.cg.spblaguna.model.enumeration.EStatusRoom;
+import com.cg.spblaguna.service.room.IRoomService;
 import com.cg.spblaguna.service.room.RoomServiceImpl;
 import com.cg.spblaguna.util.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -21,7 +26,7 @@ import java.util.Map;
 @CrossOrigin(origins = "*")
 public class RoomAPI {
     @Autowired
-    private RoomServiceImpl roomService;
+    private IRoomService roomService;
 
     @Autowired
     private AppUtils appUtils;
@@ -32,6 +37,13 @@ public class RoomAPI {
     @GetMapping("")
     public ResponseEntity<?> showRooms() {
         return new ResponseEntity<>(roomService.getRooms(), HttpStatus.OK);
+    }
+
+
+    @PostMapping("/search")
+    public ResponseEntity<?> searchBarRooms(@RequestBody SearchBarRoomReqDTO searchBarRoomReqDTO, BindingResult bindingResult, Pageable pageable) {
+        Page<RoomResDTO> roomResDTOPage = roomService.searchBarRoomReqDTO(searchBarRoomReqDTO, pageable);
+        return new ResponseEntity<>(roomResDTOPage, HttpStatus.OK);
     }
 
     /**
@@ -63,6 +75,8 @@ public class RoomAPI {
         }
         return new ResponseEntity<>(roomService.save(roomReqDTO), HttpStatus.OK);
     }
+
+
 
 
 

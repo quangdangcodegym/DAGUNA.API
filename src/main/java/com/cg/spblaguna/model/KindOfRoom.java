@@ -1,5 +1,6 @@
 package com.cg.spblaguna.model;
 
+import com.cg.spblaguna.model.dto.res.KindOfRoomResDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,4 +18,8 @@ public class KindOfRoom {
 
     @Column(nullable = false)
     private String name;
+
+    public KindOfRoomResDTO toKindOfRoomResDTO(){
+        return new KindOfRoomResDTO(this.id, this.name);
+    }
 }
