@@ -27,7 +27,7 @@ public class RoomServiceImpl {
     private IRoomRepository roomRepository;
 
     @Autowired
-    private IKindOfRoomRespository kindOfRoomRespository;
+    private IKindOfRoomRepository kindOfRoomRepository;
 
     @Autowired
     private IPerTypeRepository perTypeRepository;
@@ -43,6 +43,11 @@ public class RoomServiceImpl {
         return rooms.stream().map(Room::toRoomResDto).collect(Collectors.toList());
     }
 
+<<<<<<< HEAD
+    public RoomResDTO save(RoomReqDTO roomReqDTO) {
+        KindOfRoom kindOfRoom = kindOfRoomRepository.findById(roomReqDTO.getKindOfRoomId()).get();
+        PerType perType = perTypeRepository.findById(roomReqDTO.getPerTypId()).get();
+=======
     public RoomResDTO save(RoomReqDTO roomReqDTO) throws RuntimeException {
         KindOfRoom kindOfRoom = kindOfRoomRespository.findById(roomReqDTO.getKindOfRoomId())
                 .orElseThrow((Supplier<RuntimeException>) () -> new ResourceNotFoundException("KindOfRoom not found"));
@@ -50,6 +55,7 @@ public class RoomServiceImpl {
 
         PerType perType = perTypeRepository.findById(roomReqDTO.getPerTypId())
                 .orElseThrow((Supplier<RuntimeException>) () -> new ResourceNotFoundException("PerType not found"));
+>>>>>>> 3b7196b86b8a942602f794cbd7dbdd4b721a1384
 
         Room room = new Room(roomReqDTO.getName(),roomReqDTO.getRoomType()
                 ,roomReqDTO.getStatusRoom(),
@@ -76,7 +82,7 @@ public class RoomServiceImpl {
     }
 
     public RoomResDTO update(RoomReqDTO roomReqDTO){
-        KindOfRoom kindOfRoom = kindOfRoomRespository.findById(roomReqDTO.getKindOfRoomId()).get();
+        KindOfRoom kindOfRoom = kindOfRoomRepository.findById(roomReqDTO.getKindOfRoomId()).get();
         PerType perType = perTypeRepository.findById(roomReqDTO.getPerTypId()).get();
         Room room = roomRepository.findById(roomReqDTO.getId()).orElseThrow();
         room.setName(roomReqDTO.getName());
