@@ -6,10 +6,13 @@ import com.cg.spblaguna.model.KindOfRoom;
 import com.cg.spblaguna.model.PerType;
 import com.cg.spblaguna.model.Room;
 import com.cg.spblaguna.model.dto.req.RoomReqDTO;
+import com.cg.spblaguna.model.dto.req.SearchBarRoomReqDTO;
 import com.cg.spblaguna.model.dto.res.RoomResDTO;
 import com.cg.spblaguna.model.enumeration.EImageType;
 import com.cg.spblaguna.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +25,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class RoomServiceImpl {
+public class RoomServiceImpl implements IRoomService {
     @Autowired
     private IRoomRepository roomRepository;
 
@@ -43,19 +46,13 @@ public class RoomServiceImpl {
         return rooms.stream().map(Room::toRoomResDto).collect(Collectors.toList());
     }
 
-<<<<<<< HEAD
-    public RoomResDTO save(RoomReqDTO roomReqDTO) {
-        KindOfRoom kindOfRoom = kindOfRoomRepository.findById(roomReqDTO.getKindOfRoomId()).get();
-        PerType perType = perTypeRepository.findById(roomReqDTO.getPerTypId()).get();
-=======
     public RoomResDTO save(RoomReqDTO roomReqDTO) throws RuntimeException {
-        KindOfRoom kindOfRoom = kindOfRoomRespository.findById(roomReqDTO.getKindOfRoomId())
+        KindOfRoom kindOfRoom = kindOfRoomRepository.findById(roomReqDTO.getKindOfRoomId())
                 .orElseThrow((Supplier<RuntimeException>) () -> new ResourceNotFoundException("KindOfRoom not found"));
 
 
         PerType perType = perTypeRepository.findById(roomReqDTO.getPerTypId())
                 .orElseThrow((Supplier<RuntimeException>) () -> new ResourceNotFoundException("PerType not found"));
->>>>>>> 3b7196b86b8a942602f794cbd7dbdd4b721a1384
 
         Room room = new Room(roomReqDTO.getName(),roomReqDTO.getRoomType()
                 ,roomReqDTO.getStatusRoom(),
@@ -93,7 +90,7 @@ public class RoomServiceImpl {
         room.setAcreage(roomReqDTO.getAcreage());
         room.setDescription(roomReqDTO.getDescription());
         room.setUtilitie(roomReqDTO.getUtilitie());
-        room.setKingOfRoom(kindOfRoom);
+        room.setKindOfRoom(kindOfRoom);
         room.setPerType(perType);
 
         Room roomUpdated = roomRepository.save(room);
@@ -126,11 +123,51 @@ public class RoomServiceImpl {
         return roomRepository.findById(id);
     }
 
+    @Override
+    public void save(Room room) {
+
+    }
+
+    @Override
+    public void deleteById(Long id) {
+
+    }
+
     public List<Room> findAll() {
         return roomRepository.findAll();
     }
 
     public void change(Room room) {
         roomRepository.save(room);
+    }
+
+    public Page<RoomResDTO> searchBarRoomReqDTO(SearchBarRoomReqDTO searchBarRoomReqDTO, Pageable pageable) {
+        int actualChildren = (int) Math.ceil((searchBarRoomReqDTO.getGuest().getNumberChildren()+1) / 2);
+        Page<RoomResDTO> rooms = roomRepository.searchBarRoomReqDTO(searchBarRoomReqDTO.getGuest().getNumberAdult() + actualChildren,
+                searchBarRoomReqDTO.getRoomType(), searchBarRoomReqDTO.getPerType(),
+                searchBarRoomReqDTO.getViewType(),
+                searchBarRoomReqDTO.getPriceMin(), searchBarRoomReqDTO.getPriceMax(),
+                pageable);
+
+        List<RoomResDTO> rooms1 = roomRepository.searchBarRoomReqDTO(searchBarRoomReqDTO.getGuest().getNumberAdult() + actualChildren,
+                searchBarRoomReqDTO.getRoomType(), searchBarRoomReqDTO.getPerType(),
+                searchBarRoomReqDTO.getViewType(),
+                searchBarRoomReqDTO.getPriceMin(), searchBarRoomReqDTO.getPriceMax());
+        return rooms;
+    }
+
+    @Override
+    public List<Room> findAllByUser_Unlock(boolean user_unlock) {
+        return null;
+    }
+
+    @Override
+    public Room findByUser_Id(Long id) {
+        return null;
+    }
+
+    @Override
+    public void update(Room room) {
+
     }
 }
