@@ -24,7 +24,7 @@ public class RoomServiceImpl {
     private IRoomRepository roomRepository;
 
     @Autowired
-    private IKindOfRoomRespository kindOfRoomRespository;
+    private IKindOfRoomRepository kindOfRoomRepository;
 
     @Autowired
     private IPerTypeRepository perTypeRepository;
@@ -41,7 +41,7 @@ public class RoomServiceImpl {
     }
 
     public RoomResDTO save(RoomReqDTO roomReqDTO) {
-        KindOfRoom kindOfRoom = kindOfRoomRespository.findById(roomReqDTO.getKindOfRoomId()).get();
+        KindOfRoom kindOfRoom = kindOfRoomRepository.findById(roomReqDTO.getKindOfRoomId()).get();
         PerType perType = perTypeRepository.findById(roomReqDTO.getPerTypId()).get();
 
         Room room = new Room(roomReqDTO.getName(),roomReqDTO.getRoomType()
@@ -69,7 +69,7 @@ public class RoomServiceImpl {
     }
 
     public RoomResDTO update(RoomReqDTO roomReqDTO){
-        KindOfRoom kindOfRoom = kindOfRoomRespository.findById(roomReqDTO.getKindOfRoomId()).get();
+        KindOfRoom kindOfRoom = kindOfRoomRepository.findById(roomReqDTO.getKindOfRoomId()).get();
         PerType perType = perTypeRepository.findById(roomReqDTO.getPerTypId()).get();
         Room room = roomRepository.findById(roomReqDTO.getId()).orElseThrow();
         room.setName(roomReqDTO.getName());
