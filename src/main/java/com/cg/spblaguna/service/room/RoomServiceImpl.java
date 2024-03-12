@@ -1,5 +1,6 @@
 package com.cg.spblaguna.service.room;
 
+import com.cg.spblaguna.exception.ResourceNotFoundException;
 import com.cg.spblaguna.model.Image;
 import com.cg.spblaguna.model.KindOfRoom;
 import com.cg.spblaguna.model.PerType;
@@ -14,7 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,9 +43,19 @@ public class RoomServiceImpl {
         return rooms.stream().map(Room::toRoomResDto).collect(Collectors.toList());
     }
 
+<<<<<<< HEAD
     public RoomResDTO save(RoomReqDTO roomReqDTO) {
         KindOfRoom kindOfRoom = kindOfRoomRepository.findById(roomReqDTO.getKindOfRoomId()).get();
         PerType perType = perTypeRepository.findById(roomReqDTO.getPerTypId()).get();
+=======
+    public RoomResDTO save(RoomReqDTO roomReqDTO) throws RuntimeException {
+        KindOfRoom kindOfRoom = kindOfRoomRespository.findById(roomReqDTO.getKindOfRoomId())
+                .orElseThrow((Supplier<RuntimeException>) () -> new ResourceNotFoundException("KindOfRoom not found"));
+
+
+        PerType perType = perTypeRepository.findById(roomReqDTO.getPerTypId())
+                .orElseThrow((Supplier<RuntimeException>) () -> new ResourceNotFoundException("PerType not found"));
+>>>>>>> 3b7196b86b8a942602f794cbd7dbdd4b721a1384
 
         Room room = new Room(roomReqDTO.getName(),roomReqDTO.getRoomType()
                 ,roomReqDTO.getStatusRoom(),

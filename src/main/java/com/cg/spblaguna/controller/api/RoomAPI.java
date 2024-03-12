@@ -4,6 +4,7 @@ import com.cg.spblaguna.model.Room;
 import com.cg.spblaguna.model.dto.req.RoomReqDTO;
 import com.cg.spblaguna.model.enumeration.EStatusRoom;
 import com.cg.spblaguna.service.room.RoomServiceImpl;
+import com.cg.spblaguna.util.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,9 @@ import java.util.Map;
 public class RoomAPI {
     @Autowired
     private RoomServiceImpl roomService;
+
+    @Autowired
+    private AppUtils appUtils;
 
 //    @Autowired
 //    private UserService userService;
@@ -55,18 +59,12 @@ public class RoomAPI {
 //    @PreAuthorize("hasAnyRole('MODIFIER')")
     public ResponseEntity<?> saveRoom(@Validated @RequestBody RoomReqDTO roomReqDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(getValidationErrorJson(bindingResult));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(appUtils.getValidationErrorJson(bindingResult));
         }
         return new ResponseEntity<>(roomService.save(roomReqDTO), HttpStatus.OK);
     }
 
-    private Map<String, String> getValidationErrorJson(BindingResult bindingResult) {
-        Map<String, String> errors = new HashMap<>();
-        for (FieldError error : bindingResult.getFieldErrors()) {
-            errors.put(error.getField(), error.getDefaultMessage());
-        }
-        return errors;
-    }
+
 
     @PutMapping("/{id}")
 //    @PreAuthorize("hasAnyRole('MODIFIER')")
