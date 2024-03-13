@@ -26,4 +26,13 @@ public enum ERoomType {
     public void setName(String name) {
         this.name = name;
     }
+
+    public static ERoomType parseERoomType(String str) {
+        for(ERoomType item: values()){
+            if (item.toString().equals(str)) {
+                return item;
+            }
+        }
+        return null;
+    }
 }

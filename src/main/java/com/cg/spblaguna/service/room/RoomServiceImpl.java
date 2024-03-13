@@ -9,6 +9,8 @@ import com.cg.spblaguna.model.dto.req.RoomReqDTO;
 import com.cg.spblaguna.model.dto.req.SearchBarRoomReqDTO;
 import com.cg.spblaguna.model.dto.res.RoomResDTO;
 import com.cg.spblaguna.model.enumeration.EImageType;
+import com.cg.spblaguna.model.enumeration.ERoomType;
+import com.cg.spblaguna.model.enumeration.EStatusRoom;
 import com.cg.spblaguna.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,6 +30,8 @@ import java.util.stream.Collectors;
 public class RoomServiceImpl implements IRoomService {
     @Autowired
     private IRoomRepository roomRepository;
+    @Autowired
+    private IRoomPagingAndSortingRepository roomPagingAndSortingRepository;
 
     @Autowired
     private IKindOfRoomRepository kindOfRoomRepository;
@@ -139,6 +143,11 @@ public class RoomServiceImpl implements IRoomService {
 
     public void change(Room room) {
         roomRepository.save(room);
+    }
+
+    @Override
+    public Page<RoomResDTO> filterRooms(String kw, ERoomType roomType, EStatusRoom statusRoom, Pageable pageable) {
+        return roomPagingAndSortingRepository.filterRooms(kw, roomType, statusRoom, pageable);
     }
 
     public Page<RoomResDTO> searchBarRoomReqDTO(SearchBarRoomReqDTO searchBarRoomReqDTO, Pageable pageable) {

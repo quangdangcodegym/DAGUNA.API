@@ -1,16 +1,20 @@
 package com.cg.spblaguna.controller.api;
 
+import com.cg.spblaguna.exception.ResourceNotFoundException;
 import com.cg.spblaguna.model.Room;
 import com.cg.spblaguna.model.dto.req.RoomReqDTO;
 import com.cg.spblaguna.model.dto.req.SearchBarRoomReqDTO;
 import com.cg.spblaguna.model.dto.res.RoomResDTO;
+import com.cg.spblaguna.model.enumeration.ERoomType;
 import com.cg.spblaguna.model.enumeration.EStatusRoom;
 import com.cg.spblaguna.service.room.IRoomService;
 import com.cg.spblaguna.service.room.RoomServiceImpl;
 import com.cg.spblaguna.util.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -18,8 +22,11 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import org.springframework.data.domain.Sort.Order;
 
 @RestController
 @RequestMapping("/api/rooms")
@@ -40,6 +47,57 @@ public class RoomAPI {
     }
 
 
+    @GetMapping("/filters")
+    public ResponseEntity<?> filterRooms(
+            @RequestParam(required = false) String kw,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "3") int size,
+            @RequestParam(defaultValue = "READY") String statusRoom,
+            @RequestParam(defaultValue = "SUPERIOR") String roomType,
+            @RequestParam(defaultValue = "id,desc") String[] sort){
+
+        try{
+            List<Order> orders = new ArrayList<Order>();
+            if (sort[0].contains(",")) {
+                // will sort more than 2 fields sortOrder="field, direction"
+                for (String sortOrder : sort) {
+                    String[] _sort = sortOrder.split(",");
+                    orders.add(new Order(getSortDirection(_sort[1]), _sort[0]));
+                }
+            } else {
+                // sort=[field, direction]
+                orders.add(new Order(getSortDirection(sort[1]), sort[0]));
+            }
+            Pageable pagingSort = PageRequest.of(page, size, Sort.by(orders));
+
+            ERoomType eRoomType = ERoomType.parseERoomType(roomType);
+            EStatusRoom eStatusRoom = EStatusRoom.parseEStatusRoom(statusRoom);
+            if (roomType == null || statusRoom == null) {
+                throw new ResourceNotFoundException("Param not valid");
+            }
+
+            Page<RoomResDTO> roomResDTOS = roomService.filterRooms(kw, eRoomType, eStatusRoom, pagingSort );
+
+
+            if (roomResDTOS.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }else {
+                return new ResponseEntity<>(roomResDTOS, HttpStatus.OK);
+            }
+        }catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+    private Sort.Direction getSortDirection(String direction) {
+        if (direction.equalsIgnoreCase("asc")) {
+            return Sort.Direction.ASC;
+        } else if (direction.equalsIgnoreCase("desc")) {
+            return Sort.Direction.DESC;
+        }
+
+        throw new IllegalArgumentException("Invalid sort direction: " + direction);
+    }
     @PostMapping("/search")
     public ResponseEntity<?> searchBarRooms(@RequestBody SearchBarRoomReqDTO searchBarRoomReqDTO, BindingResult bindingResult, Pageable pageable) {
         Page<RoomResDTO> roomResDTOPage = roomService.searchBarRoomReqDTO(searchBarRoomReqDTO, pageable);

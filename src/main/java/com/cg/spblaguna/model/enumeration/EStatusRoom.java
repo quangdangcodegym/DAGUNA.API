@@ -24,4 +24,13 @@ public enum EStatusRoom {
     public void setName(String name) {
         this.name = name;
     }
+
+    public static EStatusRoom parseEStatusRoom(String str) {
+        for(EStatusRoom item: values()){
+            if (item.toString().equals(str)) {
+                return item;
+            }
+        }
+        return null;
+    }
 }
