@@ -73,6 +73,16 @@ public class BookingServiceImpl implements IBookingService {
     }
 
     @Override
+    public List<BookingResDTO> findAllBookingResDTO() {
+        return bookingRepository.findAllBookingResDTO();
+    }
+
+    @Override
+    public BookingResDTO findBookingResDTOById(Long id) {
+        return bookingRepository.findBookingResDTOById(id);
+    }
+
+    @Override
     public List<Booking> findAllByCustomerId(Long customerId) {
         return null;
     }
