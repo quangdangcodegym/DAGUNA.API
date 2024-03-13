@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -50,5 +51,9 @@ public class Booking {
 
 
     private Boolean reminderSent = false ;
+
+
+    @OneToMany(mappedBy = "booking")
+    private List<BookingDetail> bookingDetails;
 
 }

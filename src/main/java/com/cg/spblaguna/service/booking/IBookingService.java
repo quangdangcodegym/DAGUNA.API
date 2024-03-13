@@ -6,10 +6,14 @@ import com.cg.spblaguna.model.dto.req.BookingReqUpdate_BookingServiceCreUpdateDT
 import com.cg.spblaguna.model.dto.req.BookingReqUpdate_RoomAddDTO;
 import com.cg.spblaguna.model.dto.res.BookingResDTO;
 import com.cg.spblaguna.service.IGeneralService;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
 public interface IBookingService extends IGeneralService<Booking,Long> {
+    List<BookingResDTO> findAllBookingResDTO();
+    BookingResDTO findBookingResDTOById(Long id);
+
     List<Booking> findAllByCustomerId(Long customerId);
     List<Booking>findByRoomIdAndBookingDate(Long roomId, String bookingDate);
 
