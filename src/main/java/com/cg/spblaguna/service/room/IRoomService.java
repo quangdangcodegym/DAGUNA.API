@@ -4,9 +4,12 @@ import com.cg.spblaguna.model.Room;
 import com.cg.spblaguna.model.dto.req.RoomReqDTO;
 import com.cg.spblaguna.model.dto.req.SearchBarRoomReqDTO;
 import com.cg.spblaguna.model.dto.res.RoomResDTO;
+import com.cg.spblaguna.model.enumeration.ERoomType;
+import com.cg.spblaguna.model.enumeration.EStatusRoom;
 import com.cg.spblaguna.service.IGeneralService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -21,4 +24,7 @@ public interface IRoomService extends IGeneralService<Room,Long> {
     void delete(Long id);
     Page<RoomResDTO> searchBarRoomReqDTO(SearchBarRoomReqDTO searchBarRoomReqDTO, Pageable pageable);
     void change(Room room);
+
+    Page<RoomResDTO> filterRooms(String kw, ERoomType roomType, EStatusRoom statusRoom,
+            Pageable pageable);
 }
