@@ -21,8 +21,17 @@ public class BookingAPI {
     private IBookingService bookingService;
     @GetMapping
     public ResponseEntity<?> getAllBooking() {
-        List<Booking> bookingList = bookingService.findAll();
+        List<BookingResDTO> bookingList = bookingService.findAllBookingResDTO();
         return new ResponseEntity<>(bookingList, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getBookingById(@PathVariable Long id) {
+        BookingResDTO bookingResDTO = bookingService.findBookingResDTOById(id);
+        if (bookingResDTO == null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(bookingResDTO, HttpStatus.OK);
     }
 
     @PostMapping
