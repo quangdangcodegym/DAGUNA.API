@@ -1,5 +1,6 @@
 package com.cg.spblaguna.model;
 
+import com.cg.spblaguna.model.dto.res.BookingServiceResDTO;
 import com.cg.spblaguna.model.enumeration.EBookingServiceType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -24,4 +25,9 @@ public class BookingService {
 
     @Enumerated(EnumType.STRING)
     private EBookingServiceType bookingServiceType;
+
+    public BookingServiceResDTO toBookingServiceDTO(){
+        return new BookingServiceResDTO(this.id, this.name, this.description, this.price, this.bookingServiceType);
+    }
+
 }
