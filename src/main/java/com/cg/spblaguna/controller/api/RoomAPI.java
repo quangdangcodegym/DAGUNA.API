@@ -2,6 +2,7 @@ package com.cg.spblaguna.controller.api;
 
 import com.cg.spblaguna.exception.ResourceNotFoundException;
 import com.cg.spblaguna.model.Room;
+import com.cg.spblaguna.model.dto.req.RoomInfoReqDTO;
 import com.cg.spblaguna.model.dto.req.RoomReqDTO;
 import com.cg.spblaguna.model.dto.req.SearchBarRoomReqDTO;
 import com.cg.spblaguna.model.dto.res.RoomResDTO;
@@ -22,6 +23,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,8 +40,6 @@ public class RoomAPI {
     @Autowired
     private AppUtils appUtils;
 
-//    @Autowired
-//    private UserService userService;
 
     @GetMapping("")
     public ResponseEntity<?> showRooms() {
@@ -52,8 +52,9 @@ public class RoomAPI {
             @RequestParam(required = false) String kw,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "3") int size,
-            @RequestParam(defaultValue = "READY") String statusRoom,
             @RequestParam(defaultValue = "SUPERIOR") String roomType,
+            @RequestParam(required = false) BigDecimal minPrice,
+            @RequestParam(required = false) BigDecimal maxPrice,
             @RequestParam(defaultValue = "id,desc") String[] sort){
 
         try{
@@ -71,12 +72,11 @@ public class RoomAPI {
             Pageable pagingSort = PageRequest.of(page, size, Sort.by(orders));
 
             ERoomType eRoomType = ERoomType.parseERoomType(roomType);
-            EStatusRoom eStatusRoom = EStatusRoom.parseEStatusRoom(statusRoom);
-            if (roomType == null || statusRoom == null) {
+
+            if (roomType == null) {
                 throw new ResourceNotFoundException("Param not valid");
             }
-
-            Page<RoomResDTO> roomResDTOS = roomService.filterRooms(kw, eRoomType, eStatusRoom, pagingSort );
+            Page<RoomResDTO> roomResDTOS = roomService.filterRoomsByPrice(kw, eRoomType,minPrice, maxPrice, pagingSort );
 
 
             if (roomResDTOS.isEmpty()) {
@@ -85,6 +85,7 @@ public class RoomAPI {
                 return new ResponseEntity<>(roomResDTOS, HttpStatus.OK);
             }
         }catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
@@ -135,14 +136,16 @@ public class RoomAPI {
     }
 
 
-
-
-
     @PutMapping("/{id}")
 //    @PreAuthorize("hasAnyRole('MODIFIER')")
     public ResponseEntity<?> updateRoom(@PathVariable Long id, @RequestBody RoomReqDTO roomReqDTO) {
         roomReqDTO.setId(id);
         return new ResponseEntity<>(roomService.update(roomReqDTO), HttpStatus.OK);
+    }
+
+    @PatchMapping("/{roomId}/room-reals")
+    public ResponseEntity<?> updateRoom_updateRoomReal(@RequestBody RoomInfoReqDTO roomInfoReqDTO) {
+        return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
 
@@ -156,24 +159,27 @@ public class RoomAPI {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getRoom(@PathVariable Long id) {
-        Room room = roomService.findById(id).get();
-        return new ResponseEntity<>(room, HttpStatus.OK);
+        RoomResDTO roomResDTO = roomService.findByIdDTO(id);
+        if (roomResDTO == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(roomResDTO);
     }
 
-    @PatchMapping("/lock/{id}")
-    public ResponseEntity<?> lockRoom(@PathVariable Long id){
-        Room room = roomService.findById(id).get();
-        room.setStatusRoom(EStatusRoom.NOT_READY);
-        roomService.change(room);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @PatchMapping("/open/{id}")
-    public ResponseEntity<?> openRoom(@PathVariable Long id){
-        Room room = roomService.findById(id).get();
-        room.setStatusRoom(EStatusRoom.READY);
-        roomService.change(room);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+//    @PatchMapping("/lock/{id}")
+//    public ResponseEntity<?> lockRoom(@PathVariable Long id){
+//        Room room = roomService.findById(id).get();
+//        room.setStatusRoom(EStatusRoom.NOT_READY);
+//        roomService.change(room);
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
+//
+//    @PatchMapping("/open/{id}")
+//    public ResponseEntity<?> openRoom(@PathVariable Long id){
+//        Room room = roomService.findById(id).get();
+//        room.setStatusRoom(EStatusRoom.READY);
+//        roomService.change(room);
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
 
 }

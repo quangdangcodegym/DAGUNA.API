@@ -27,7 +27,7 @@ public class RoomReqDTO {
 
     private ERoomType roomType;
 
-    private EStatusRoom statusRoom;
+    private Integer quantity;
 
     private EViewType viewType;
 

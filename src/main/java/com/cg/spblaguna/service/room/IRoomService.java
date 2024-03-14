@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface IRoomService extends IGeneralService<Room,Long> {
@@ -25,6 +26,10 @@ public interface IRoomService extends IGeneralService<Room,Long> {
     Page<RoomResDTO> searchBarRoomReqDTO(SearchBarRoomReqDTO searchBarRoomReqDTO, Pageable pageable);
     void change(Room room);
 
-    Page<RoomResDTO> filterRooms(String kw, ERoomType roomType, EStatusRoom statusRoom,
+    Page<RoomResDTO> filterRooms(String kw, ERoomType roomType,
             Pageable pageable);
+
+    Page<RoomResDTO> filterRoomsByPrice(String kw, ERoomType eRoomType, BigDecimal minPrice, BigDecimal maxPrice, Pageable pagingSort);
+
+    RoomResDTO findByIdDTO(Long id);
 }
