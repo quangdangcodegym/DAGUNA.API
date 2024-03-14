@@ -16,6 +16,6 @@ public class RoomRealReqDTO {
     private Long id;
     private String roomCode;
     private EStatusRoom statusRoom;
-    private ERangeRoom eRangeRoom;
+    private ERangeRoom rangeRoom;
     private Integer floor;
 }
