@@ -19,11 +19,17 @@ public class RoomReal {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String roomCode;
+
+
     @ManyToOne
+    @JoinColumn(name = "room_id")
     private Room roomId;
     @Enumerated(EnumType.STRING)
     @Column(name = "status_room")
     private EStatusRoom statusRoom;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "range_room")
     private ERangeRoom eRangeRoom;
     private Integer floor;
 

@@ -1,15 +1,12 @@
 package com.cg.spblaguna.controller.api;
 
 import com.cg.spblaguna.exception.ResourceNotFoundException;
-import com.cg.spblaguna.model.Room;
 import com.cg.spblaguna.model.dto.req.RoomInfoReqDTO;
 import com.cg.spblaguna.model.dto.req.RoomReqDTO;
 import com.cg.spblaguna.model.dto.req.SearchBarRoomReqDTO;
 import com.cg.spblaguna.model.dto.res.RoomResDTO;
 import com.cg.spblaguna.model.enumeration.ERoomType;
-import com.cg.spblaguna.model.enumeration.EStatusRoom;
 import com.cg.spblaguna.service.room.IRoomService;
-import com.cg.spblaguna.service.room.RoomServiceImpl;
 import com.cg.spblaguna.util.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,7 +16,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +23,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
 import org.springframework.data.domain.Sort.Order;
 
 @RestController
@@ -145,7 +141,8 @@ public class RoomAPI {
 
     @PatchMapping("/{roomId}/room-reals")
     public ResponseEntity<?> updateRoom_updateRoomReal(@RequestBody RoomInfoReqDTO roomInfoReqDTO) {
-        return new ResponseEntity<>(null, HttpStatus.OK);
+        roomService.updateRoom_updateRoomReal(roomInfoReqDTO);
+        return new ResponseEntity<>(roomService.updateRoom_updateRoomReal(roomInfoReqDTO), HttpStatus.OK);
     }
 
 
