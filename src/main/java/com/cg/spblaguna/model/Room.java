@@ -8,6 +8,7 @@ import com.cg.spblaguna.model.enumeration.EViewType;
 import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.Accessors;
 import org.hibernate.annotations.Type;
 
 import java.math.BigDecimal;
@@ -18,9 +19,9 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @Data
 @Table(name = "rooms")
+@Accessors(chain = true)
 public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,9 +33,7 @@ public class Room {
     @Column(name = "room_type")
     private ERoomType roomType;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status_room")
-    private EStatusRoom statusRoom;
+
 
     @Enumerated(EnumType.STRING)
     @Column(name = "view_type")
@@ -50,6 +49,8 @@ public class Room {
     @ManyToOne
     @JoinColumn(name = "per_type_id", nullable = false)
     private PerType perType;
+
+    private Integer quantity;
 
 
 
@@ -76,11 +77,11 @@ public class Room {
 
     private Float rate;
 
-    public Room(String name, ERoomType roomType, EStatusRoom statusRoom, EViewType viewType, BigDecimal pricePerNight, BigDecimal acreage, Integer sleep, String description, String utilitie, KindOfRoom kindOfRoom, Float rate, PerType perType) {
+    public Room(String name, ERoomType roomType, EViewType viewType,Integer quantity, BigDecimal pricePerNight, BigDecimal acreage, Integer sleep, String description, String utilitie, KindOfRoom kindOfRoom, Float rate, PerType perType) {
         this.name = name;
         this.roomType = roomType;
-        this.statusRoom = statusRoom;
         this.viewType = viewType;
+        this.quantity = quantity;
         this.pricePerNight = pricePerNight;
         this.acreage = acreage;
         this.sleep = sleep;
@@ -91,10 +92,9 @@ public class Room {
         this.perType = perType;
     }
 
-    public Room(String name, ERoomType roomType, EStatusRoom statusRoom, EViewType viewType, BigDecimal pricePerNight, BigDecimal acreage, Integer sleep, String description, String utilitie, KindOfRoom kindOfRoom, PerType perType) {
+    public Room(String name, ERoomType roomType, EViewType viewType, BigDecimal pricePerNight, BigDecimal acreage, Integer sleep, String description, String utilitie, KindOfRoom kindOfRoom, PerType perType) {
         this.name = name;
         this.roomType = roomType;
-        this.statusRoom = statusRoom;
         this.viewType = viewType;
         this.pricePerNight = pricePerNight;
         this.acreage = acreage;
@@ -105,15 +105,42 @@ public class Room {
         this.perType = perType;
     }
 
+    public Room(Long id, String name, ERoomType roomType, EViewType viewType, KindOfRoom kindOfRoom, BigDecimal pricePerNight, PerType perType, Integer quantity, BigDecimal acreage, Integer sleep, String description, List<Image> images, String utilitie, Float rate) {
+        this.id = id;
+        this.name = name;
+        this.roomType = roomType;
+        this.viewType = viewType;
+        this.kindOfRoom = kindOfRoom;
+        this.pricePerNight = pricePerNight;
+        this.perType = perType;
+        this.quantity = quantity;
+        this.acreage = acreage;
+        this.sleep = sleep;
+        this.description = description;
+        this.images = images;
+        this.utilitie = utilitie;
+        this.rate = rate;
+    }
 
-
+    public Room(String name, ERoomType roomType, Integer quantity, EViewType viewType, BigDecimal pricePerNight, BigDecimal acreage, Integer sleep, String description, String utilitie, KindOfRoom kindOfRoom, PerType perType) {
+        this.name = name;
+        this.roomType = roomType;
+        this.viewType = viewType;
+        this.quantity = quantity;
+        this.pricePerNight = pricePerNight;
+        this.acreage = acreage;
+        this.sleep = sleep;
+        this.description = description;
+        this.utilitie = utilitie;
+        this.kindOfRoom = kindOfRoom;
+        this.perType = perType;
+    }
 
     public RoomResDTO toRoomResDto() {
         RoomResDTO roomResDTO = new RoomResDTO();
         roomResDTO.setId(id);
         roomResDTO.setName(name);
         roomResDTO.setRoomType(roomType);
-        roomResDTO.setStatusRoom(statusRoom);
         roomResDTO.setViewType(viewType);
         roomResDTO.setKindOfRoom(kindOfRoom.toKindOfRoomResDTO());
         roomResDTO.setPerType(perType.toPerTypeResDTO());
@@ -122,6 +149,7 @@ public class Room {
         roomResDTO.setSleep(sleep);
         roomResDTO.setDescription(description);
         roomResDTO.setUtilitie(utilitie);
+        roomResDTO.setQuantity(quantity);
 
         List<ImageResDTO> imageResDTOS = this.getImages()
                 .stream()

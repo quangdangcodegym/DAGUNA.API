@@ -1,15 +1,11 @@
 package com.cg.spblaguna.service.receptionist;
 
-import com.cg.spblaguna.model.Room;
 import com.cg.spblaguna.model.User;
 import com.cg.spblaguna.model.dto.req.ReceptionistReqDTO;
-import com.cg.spblaguna.model.dto.req.RoomReqDTO;
-import com.cg.spblaguna.model.dto.res.RoomResDTO;
-import com.cg.spblaguna.model.enumeration.ELockStatus;
+import com.cg.spblaguna.model.dto.res.ReceptionistResDTO;
 import com.cg.spblaguna.model.enumeration.ERole;
 import com.cg.spblaguna.repository.IReceptionistRepository;
 import com.cg.spblaguna.service.user.IUserServiceImpl;
-import com.cg.spblaguna.service.user.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -44,9 +40,33 @@ public class ReceptionistServiceImpl implements IReceptionistService{
     }
 
     @Override
-    public ResponseEntity<?> create(ReceptionistReqDTO receptionistReqDTO) {
-        return null;
+    public Page<ReceptionistResDTO> findReceptionistResDTOByRole(ERole role, Pageable pageable) {
+        Page<ReceptionistResDTO> userList = receptionistRepository.findUsersDTOByERole(role,pageable);
+        userList.stream().forEach(e->{
+            String img = userService.findById(e.getId())
+                    .map(user -> !user.getUserImages().isEmpty() ? user.getUserImages().get(0).getFileUrl() : "https://bit.ly/499RjtL")
+                    .orElse("https://bit.ly/499RjtL");
+            e.setAvatarImg(img);
+        });
+        return userList;
     }
+
+    @Override
+    public ResponseEntity<?> create(ReceptionistReqDTO receptionistReqDTO) {
+        ReceptionistResDTO receptionistResDTO = new ReceptionistResDTO();
+        receptionistResDTO.setReceptionistName(receptionistReqDTO.getReceptionistName());
+        receptionistResDTO.setDob(receptionistReqDTO.getDob());
+        receptionistResDTO.setEmail(receptionistReqDTO.getEmail());
+        receptionistResDTO.setPhone(receptionistReqDTO.getPhone());
+        receptionistResDTO.setAddress(receptionistReqDTO.getAddress());
+        receptionistResDTO.setCreateAt(LocalDate.now());
+        receptionistResDTO.setReceptionistInfo(receptionistReqDTO.getReceptionistInfo());
+
+
+        // Trả về ResponseEntity chứa đối tượng ReceptionistResDTO đã tạo
+        return ResponseEntity.ok(receptionistResDTO);
+    }
+
 
     @Override
     public Optional<User> findById(Long id) {

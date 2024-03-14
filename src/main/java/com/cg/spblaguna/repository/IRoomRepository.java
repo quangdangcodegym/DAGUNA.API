@@ -44,5 +44,4 @@ public interface IRoomRepository extends JpaRepository<Room, Long> {
     );
 
 
-
 }

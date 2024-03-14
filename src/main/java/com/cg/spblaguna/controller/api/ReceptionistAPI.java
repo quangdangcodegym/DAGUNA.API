@@ -4,6 +4,7 @@ import com.cg.spblaguna.model.Room;
 import com.cg.spblaguna.model.User;
 import com.cg.spblaguna.model.dto.req.ReceptionistReqDTO;
 import com.cg.spblaguna.model.dto.req.RoomReqDTO;
+import com.cg.spblaguna.model.dto.res.ReceptionistResDTO;
 import com.cg.spblaguna.model.enumeration.ELockStatus;
 import com.cg.spblaguna.model.enumeration.ERole;
 import com.cg.spblaguna.model.enumeration.EStatusRoom;
@@ -43,7 +44,7 @@ public class ReceptionistAPI {
 
     @GetMapping()
     public ResponseEntity<?> getAllReceptionists(Pageable pageable) {
-        Page<User> receptionists = receptionistService.findUsersByRole(ERole.RECEPTIONIST, pageable);
+        Page<ReceptionistResDTO> receptionists = receptionistService.findReceptionistResDTOByRole(ERole.RECEPTIONIST, pageable);
         return new ResponseEntity<>(receptionists, HttpStatus.OK);
     }
 @PatchMapping("/update/{id}")
@@ -60,8 +61,6 @@ public class ReceptionistAPI {
         userService.save(user);
         return new ResponseEntity<>( HttpStatus.OK);
     }
-
-
     @PostMapping
     public ResponseEntity<?> createReceptionist(@Validated  @RequestBody ReceptionistReqDTO receptionistReqDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -90,7 +89,4 @@ public class ReceptionistAPI {
         userService.deleteById(id);
         return new ResponseEntity<>(new HashMap<>(), HttpStatus.OK);
     }
-
-
-
 }
