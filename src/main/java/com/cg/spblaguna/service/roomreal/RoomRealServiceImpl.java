@@ -1,12 +1,10 @@
 package com.cg.spblaguna.service.roomreal;
 
+import com.cg.spblaguna.model.Room;
 import com.cg.spblaguna.model.RoomReal;
-import com.cg.spblaguna.model.dto.req.RoomRealReqDTO;
-import com.cg.spblaguna.model.dto.res.RoomRealResDTO;
 import com.cg.spblaguna.repository.IRoomRealRepository;
 import com.cg.spblaguna.repository.IRoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +15,9 @@ import java.util.Optional;
 public class RoomRealServiceImpl implements  IRoomRealService {
     @Autowired
     private IRoomRealRepository roomRealRepository;
+
+    @Autowired
+    private IRoomRepository roomRepository;
 
 
     @Override
@@ -41,5 +42,12 @@ public class RoomRealServiceImpl implements  IRoomRealService {
         roomRealRepository.deleteById(id);
     }
 
-
+    public List<RoomReal> findAllRoomRealsByRoomId(Long roomId) {
+        Optional<Room> room = roomRepository.findById(roomId);
+        if (room.isEmpty()){
+            throw new RuntimeException();
+        }
+        Room currentRoom = room.get();
+        return roomRealRepository.findAllByRoomId(currentRoom);
+    }
 }

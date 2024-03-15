@@ -226,7 +226,4 @@ public class RoomServiceImpl implements IRoomService {
         }
         return new RoomResDTO(room);
     }
-
-
-
 }
