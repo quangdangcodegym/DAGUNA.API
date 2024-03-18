@@ -50,7 +50,7 @@ public class User {
 
 
     @Enumerated(EnumType.STRING)
-    private EBookingStatus eBookStatusookStatus;
+    private EBookingStatus eBookStatubookStatus;
 
     @OneToMany(mappedBy = "user")
     private List<Image> userImages;

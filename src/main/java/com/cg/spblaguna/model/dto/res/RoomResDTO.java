@@ -28,7 +28,7 @@ public class RoomResDTO {
 
     private ERoomType roomType;
 
-    private EStatusRoom statusRoom;
+    private Integer quantity;
 
     private EViewType viewType;
 
@@ -53,7 +53,7 @@ public class RoomResDTO {
         this.setId(room.getId());
         this.setName(room.getName());
         this.setRoomType(room.getRoomType());
-        this.setStatusRoom(room.getStatusRoom());
+        this.setQuantity(room.getQuantity());
         this.setViewType(room.getViewType());
         this.setKindOfRoom(room.getKindOfRoom().toKindOfRoomResDTO());
         this.setPerType(room.getPerType().toPerTypeResDTO());

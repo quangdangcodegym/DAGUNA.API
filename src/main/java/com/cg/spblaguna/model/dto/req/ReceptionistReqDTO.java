@@ -32,5 +32,7 @@ public class ReceptionistReqDTO {
     private List<Image> avatarImgId;
     @NotBlank(message = "Hãy thêm tiểu sử của lễ tân")
     private String receptionistInfo;
-
+    public void setAvatarImgId(List<Image> avatarImgId) {
+        this.avatarImgId = avatarImgId;
+    }
 }
