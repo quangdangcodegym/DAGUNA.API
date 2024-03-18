@@ -8,11 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+
 @Service
 @Transactional
-public class RoomRealServiceImpl implements  IRoomRealService {
+public class RoomRealServiceImpl implements IRoomRealService {
     @Autowired
     private IRoomRealRepository roomRealRepository;
 
@@ -26,11 +28,11 @@ public class RoomRealServiceImpl implements  IRoomRealService {
     }
 
 
-
     @Override
     public Optional<RoomReal> findById(Long id) {
         return Optional.empty();
     }
+
 
     @Override
     public void save(RoomReal roomReal) {
@@ -44,7 +46,7 @@ public class RoomRealServiceImpl implements  IRoomRealService {
 
     public List<RoomReal> findAllRoomRealsByRoomId(Long roomId) {
         Optional<Room> room = roomRepository.findById(roomId);
-        if (room.isEmpty()){
+        if (room.isEmpty()) {
             throw new RuntimeException();
         }
         Room currentRoom = room.get();
