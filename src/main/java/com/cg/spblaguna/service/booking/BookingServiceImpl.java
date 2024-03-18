@@ -285,9 +285,83 @@ public class BookingServiceImpl implements IBookingService {
                 .collect(Collectors.toList());
         bookingResDTO.setBookingDetails(bookingDetailResDTOS);
 
+        return bookingResDTO;
+    }
+
+//    @Override
+//    public BookingResDTO saveBookingReqUpdate_RoomEditDTO(BookingReqUpdate_RoomAddDTO bookingReqUpdateRoomAddDTO) {
+//        Booking booking = bookingRepository.findById(bookingReqUpdateRoomAddDTO.getBookingId()).get();
+//
+//
+//        List<BookingDetail> bookingDetails = bookingDetailRepository.findBookingDetailsByBooking_Id(booking.getId());
+//
+//        for (BookingDetail bookingDetail : bookingDetails) {
+//            if (bookingDetail.getRoom().getId().equals(bookingReqUpdateRoomAddDTO.getBookingDetail().getRoomId())) {
+//                bookingDetail.setCheckIn(bookingReqUpdateRoomAddDTO.getBookingDetail().getCheckIn());
+//                bookingDetail.setCheckOut(bookingReqUpdateRoomAddDTO.getBookingDetail().getCheckOut());
+//                bookingDetail.setNumberAdult(bookingReqUpdateRoomAddDTO.getBookingDetail().getNumberAdult());
+//                bookingDetail.setNumberChildren(bookingReqUpdateRoomAddDTO.getBookingDetail().getNumberChildren());
+//                bookingDetail.setDiscountCode(bookingReqUpdateRoomAddDTO.getBookingDetail().getDiscountCode());
+//                bookingDetail.setVat(new BigDecimal(vatBookingDetail));
+//                bookingDetail.setTotalAmount(bookingReqUpdateRoomAddDTO.getBookingDetail().getTotalAmount());
+//                bookingDetail.setPrice(bookingReqUpdateRoomAddDTO.getBookingDetail().getPrice());
+//                bookingDetail.setTotal(bookingReqUpdateRoomAddDTO.getBookingDetail().getTotal());
+//
+//                bookingDetailRepository.save(bookingDetail);
+//            }
+//        }
+//
+//        bookingDetails = bookingDetailRepository.findBookingDetailsByBooking_Id(booking.getId());
+//
+//        //
+//        BookingResDTO bookingResDTO = new BookingResDTO();
+//        bookingResDTO.setBookingId(booking.getId());
+//        List<BookingDetailResDTO> bookingDetailResDTOS = bookingDetails.stream()
+//                .map(bdt -> bdt.toBookingDetailResDTO())
+//                .collect(Collectors.toList());
+//        bookingResDTO.setBookingDetails(bookingDetailResDTOS);
+//
+//        return bookingResDTO;
+//    }
+
+    @Override
+    public BookingResDTO saveBookingReqUpdate_RoomEditDTO(BookingReqUpdate_RoomAddDTO bookingReqUpdateRoomAddDTO) {
+                Booking booking = bookingRepository.findById(bookingReqUpdateRoomAddDTO.getBookingId()).get();
+
+
+        List<BookingDetail> bookingDetails = bookingDetailRepository.findBookingDetailsByBooking_Id(booking.getId());
+
+        // Tìm kiếm và cập nhật thông tin BookingDetail
+        for (BookingDetail bookingDetail : bookingDetails) {
+            if (bookingDetail.getRoom().getId().equals(bookingReqUpdateRoomAddDTO.getBookingDetail().getRoomId())) {
+                bookingDetail.setCheckIn(bookingReqUpdateRoomAddDTO.getBookingDetail().getCheckIn());
+                bookingDetail.setCheckOut(bookingReqUpdateRoomAddDTO.getBookingDetail().getCheckOut());
+                bookingDetail.setNumberAdult(bookingReqUpdateRoomAddDTO.getBookingDetail().getNumberAdult());
+                bookingDetail.setNumberChildren(bookingReqUpdateRoomAddDTO.getBookingDetail().getNumberChildren());
+                bookingDetail.setDiscountCode(bookingReqUpdateRoomAddDTO.getBookingDetail().getDiscountCode());
+                bookingDetail.setTotalAmount(bookingReqUpdateRoomAddDTO.getBookingDetail().getTotalAmount());
+                bookingDetail.setPrice(bookingReqUpdateRoomAddDTO.getBookingDetail().getPrice());
+                bookingDetail.setTotal(bookingReqUpdateRoomAddDTO.getBookingDetail().getTotal());
+
+                // Lưu cập nhật
+                bookingDetailRepository.save(bookingDetail);
+            }
+        }
+
+        // Lấy lại danh sách BookingDetail sau khi cập nhật
+        bookingDetails = bookingDetailRepository.findBookingDetailsByBooking_Id(booking.getId());
+
+        // Tạo đối tượng BookingResDTO mới
+        BookingResDTO bookingResDTO = new BookingResDTO();
+        bookingResDTO.setBookingId(booking.getId());
+        List<BookingDetailResDTO> bookingDetailResDTOS = bookingDetails.stream()
+                .map(bdt -> bdt.toBookingDetailResDTO())
+                .collect(Collectors.toList());
+        bookingResDTO.setBookingDetails(bookingDetailResDTOS);
 
         return bookingResDTO;
     }
+
 
     private boolean checkRoomIdExistsBookingDetails(List<BookingDetail> bookingDetails, Long roomId) {
         for (BookingDetail bdt : bookingDetails) {
