@@ -1,5 +1,6 @@
 package com.cg.spblaguna.model;
 
+import com.cg.spblaguna.model.dto.res.BookingDetailServiceResDTO;
 import com.cg.spblaguna.model.enumeration.EBookingServiceType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -43,4 +44,19 @@ public class BookingDetailService {
     private BigDecimal total;
 
     private BigDecimal price;
+
+    public BookingDetailServiceResDTO toBookingDetailServiceResDTO(){
+        BookingDetailServiceResDTO bookingDetailServiceResDTO = new BookingDetailServiceResDTO();
+        bookingDetailServiceResDTO.setBookingServiceType(bookingServiceType);
+        bookingDetailServiceResDTO.setPrice(price);
+        bookingDetailServiceResDTO.setBookingService(this.bookingService.toBookingServiceDTO());
+        bookingDetailServiceResDTO.setDateChooseService(this.dateChooseService);
+        bookingDetailServiceResDTO.setTotal(this.total);
+        bookingDetailServiceResDTO.setVat(this.vat);
+        bookingDetailServiceResDTO.setNumberPerson(this.numberPerson);
+        bookingDetailServiceResDTO.setNumberCar(this.numberCar);
+        bookingDetailServiceResDTO.setId(this.id);
+
+        return bookingDetailServiceResDTO;
+    }
 }
