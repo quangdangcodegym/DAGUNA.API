@@ -48,7 +48,7 @@ public class RoomAPI {
             @RequestParam(required = false) String kw,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "3") int size,
-            @RequestParam(defaultValue = "SUPERIOR") String roomType,
+            @RequestParam(defaultValue = "") String roomType,
             @RequestParam(required = false) BigDecimal minPrice,
             @RequestParam(required = false) BigDecimal maxPrice,
             @RequestParam(defaultValue = "id,desc") String[] sort){
@@ -56,7 +56,6 @@ public class RoomAPI {
         try{
             List<Order> orders = new ArrayList<Order>();
             if (sort[0].contains(",")) {
-                // will sort more than 2 fields sortOrder="field, direction"
                 for (String sortOrder : sort) {
                     String[] _sort = sortOrder.split(",");
                     orders.add(new Order(getSortDirection(_sort[1]), _sort[0]));

@@ -5,6 +5,7 @@ import com.cg.spblaguna.model.dto.res.RoomResDTO;
 import com.cg.spblaguna.model.enumeration.ERoomType;
 import com.cg.spblaguna.model.enumeration.EStatusRoom;
 import com.cg.spblaguna.model.enumeration.EViewType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.*;
 import lombok.*;
@@ -67,6 +68,8 @@ public class Room {
 
 
     @OneToMany(mappedBy = "room")
+@JsonIgnore
+
     private List<Image> images;
 
 
