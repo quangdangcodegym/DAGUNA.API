@@ -52,6 +52,7 @@ public class Booking {
 
     private Boolean reminderSent = false ;
 
+
     @OneToMany(mappedBy = "booking")
     private List<BookingDetail> bookingDetails;
 

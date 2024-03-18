@@ -21,8 +21,17 @@ public class BookingAPI {
     private IBookingService bookingService;
     @GetMapping
     public ResponseEntity<?> getAllBooking() {
-        List<Booking> bookingList = bookingService.findAll();
+        List<BookingResDTO> bookingList = bookingService.findAllBookingResDTO();
         return new ResponseEntity<>(bookingList, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getBookingById(@PathVariable Long id) {
+        BookingResDTO bookingResDTO = bookingService.findBookingResDTOById(id);
+        if (bookingResDTO == null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(bookingResDTO, HttpStatus.OK);
     }
 
     @PostMapping
@@ -30,11 +39,17 @@ public class BookingAPI {
         BookingResDTO bookingResDTO = bookingService.saveBooking(bookingReqCreDTO);
         return new ResponseEntity<>(bookingResDTO, HttpStatus.OK);
     }
-    @PatchMapping("/rooms/edit")
-    public ResponseEntity<?> editBookingService(@RequestBody BookingReqUpdate_RoomAddDTO bookingReqUpdateRoomAddDTO) {
+    @PatchMapping("/rooms/add")
+    public ResponseEntity<?> addRoomBookingService(@RequestBody BookingReqUpdate_RoomAddDTO bookingReqUpdateRoomAddDTO) {
         BookingResDTO bookingResDTO = bookingService.saveBookingReqUpdate_RoomAddDTO(bookingReqUpdateRoomAddDTO);
         return new ResponseEntity<>(bookingResDTO, HttpStatus.OK);
     }
+    @PatchMapping("/rooms/edit")
+    public ResponseEntity<?> editRoomBookingService(@RequestBody BookingReqUpdate_RoomAddDTO bookingReqUpdateRoomAddDTO){
+        BookingResDTO bookingResDTO = bookingService.saveBookingReqUpdate_RoomEditDTO(bookingReqUpdateRoomAddDTO);
+        return new ResponseEntity<>(bookingResDTO, HttpStatus.OK);
+    }
+
     @PatchMapping("/booking-services/add")
     public ResponseEntity<?> addBookingService(@RequestBody BookingReqUpdate_BookingServiceCreUpdateDTO bookingReqUpdateBookingServiceCreUpdateDTO) {
         BookingResDTO bookingResDTO = bookingService.saveBookingReqUpdate_BookingServiceAddDTO(bookingReqUpdateBookingServiceCreUpdateDTO);

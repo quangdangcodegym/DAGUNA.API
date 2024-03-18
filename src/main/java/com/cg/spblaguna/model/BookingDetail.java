@@ -1,6 +1,8 @@
 package com.cg.spblaguna.model;
 
 import com.cg.spblaguna.model.dto.res.BookingDetailResDTO;
+import com.cg.spblaguna.model.dto.res.BookingDetailServiceResDTO;
+import com.cg.spblaguna.model.dto.res.BookingServiceResDTO;
 import com.cg.spblaguna.model.enumeration.EBookingStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -10,6 +12,9 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @AllArgsConstructor
@@ -39,6 +44,9 @@ public class BookingDetail {
     @JoinColumn(name = "room_id")
     private Room room;
 
+    @OneToMany(mappedBy = "bookingDetail")
+    private List<BookingDetailService> bookingDetailServices = new ArrayList<>();
+
     @Column(name = "deleted", columnDefinition = "boolean default false")
     private Boolean deleted;
 
@@ -59,6 +67,8 @@ public class BookingDetail {
 
     public BookingDetailResDTO toBookingDetailResDTO(){
         BookingDetailResDTO bookingDetailResDTO = new BookingDetailResDTO();
+
+        bookingDetailResDTO.setBookingDetailId(this.getId());
         bookingDetailResDTO.setRoom(this.getRoom().toRoomResDto());
         bookingDetailResDTO.setCheckOut(this.getCheckOut());
         bookingDetailResDTO.setCheckIn(this.getCheckIn());
@@ -68,6 +78,12 @@ public class BookingDetail {
         bookingDetailResDTO.setTotal(this.getTotal());
         bookingDetailResDTO.setVat(this.getVat());
         bookingDetailResDTO.setDiscountCode(this.getDiscountCode());
+
+        List<BookingDetailServiceResDTO> bookingDetailServiceResDTOS = this.bookingDetailServices.stream()
+                .map(bookingDetailService -> bookingDetailService.toBookingDetailServiceResDTO())
+                .collect(Collectors.toList());
+        bookingDetailResDTO.setBookingDetailServiceResDTOS(bookingDetailServiceResDTOS);
+
         return bookingDetailResDTO;
     }
 
