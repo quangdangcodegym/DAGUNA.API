@@ -19,8 +19,6 @@ public class RoomReal {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String roomCode;
-
-
     @ManyToOne
     @JoinColumn(name = "room_id")
     private Room roomId;

@@ -30,5 +30,8 @@ public class RoomRealAPI {
         List<RoomReal> roomReals= roomRealService.findAll();
         return new ResponseEntity<>(roomReals, HttpStatus.OK);
     }
-
+    @GetMapping("/{roomId}")
+    public List<RoomReal> findByRoomId(@PathVariable Long roomId) {
+        return roomRealService.findAllRoomRealsByRoomId(roomId);
+    }
 }
