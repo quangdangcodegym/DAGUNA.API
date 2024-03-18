@@ -30,17 +30,39 @@ public class Image {
     @Enumerated(EnumType.STRING)
     private EImageType imageType;
 
-    @Column(name = "id_image_or_id_user")
-    private Long idResource;
+//    @Column(name = "id_room_or_id_user")
+//    private Long idResource;
 
 
     @ManyToOne
-    @JoinColumn(name = "id_image_or_id_user", insertable = false, updatable = false)
+    @JoinColumn(name = "id_room")
     private Room room;
 
     @ManyToOne
-    @JoinColumn(name = "id_image_or_id_user", insertable = false, updatable = false)
+    @JoinColumn(name = "id_user")
     private User user;
+
+    public Image(String fileName, String fileFolder, String fileUrl, String fileType, String cloudId, EImageType imageType, Room room) {
+        this.fileName = fileName;
+        this.fileFolder = fileFolder;
+        this.fileUrl = fileUrl;
+        this.fileType = fileType;
+        this.cloudId = cloudId;
+        this.imageType = imageType;
+        this.room = room;
+    }
+
+    public Image(String fileName, String fileFolder, String fileUrl, String fileType, String cloudId, EImageType imageType, User user) {
+        this.fileName = fileName;
+        this.fileFolder = fileFolder;
+        this.fileUrl = fileUrl;
+        this.fileType = fileType;
+        this.cloudId = cloudId;
+        this.imageType = imageType;
+        this.user = user;
+    }
+
+
     public ImageResDTO toImageResDTO(){
         return new ImageResDTO(this.id, this.fileUrl);
     }
