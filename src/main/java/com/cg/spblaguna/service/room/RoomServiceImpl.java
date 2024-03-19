@@ -8,14 +8,13 @@ import com.cg.spblaguna.model.dto.req.RoomReqDTO;
 import com.cg.spblaguna.model.dto.req.SearchBarRoomReqDTO;
 import com.cg.spblaguna.model.dto.res.RoomResDTO;
 import com.cg.spblaguna.model.enumeration.EImageType;
-import com.cg.spblaguna.model.enumeration.ERangeRoom;
 import com.cg.spblaguna.model.enumeration.ERoomType;
 import com.cg.spblaguna.model.enumeration.EStatusRoom;
 import com.cg.spblaguna.repository.*;
+import com.cg.spblaguna.service.user.IUserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,7 +39,7 @@ public class RoomServiceImpl implements IRoomService {
     private IPerTypeRepository perTypeRepository;
 
     @Autowired
-    private IRateRespository rateRespository;
+    private IUserRepository userRepository;
 
     @Autowired
     private IRoomRealRepository roomRealRepository;
@@ -135,8 +134,9 @@ public class RoomServiceImpl implements IRoomService {
 
 
     @Override
-    public void save(Room room) {
+    public User save(Room room) {
 
+        return null;
     }
 
     @Override
@@ -219,6 +219,7 @@ public class RoomServiceImpl implements IRoomService {
 
             roomReal.setRoomCode(roomCode);
             roomReal.setERangeRoom(roomRealReqDTO.getRangeRoom());
+            roomReal.setStatusRoom(EStatusRoom.NOT_READY);
             roomReal.setFloor(floor);
             roomReal.setRoomId(room);
 

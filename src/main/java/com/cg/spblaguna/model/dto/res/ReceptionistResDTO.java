@@ -2,6 +2,7 @@ package com.cg.spblaguna.model.dto.res;
 
 
 import com.cg.spblaguna.model.Image;
+import com.cg.spblaguna.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,6 +11,7 @@ import lombok.experimental.Accessors;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -24,7 +26,7 @@ public class ReceptionistResDTO {
     private String phone;
     private String address;
     private LocalDate createAt;
-    private String avatarImg;
+    private String avatarImgResDTO;
     private String receptionistInfo;
 
     public ReceptionistResDTO(Long id, String receptionistName, LocalDate dob, String email, String phone, String address, LocalDate createAt, String receptionistInfo) {
@@ -37,4 +39,24 @@ public class ReceptionistResDTO {
         this.createAt = createAt;
         this.receptionistInfo = receptionistInfo;
     }
+
+    public ReceptionistResDTO(User user){
+        this.setId(user.getId());
+        this.setReceptionistName(user.getReceptionistName());
+        this.setDob(user.getDob());
+        this.setEmail(user.getEmail());
+        this.setPhone(user.getPhone());
+        this.setAddress(user.getAddress());
+
+        if (!user.getUserImages().isEmpty()) {
+            this.setAvatarImgResDTO(user.getUserImages().get(0).getFileUrl());
+        } else {
+            this.setAvatarImgResDTO("https://bit.ly/499RjtL");
+        }
+        this.setReceptionistInfo(user.getReceptionistInfo());
+    }
+
+
+
+
 }

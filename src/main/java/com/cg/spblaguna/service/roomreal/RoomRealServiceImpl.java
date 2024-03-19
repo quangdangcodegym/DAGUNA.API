@@ -2,6 +2,7 @@ package com.cg.spblaguna.service.roomreal;
 
 import com.cg.spblaguna.model.Room;
 import com.cg.spblaguna.model.RoomReal;
+import com.cg.spblaguna.model.User;
 import com.cg.spblaguna.repository.IRoomRealRepository;
 import com.cg.spblaguna.repository.IRoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +34,9 @@ public class RoomRealServiceImpl implements  IRoomRealService {
     }
 
     @Override
-    public void save(RoomReal roomReal) {
+    public User save(RoomReal roomReal) {
         roomRealRepository.save(roomReal);
+        return null;
     }
 
     @Override

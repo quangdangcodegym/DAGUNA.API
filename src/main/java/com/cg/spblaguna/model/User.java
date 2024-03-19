@@ -1,9 +1,10 @@
 package com.cg.spblaguna.model;
 
+import com.cg.spblaguna.model.dto.res.ImageResDTO;
+import com.cg.spblaguna.model.dto.res.ReceptionistResDTO;
 import com.cg.spblaguna.model.enumeration.EBookingStatus;
 import com.cg.spblaguna.model.enumeration.ELockStatus;
 import com.cg.spblaguna.model.enumeration.ERole;
-import com.cg.spblaguna.model.enumeration.EStatusRoom;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
@@ -12,9 +13,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -68,6 +69,29 @@ public class User {
 
 
 
+    public ReceptionistResDTO toReceptionistResDTO(){
+        ReceptionistResDTO receptionistResDTO = new ReceptionistResDTO();
+        receptionistResDTO.setId(id);
+        receptionistResDTO.setReceptionistName(receptionistName);
+        receptionistResDTO.setDob(dob);
+        receptionistResDTO.setEmail(email);
+        receptionistResDTO.setPhone(phone);
+        receptionistResDTO.setAddress(address);
+        receptionistResDTO.setReceptionistInfo(receptionistInfo);
+        List<ImageResDTO> imageResDTOS = this.getUserImages()
+                .stream()
+                .map(m -> {
+                    ImageResDTO imageResDTO = new ImageResDTO();
+                    imageResDTO.setId(m.getId());
+                    imageResDTO.setFileUrl(m.getFileUrl());
+                    return imageResDTO;
+                })
+                .collect(Collectors.toList());
+        if (imageResDTOS.size() > 0) {
+            receptionistResDTO.setAvatarImgResDTO(imageResDTOS.get(0).getFileUrl());
+        }
+        return receptionistResDTO;
+    }
 
 
 
