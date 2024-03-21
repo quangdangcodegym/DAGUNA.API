@@ -326,14 +326,18 @@ public class BookingServiceImpl implements IBookingService {
 
     @Override
     public BookingResDTO saveBookingReqUpdate_RoomEditDTO(BookingReqUpdate_RoomAddDTO bookingReqUpdateRoomAddDTO) {
-                Booking booking = bookingRepository.findById(bookingReqUpdateRoomAddDTO.getBookingId()).get();
-
+        Booking booking = bookingRepository.findById(bookingReqUpdateRoomAddDTO.getBookingId()).get();
 
         List<BookingDetail> bookingDetails = bookingDetailRepository.findBookingDetailsByBooking_Id(booking.getId());
 
         // Tìm kiếm và cập nhật thông tin BookingDetail
         for (BookingDetail bookingDetail : bookingDetails) {
-            if (bookingDetail.getRoom().getId().equals(bookingReqUpdateRoomAddDTO.getBookingDetail().getRoomId())) {
+            if (!bookingDetail.getRoom().getId().equals(bookingReqUpdateRoomAddDTO.getBookingDetail().getRoomId())) {
+                // Lấy phòng mới từ ID
+                Room newRoom = roomRepository.findById(bookingReqUpdateRoomAddDTO.getBookingDetail().getRoomId()).get();
+
+                // Cập nhật thông tin cho BookingDetail
+                bookingDetail.setRoom(newRoom);
                 bookingDetail.setCheckIn(bookingReqUpdateRoomAddDTO.getBookingDetail().getCheckIn());
                 bookingDetail.setCheckOut(bookingReqUpdateRoomAddDTO.getBookingDetail().getCheckOut());
                 bookingDetail.setNumberAdult(bookingReqUpdateRoomAddDTO.getBookingDetail().getNumberAdult());
@@ -361,7 +365,6 @@ public class BookingServiceImpl implements IBookingService {
 
         return bookingResDTO;
     }
-
 
     private boolean checkRoomIdExistsBookingDetails(List<BookingDetail> bookingDetails, Long roomId) {
         for (BookingDetail bdt : bookingDetails) {

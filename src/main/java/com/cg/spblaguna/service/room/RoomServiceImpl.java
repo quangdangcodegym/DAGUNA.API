@@ -12,11 +12,15 @@ import com.cg.spblaguna.model.enumeration.ERoomType;
 import com.cg.spblaguna.model.enumeration.EStatusRoom;
 import com.cg.spblaguna.repository.*;
 import com.cg.spblaguna.service.user.IUserServiceImpl;
+import com.cg.spblaguna.service.roomreal.IRoomRealService;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
+import org.thymeleaf.standard.expression.MessageExpression;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -47,6 +51,8 @@ public class RoomServiceImpl implements IRoomService {
     @Autowired
     private IImageRepository imageRepository;
 
+    @Autowired
+    private IRoomRealService roomRealService;
 
     public List<RoomResDTO> getRooms() {
         List<Room> rooms = roomRepository.findAll();
@@ -213,9 +219,17 @@ public class RoomServiceImpl implements IRoomService {
         for (RoomRealReqDTO roomRealReqDTO : roomReals) {
             Long roomRealId = roomRealReqDTO.getId();
             String roomCode = roomRealReqDTO.getRoomCode();
+
+            List<RoomReal> roomResDTOS= roomRealService.findAll();
+            for (RoomReal roomResDTO : roomResDTOS) {
+                if (roomCode.equals(roomResDTO.getRoomCode())) {
+                    throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Room with code '" + roomCode + "' already exists");
+                }
+            }
             Integer floor = roomRealReqDTO.getFloor();
 
             RoomReal roomReal = roomRealRepository.findById(roomRealId).orElseThrow(() -> new RuntimeException("RoomReal not found with id: " + roomRealId));
+            roomReal.setStatusRoom((roomRealReqDTO.getStatusRoom()));
 
             roomReal.setRoomCode(roomCode);
             roomReal.setERangeRoom(roomRealReqDTO.getRangeRoom());
@@ -227,4 +241,6 @@ public class RoomServiceImpl implements IRoomService {
         }
         return new RoomResDTO(room);
     }
+
+
 }

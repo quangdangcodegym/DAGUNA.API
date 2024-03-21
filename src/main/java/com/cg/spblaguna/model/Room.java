@@ -68,7 +68,9 @@ public class Room {
 
 
     @OneToMany(mappedBy = "room")
+
 @JsonIgnore
+
 
     private List<Image> images;
 
