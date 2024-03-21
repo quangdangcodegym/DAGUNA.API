@@ -5,6 +5,7 @@ import com.cg.spblaguna.model.User;
 import com.cg.spblaguna.model.dto.req.ReceptionistReqDTO;
 import com.cg.spblaguna.model.dto.req.RoomReqDTO;
 import com.cg.spblaguna.model.dto.res.ReceptionistResDTO;
+import com.cg.spblaguna.model.dto.res.RoomResDTO;
 import com.cg.spblaguna.model.enumeration.ELockStatus;
 import com.cg.spblaguna.model.enumeration.ERole;
 import com.cg.spblaguna.model.enumeration.EStatusRoom;
@@ -47,20 +48,42 @@ public class ReceptionistAPI {
         Page<ReceptionistResDTO> receptionists = receptionistService.findReceptionistResDTOByRole(ERole.RECEPTIONIST, pageable);
         return new ResponseEntity<>(receptionists, HttpStatus.OK);
     }
-@PatchMapping("/update/{id}")
-    public ResponseEntity<?> updateReceptionists(@PathVariable Long id, @RequestBody ReceptionistReqDTO receptionistReqDTO) {
-        User user = userService.findById(id).get();
-        user.setReceptionistInfo(receptionistReqDTO.getReceptionistInfo())
-                .setReceptionistName(receptionistReqDTO.getReceptionistName())
-                .setDob(receptionistReqDTO.getDob())
-                .setAddress(receptionistReqDTO.getAddress())
-                .setPhone(receptionistReqDTO.getPhone())
-                .setEmail(receptionistReqDTO.getEmail())
-                .setCreateAt(LocalDate.now())
-                .setUserImages(receptionistReqDTO.getAvatarImgId());
-        userService.save(user);
-        return new ResponseEntity<>( HttpStatus.OK);
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getReceptionistById(@PathVariable Long id) {
+        ReceptionistResDTO receptionistResDTO = receptionistService.findReceptionistByIdDTO(id);
+        if (receptionistResDTO == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(receptionistResDTO);
     }
+
+
+
+
+//    @PatchMapping("/update/{id}")
+//    public ResponseEntity<?> updateReceptionists(@PathVariable Long id, @RequestBody ReceptionistReqDTO receptionistReqDTO) {
+//        User user = userService.findById(id).get();
+//        user.setReceptionistInfo(receptionistReqDTO.getReceptionistInfo())
+//                .setReceptionistName(receptionistReqDTO.getReceptionistName())
+//                .setDob(receptionistReqDTO.getDob())
+//                .setAddress(receptionistReqDTO.getAddress())
+//                .setPhone(receptionistReqDTO.getPhone())
+//                .setEmail(receptionistReqDTO.getEmail())
+//                .setCreateAt(LocalDate.now())
+//                .setUserImages(receptionistReqDTO.getAvatarImgId());
+//        userService.save(user);
+//        user.toReceptionistResDTO();
+//        return new ResponseEntity<>(user.toReceptionistResDTO(), HttpStatus.OK);
+//    }
+
+    @PutMapping("/{id}")
+//    @PreAuthorize("hasAnyRole('MODIFIER')")
+    public ResponseEntity<?> updateReceptionist(@PathVariable Long id, @RequestBody ReceptionistReqDTO receptionistReqDTO) {
+        receptionistReqDTO.setId(id);
+        return new ResponseEntity<>(receptionistService.update(receptionistReqDTO), HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<?> createReceptionist(@Validated  @RequestBody ReceptionistReqDTO receptionistReqDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {

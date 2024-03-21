@@ -1,6 +1,7 @@
 package com.cg.spblaguna.service.image;
 
 import com.cg.spblaguna.model.Image;
+import com.cg.spblaguna.model.User;
 import com.cg.spblaguna.model.dto.res.ImageResDTO;
 import com.cg.spblaguna.repository.IImageRepository;
 import com.cg.spblaguna.util.UploadUtil;
@@ -60,8 +61,9 @@ public class ImageServiceImpl implements IImageService {
     }
 
     @Override
-    public void save(Image image) {
+    public User save(Image image) {
 
+        return null;
     }
 
     @Override

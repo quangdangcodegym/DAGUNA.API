@@ -65,7 +65,6 @@ public class RoomAPI {
                     orders.add(new Order(getSortDirection(_sort[1]), _sort[0]));
                 }
             } else {
-                // sort=[field, direction]
                 orders.add(new Order(getSortDirection(sort[1]), sort[0]));
             }
             Pageable pagingSort = PageRequest.of(page, size, Sort.by(orders));

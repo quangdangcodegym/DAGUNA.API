@@ -1,6 +1,7 @@
 package com.cg.spblaguna.service.booking_service;
 
 import com.cg.spblaguna.model.BookingService;
+import com.cg.spblaguna.model.User;
 import com.cg.spblaguna.model.dto.res.BookingServiceResDTO;
 import com.cg.spblaguna.repository.IBookingServiceRepository;
 import jakarta.transaction.Transactional;
@@ -27,8 +28,9 @@ public class IBookingServiceImpl implements IBookingService{
     }
 
     @Override
-    public void save(BookingService bookingService) {
+    public User save(BookingService bookingService) {
 
+        return null;
     }
 
     @Override
