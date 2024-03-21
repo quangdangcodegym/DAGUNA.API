@@ -1,5 +1,6 @@
 package com.cg.spblaguna.service.receptionist;
 
+import com.cg.spblaguna.exception.ResourceNotFoundException;
 import com.cg.spblaguna.model.Image;
 import com.cg.spblaguna.model.User;
 import com.cg.spblaguna.model.dto.req.ReceptionistReqDTO;
@@ -65,7 +66,6 @@ public class ReceptionistServiceImpl implements IReceptionistService {
             images.add(image1);
         });
         user.setUserImages(images);
-
         return user.toReceptionistResDTO();
     }
 
@@ -80,8 +80,8 @@ public class ReceptionistServiceImpl implements IReceptionistService {
         Page<ReceptionistResDTO> userList = receptionistRepository.findUsersDTOByERole(role, pageable);
         userList.stream().forEach(e -> {
             String img = userService.findById(e.getId())
-                    .map(user -> !user.getUserImages().isEmpty() ? user.getUserImages().get(0).getFileUrl() : "https://bit.ly/499RjtL")
-                    .orElse("https://bit.ly/499RjtL");
+                    .map(user -> !user.getUserImages().isEmpty() ? user.getUserImages().get(0).getFileUrl() : "https://res.cloudinary.com/dmrmbvvbi/image/upload/v1710381703/clinic-avatar/50d29b78-fbdc-4932-aba3-e8dffa0c6bb0.png")
+                    .orElse("https://res.cloudinary.com/dmrmbvvbi/image/upload/v1710381703/clinic-avatar/50d29b78-fbdc-4932-aba3-e8dffa0c6bb0.png");
             e.setAvatarImgResDTO(img);
         });
         return userList;
@@ -113,10 +113,26 @@ public class ReceptionistServiceImpl implements IReceptionistService {
         receptionistResDTO.setAddress(user.getAddress());
         receptionistResDTO.setCreateAt(user.getCreateAt());
         receptionistResDTO.setReceptionistInfo(user.getReceptionistInfo());
+        receptionistResDTO.setId(user.getId());
 
-        // Trả về đối tượng ReceptionistResDTO đã tạo
+        // Xử lý danh sách hình ảnh (chỉ sửa đổi nếu cần)
+        List<Image> images = new ArrayList<>();
+        User finalUser = user;
+        receptionistReqDTO.getAvatarImgId().forEach(s -> {
+            Image image = imageRepository.findById(s).orElseThrow(() -> new ResourceNotFoundException("Image not found"));
+            image.setImageType(EImageType.RECEPTIONIST);
+            image.setUser(finalUser);
+            imageRepository.save(image);
+            images.add(image);
+        });
+        if (images.size() != 0) {
+            receptionistResDTO.setAvatarImgResDTO(images.get(0).getFileUrl());
+        }else{
+            receptionistResDTO.setAvatarImgResDTO("https://res.cloudinary.com/dmrmbvvbi/image/upload/v1710381703/clinic-avatar/50d29b78-fbdc-4932-aba3-e8dffa0c6bb0.png");
+        }
         return receptionistResDTO;
     }
+
 
 
     @Override
