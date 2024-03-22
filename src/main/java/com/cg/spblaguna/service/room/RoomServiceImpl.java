@@ -97,8 +97,10 @@ public class RoomServiceImpl implements IRoomService {
 
 
     public RoomResDTO update(RoomReqDTO roomReqDTO) {
-        KindOfRoom kindOfRoom = kindOfRoomRepository.findById(roomReqDTO.getKindOfRoomId()).get();
-        PerType perType = perTypeRepository.findById(roomReqDTO.getPerTypId()).get();
+        KindOfRoom kindOfRoom = kindOfRoomRepository.findById(roomReqDTO.getKindOfRoomId())
+                .orElseThrow(()->new ResourceNotFoundException("KindOfRoom not found"));
+        PerType perType = perTypeRepository.findById(roomReqDTO.getPerTypId())
+                .orElseThrow(()->new ResourceNotFoundException("PerType not found"));
         Room room = roomRepository.findById(roomReqDTO.getId()).orElseThrow();
         room.setName(roomReqDTO.getName());
         room.setRoomType(roomReqDTO.getRoomType());
@@ -110,6 +112,7 @@ public class RoomServiceImpl implements IRoomService {
         room.setUtilitie(roomReqDTO.getUtilitie());
         room.setKindOfRoom(kindOfRoom);
         room.setPerType(perType);
+        room.setSleep(roomReqDTO.getSleep());
 
         Room roomUpdated = roomRepository.save(room);
 
@@ -221,12 +224,15 @@ public class RoomServiceImpl implements IRoomService {
             Long roomRealId = roomRealReqDTO.getId();
             String roomCode = roomRealReqDTO.getRoomCode();
 
-            List<RoomReal> roomResDTOS= roomRealService.findAll();
-            for (RoomReal roomResDTO : roomResDTOS) {
-                if (roomCode.equals(roomResDTO.getRoomCode())) {
-                    throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Room with code '" + roomCode + "' already exists");
-                }
-            }
+//            List<RoomReal> roomResDTOS= roomRealService.findAll();
+//            for (RoomReal roomResDTO : roomResDTOS) {
+//                if (roomCode.equals(roomResDTO.getRoomCode())) {
+//                    throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Room with code '" + roomCode + "' already exists");
+//                }
+//            }
+           if ( roomRealRepository.existsByRoomCode(roomCode)){
+               throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Room with code '" + roomCode + "' already exists");
+           }
             Integer floor = roomRealReqDTO.getFloor();
 
             RoomReal roomReal = roomRealRepository.findById(roomRealId).orElseThrow(() -> new RuntimeException("RoomReal not found with id: " + roomRealId));
