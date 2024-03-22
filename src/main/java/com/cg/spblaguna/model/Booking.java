@@ -53,6 +53,10 @@ public class Booking {
     @OneToMany(mappedBy = "booking")
     private List<BookingDetail> bookingDetails;
 
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private User user;
+
     private String bookingCode;
 
 }

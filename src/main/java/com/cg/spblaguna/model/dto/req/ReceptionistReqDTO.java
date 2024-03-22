@@ -1,6 +1,7 @@
 package com.cg.spblaguna.model.dto.req;
 
 import com.cg.spblaguna.model.Image;
+import com.cg.spblaguna.model.enumeration.ELockStatus;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,5 +33,7 @@ public class ReceptionistReqDTO {
     private List<String> avatarImgId;
     @NotBlank(message = "Hãy thêm tiểu sử của lễ tân")
     private String receptionistInfo;
+    private ELockStatus eLockStatus;
+
 
 }
