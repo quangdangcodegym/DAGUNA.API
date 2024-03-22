@@ -1,6 +1,7 @@
 package com.cg.spblaguna.service.image;
 
 import com.cg.spblaguna.model.Image;
+import com.cg.spblaguna.model.User;
 import com.cg.spblaguna.model.dto.res.ImageResDTO;
 import com.cg.spblaguna.repository.IImageRepository;
 import com.cg.spblaguna.util.UploadUtil;
@@ -29,7 +30,6 @@ public class ImageServiceImpl implements IImageService {
     public ImageResDTO saveImage(MultipartFile fileImage) throws IOException {
         var file = new Image();
         iImageRepository.save(file);
-
         var uploadResult = cloudinary.uploader().upload(fileImage.getBytes(), uploadUtil.buildImageUpLoadParams(file));
         String fileUrl = (String) uploadResult.get("secure_url");
         String fileFormat = (String) uploadResult.get("format");
@@ -60,8 +60,9 @@ public class ImageServiceImpl implements IImageService {
     }
 
     @Override
-    public void save(Image image) {
+    public User save(Image image) {
 
+        return null;
     }
 
     @Override

@@ -1,9 +1,16 @@
 package com.cg.spblaguna.service.receptionist;
 
+import com.cg.spblaguna.exception.ResourceNotFoundException;
+import com.cg.spblaguna.model.Image;
 import com.cg.spblaguna.model.User;
 import com.cg.spblaguna.model.dto.req.ReceptionistReqDTO;
+import com.cg.spblaguna.model.dto.res.ImageResDTO;
 import com.cg.spblaguna.model.dto.res.ReceptionistResDTO;
+import com.cg.spblaguna.model.dto.res.RoomResDTO;
+import com.cg.spblaguna.model.enumeration.EImageType;
+import com.cg.spblaguna.model.enumeration.ELockStatus;
 import com.cg.spblaguna.model.enumeration.ERole;
+import com.cg.spblaguna.repository.IImageRepository;
 import com.cg.spblaguna.repository.IReceptionistRepository;
 import com.cg.spblaguna.service.user.IUserServiceImpl;
 import jakarta.transaction.Transactional;
@@ -16,17 +23,22 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @Transactional
-public class ReceptionistServiceImpl implements IReceptionistService{
+public class ReceptionistServiceImpl implements IReceptionistService {
 
     @Autowired
     private IReceptionistRepository receptionistRepository;
     @Autowired
     private IUserServiceImpl userService;
+
+    @Autowired
+    private IImageRepository imageRepository;
 
 
     @Override
@@ -35,37 +47,92 @@ public class ReceptionistServiceImpl implements IReceptionistService{
     }
 
     @Override
-    public Page<User> findUsersByRole(ERole eRole, Pageable pageable) {
-        return receptionistRepository.findUsersByERole(eRole, pageable);
+    public ReceptionistResDTO update(ReceptionistReqDTO receptionistReqDTO) {
+        User user = userService.findById(receptionistReqDTO.getId()).orElseThrow();
+        user.setReceptionistInfo(receptionistReqDTO.getReceptionistInfo())
+                .setReceptionistName(receptionistReqDTO.getReceptionistName())
+                .setDob(receptionistReqDTO.getDob())
+                .setAddress(receptionistReqDTO.getAddress())
+                .setPhone(receptionistReqDTO.getPhone())
+                .setEmail(receptionistReqDTO.getEmail())
+                .setCreateAt(LocalDate.now());
+        userService.save(user);
+        List<Image> images = new ArrayList<>();
+        receptionistReqDTO.getAvatarImgId().forEach(a -> {
+            Image image1 = imageRepository.findById(a).get();
+            image1.setImageType(EImageType.RECEPTIONIST);
+            image1.setUser(user);
+            imageRepository.save(image1);
+            images.add(image1);
+        });
+        user.setUserImages(images);
+        return user.toReceptionistResDTO();
     }
+
+//    @Override
+//    public Page<User> findUsersByRole(ERole eRole, Pageable pageable) {
+//        return receptionistRepository.findUsersByERole(eRole, pageable);
+//    }
+
 
     @Override
     public Page<ReceptionistResDTO> findReceptionistResDTOByRole(ERole role, Pageable pageable) {
-        Page<ReceptionistResDTO> userList = receptionistRepository.findUsersDTOByERole(role,pageable);
-        userList.stream().forEach(e->{
+        Page<ReceptionistResDTO> userList = receptionistRepository.findUsersDTOByERole(role, pageable);
+        userList.stream().forEach(e -> {
             String img = userService.findById(e.getId())
-                    .map(user -> !user.getUserImages().isEmpty() ? user.getUserImages().get(0).getFileUrl() : "https://bit.ly/499RjtL")
-                    .orElse("https://bit.ly/499RjtL");
-            e.setAvatarImg(img);
+                    .map(user -> !user.getUserImages().isEmpty() ? user.getUserImages().get(0).getFileUrl() : "https://res.cloudinary.com/dmrmbvvbi/image/upload/v1710381703/clinic-avatar/50d29b78-fbdc-4932-aba3-e8dffa0c6bb0.png")
+                    .orElse("https://res.cloudinary.com/dmrmbvvbi/image/upload/v1710381703/clinic-avatar/50d29b78-fbdc-4932-aba3-e8dffa0c6bb0.png");
+            e.setAvatarImgResDTO(img);
         });
         return userList;
     }
 
+
     @Override
-    public ResponseEntity<?> create(ReceptionistReqDTO receptionistReqDTO) {
+    public ReceptionistResDTO create(ReceptionistReqDTO receptionistReqDTO) {
+        User user = new User();
+        user.setDob(receptionistReqDTO.getDob());
+        user.setEmail(receptionistReqDTO.getEmail());
+        user.setReceptionistName(receptionistReqDTO.getReceptionistName());
+        user.setPhone(receptionistReqDTO.getPhone());
+        user.setAddress(receptionistReqDTO.getAddress());
+        user.setUnlock(true);
+        user.setERole(ERole.RECEPTIONIST);
+        user.setCreateAt(LocalDate.now());
+        user.setReceptionistInfo(receptionistReqDTO.getReceptionistInfo());
+
+        // Lưu đối tượng User vào cơ sở dữ liệu
+        user = userService.save(user);
+
+        // Tạo đối tượng ReceptionistResDTO từ đối tượng User
         ReceptionistResDTO receptionistResDTO = new ReceptionistResDTO();
-        receptionistResDTO.setReceptionistName(receptionistReqDTO.getReceptionistName());
-        receptionistResDTO.setDob(receptionistReqDTO.getDob());
-        receptionistResDTO.setEmail(receptionistReqDTO.getEmail());
-        receptionistResDTO.setPhone(receptionistReqDTO.getPhone());
-        receptionistResDTO.setAddress(receptionistReqDTO.getAddress());
-        receptionistResDTO.setCreateAt(LocalDate.now());
-        receptionistResDTO.setReceptionistInfo(receptionistReqDTO.getReceptionistInfo());
+        receptionistResDTO.setReceptionistName(user.getReceptionistName());
+        receptionistResDTO.setDob(user.getDob());
+        receptionistResDTO.setEmail(user.getEmail());
+        receptionistResDTO.setPhone(user.getPhone());
+        receptionistResDTO.setAddress(user.getAddress());
+        receptionistResDTO.setCreateAt(user.getCreateAt());
+        receptionistResDTO.setReceptionistInfo(user.getReceptionistInfo());
+        receptionistResDTO.setId(user.getId());
 
-
-        // Trả về ResponseEntity chứa đối tượng ReceptionistResDTO đã tạo
-        return ResponseEntity.ok(receptionistResDTO);
+        // Xử lý danh sách hình ảnh (chỉ sửa đổi nếu cần)
+        List<Image> images = new ArrayList<>();
+        User finalUser = user;
+        receptionistReqDTO.getAvatarImgId().forEach(s -> {
+            Image image = imageRepository.findById(s).orElseThrow(() -> new ResourceNotFoundException("Image not found"));
+            image.setImageType(EImageType.RECEPTIONIST);
+            image.setUser(finalUser);
+            imageRepository.save(image);
+            images.add(image);
+        });
+        if (images.size() != 0) {
+            receptionistResDTO.setAvatarImgResDTO(images.get(0).getFileUrl());
+        }else{
+            receptionistResDTO.setAvatarImgResDTO("https://res.cloudinary.com/dmrmbvvbi/image/upload/v1710381703/clinic-avatar/50d29b78-fbdc-4932-aba3-e8dffa0c6bb0.png");
+        }
+        return receptionistResDTO;
     }
+
 
 
     @Override
@@ -74,30 +141,26 @@ public class ReceptionistServiceImpl implements IReceptionistService{
     }
 
     @Override
-    public void save(User user) {
+    public User save(User user) {
 
+        return user;
     }
 
     @Override
     public void deleteById(Long id) {
 
     }
+
     public void changeUser(User user) {
         receptionistRepository.save(user);
     }
 
 
-    public ResponseEntity<?> updateReceptionists(@PathVariable Long id, ReceptionistReqDTO receptionistReqDTO) {
-        User user = userService.findById(id).get();
-        user.setReceptionistInfo(receptionistReqDTO.getReceptionistInfo())
-                .setReceptionistName(receptionistReqDTO.getReceptionistName())
-                .setDob(receptionistReqDTO.getDob())
-                .setAddress(receptionistReqDTO.getAddress())
-                .setPhone(receptionistReqDTO.getPhone())
-                .setEmail(receptionistReqDTO.getEmail())
-                .setCreateAt(LocalDate.now())
-                .setUserImages(receptionistReqDTO.getAvatarImgId());
-        userService.save(user);
-        return new ResponseEntity<>( HttpStatus.OK);
+    public ReceptionistResDTO findReceptionistByIdDTO(Long id) {
+        User user = receptionistRepository.findById(id).orElse(null);
+        if (user == null) {
+            return null;
+        }
+        return new ReceptionistResDTO(user);
     }
 }

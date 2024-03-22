@@ -29,10 +29,8 @@ public class ReceptionistReqDTO {
     @NotBlank(message = "địa chỉ không được để trống")
     private String address;
     private LocalDate createAt;
-    private List<Image> avatarImgId;
+    private List<String> avatarImgId;
     @NotBlank(message = "Hãy thêm tiểu sử của lễ tân")
     private String receptionistInfo;
-    public void setAvatarImgId(List<Image> avatarImgId) {
-        this.avatarImgId = avatarImgId;
-    }
+
 }

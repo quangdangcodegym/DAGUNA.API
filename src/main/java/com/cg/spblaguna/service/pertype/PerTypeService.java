@@ -1,6 +1,7 @@
 package com.cg.spblaguna.service.pertype;
 
 import com.cg.spblaguna.model.PerType;
+import com.cg.spblaguna.model.User;
 import com.cg.spblaguna.repository.IPerTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,8 +25,9 @@ public class PerTypeService implements IPerTypeService{
     }
 
     @Override
-    public void save(PerType perType) {
+    public User save(PerType perType) {
 
+        return null;
     }
 
     @Override
