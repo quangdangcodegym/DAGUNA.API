@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -288,41 +289,6 @@ public class BookingServiceImpl implements IBookingService {
         return bookingResDTO;
     }
 
-//    @Override
-//    public BookingResDTO saveBookingReqUpdate_RoomEditDTO(BookingReqUpdate_RoomAddDTO bookingReqUpdateRoomAddDTO) {
-//        Booking booking = bookingRepository.findById(bookingReqUpdateRoomAddDTO.getBookingId()).get();
-//
-//
-//        List<BookingDetail> bookingDetails = bookingDetailRepository.findBookingDetailsByBooking_Id(booking.getId());
-//
-//        for (BookingDetail bookingDetail : bookingDetails) {
-//            if (bookingDetail.getRoom().getId().equals(bookingReqUpdateRoomAddDTO.getBookingDetail().getRoomId())) {
-//                bookingDetail.setCheckIn(bookingReqUpdateRoomAddDTO.getBookingDetail().getCheckIn());
-//                bookingDetail.setCheckOut(bookingReqUpdateRoomAddDTO.getBookingDetail().getCheckOut());
-//                bookingDetail.setNumberAdult(bookingReqUpdateRoomAddDTO.getBookingDetail().getNumberAdult());
-//                bookingDetail.setNumberChildren(bookingReqUpdateRoomAddDTO.getBookingDetail().getNumberChildren());
-//                bookingDetail.setDiscountCode(bookingReqUpdateRoomAddDTO.getBookingDetail().getDiscountCode());
-//                bookingDetail.setVat(new BigDecimal(vatBookingDetail));
-//                bookingDetail.setTotalAmount(bookingReqUpdateRoomAddDTO.getBookingDetail().getTotalAmount());
-//                bookingDetail.setPrice(bookingReqUpdateRoomAddDTO.getBookingDetail().getPrice());
-//                bookingDetail.setTotal(bookingReqUpdateRoomAddDTO.getBookingDetail().getTotal());
-//
-//                bookingDetailRepository.save(bookingDetail);
-//            }
-//        }
-//
-//        bookingDetails = bookingDetailRepository.findBookingDetailsByBooking_Id(booking.getId());
-//
-//        //
-//        BookingResDTO bookingResDTO = new BookingResDTO();
-//        bookingResDTO.setBookingId(booking.getId());
-//        List<BookingDetailResDTO> bookingDetailResDTOS = bookingDetails.stream()
-//                .map(bdt -> bdt.toBookingDetailResDTO())
-//                .collect(Collectors.toList());
-//        bookingResDTO.setBookingDetails(bookingDetailResDTOS);
-//
-//        return bookingResDTO;
-//    }
 
     @Override
     public BookingResDTO saveBookingReqUpdate_RoomEditDTO(BookingReqUpdate_RoomAddDTO bookingReqUpdateRoomAddDTO) {
@@ -365,6 +331,47 @@ public class BookingServiceImpl implements IBookingService {
 
         return bookingResDTO;
     }
+
+    @Override
+    public BookingResDTO saveBookingReqUpdate_RoomDeleteDTO(Long bookingId, Long roomId) {
+        Optional<Booking> optionalBooking = bookingRepository.findById(bookingId);
+
+
+        if (optionalBooking.isPresent()) {
+            Booking booking = optionalBooking.get();
+            List<BookingDetail> bookingDetails = bookingDetailRepository.findBookingDetailsByBooking_Id(bookingId);
+
+            // Tìm kiếm và xóa chi tiết đặt phòng có roomId tương ứng
+            List<BookingDetail> updatedBookingDetails = new ArrayList<>();
+            for (BookingDetail bookingDetail : bookingDetails) {
+                if (!bookingDetail.getId().equals(roomId)) {
+                    updatedBookingDetails.add(bookingDetail);
+                } else {
+                    // Xóa chi tiết đặt phòng có roomId tương ứng
+                    bookingDetailRepository.delete(bookingDetail);
+                }
+            }
+
+            // Cập nhật danh sách chi tiết đặt phòng mới
+            booking.setBookingDetails(updatedBookingDetails);
+            bookingRepository.save(booking);
+
+            // Tạo đối tượng BookingResDTO mới
+            BookingResDTO bookingResDTO = new BookingResDTO();
+            bookingResDTO.setBookingId(bookingId);
+            List<BookingDetailResDTO> bookingDetailResDTOS = updatedBookingDetails.stream()
+                    .map(BookingDetail::toBookingDetailResDTO)
+                    .collect(Collectors.toList());
+            bookingResDTO.setBookingDetails(bookingDetailResDTOS);
+            return bookingResDTO;
+        } else {
+            throw new IllegalArgumentException("Booking with id " + bookingId + " not found.");
+        }
+    }
+
+
+
+
 
     private boolean checkRoomIdExistsBookingDetails(List<BookingDetail> bookingDetails, Long roomId) {
         for (BookingDetail bdt : bookingDetails) {
