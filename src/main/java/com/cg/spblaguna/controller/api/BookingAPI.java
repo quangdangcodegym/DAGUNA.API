@@ -1,6 +1,7 @@
 package com.cg.spblaguna.controller.api;
 
 import com.cg.spblaguna.model.Booking;
+import com.cg.spblaguna.model.Room;
 import com.cg.spblaguna.model.dto.req.BookingReqCreDTO;
 import com.cg.spblaguna.model.dto.req.BookingReqUpdate_BookingServiceCreUpdateDTO;
 import com.cg.spblaguna.model.dto.req.BookingReqUpdate_RoomAddDTO;
@@ -49,6 +50,12 @@ public class BookingAPI {
         BookingResDTO bookingResDTO = bookingService.saveBookingReqUpdate_RoomEditDTO(bookingReqUpdateRoomAddDTO);
         return new ResponseEntity<>(bookingResDTO, HttpStatus.OK);
     }
+    @DeleteMapping("/{bookingId}/rooms/{roomId}/delete")
+    public ResponseEntity<?> updateBooking_DeleteRoom(@PathVariable Long bookingId, @PathVariable Long roomId){
+        BookingResDTO bookingResDTO = bookingService.saveBookingReqUpdate_RoomDeleteDTO( bookingId , roomId);
+        return new ResponseEntity<>(bookingResDTO, HttpStatus.OK);
+    }
+
 
     @PatchMapping("/booking-services/add")
     public ResponseEntity<?> addBookingService(@RequestBody BookingReqUpdate_BookingServiceCreUpdateDTO bookingReqUpdateBookingServiceCreUpdateDTO) {
@@ -60,4 +67,5 @@ public class BookingAPI {
         BookingResDTO bookingResDTO = bookingService.editBookingReqUpdate_BookingServiceEditDTO(bookingReqUpdateBookingServiceCreUpdateDTO);
         return new ResponseEntity<>(bookingResDTO, HttpStatus.OK);
     }
+
 }
