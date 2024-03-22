@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Service;
 
-import java.awt.datatransfer.FlavorEvent;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -64,8 +63,9 @@ public class BookingServiceImpl implements IBookingService {
     }
 
     @Override
-    public void save(Booking booking) {
+    public User save(Booking booking) {
         bookingRepository.save(booking);
+        return null;
     }
 
     @Override
