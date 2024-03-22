@@ -68,11 +68,15 @@ public class User {
     private ERole eRole;
 
 
+    @OneToMany(mappedBy = "user")
+    private List<Booking> bookings;
+
 
     public ReceptionistResDTO toReceptionistResDTO(){
         ReceptionistResDTO receptionistResDTO = new ReceptionistResDTO();
         receptionistResDTO.setId(id);
         receptionistResDTO.setReceptionistName(receptionistName);
+        receptionistResDTO.setELockStatus(eLockStatus);
         receptionistResDTO.setDob(dob);
         receptionistResDTO.setEmail(email);
         receptionistResDTO.setPhone(phone);

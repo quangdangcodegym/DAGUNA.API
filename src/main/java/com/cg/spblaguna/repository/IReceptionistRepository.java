@@ -24,6 +24,6 @@ public interface IReceptionistRepository extends JpaRepository<User, Long> {
     @Query("select  u from User u where u.id =: id")
     List<User> findUsersById(@Param("id") Long id);
 
-    @Query("select new com.cg.spblaguna.model.dto.res.ReceptionistResDTO (u.id,u.receptionistName,u.dob,u.email,u.phone,u.address,u.createAt,u.receptionistInfo) from User u where u.eRole=:role")
+    @Query("select new com.cg.spblaguna.model.dto.res.ReceptionistResDTO (u.id,u.eLockStatus,u.receptionistName,u.dob,u.email,u.phone,u.address,u.createAt,u.receptionistInfo) from User u where u.eRole=:role")
     Page<ReceptionistResDTO> findUsersDTOByERole(@Param("role") ERole role,Pageable pageable);
 }
