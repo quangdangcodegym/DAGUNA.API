@@ -48,12 +48,11 @@ public class Booking {
     @Column(name = "deleted", columnDefinition = "boolean default false")
     private Boolean deleted;
 
-
-
     private Boolean reminderSent = false ;
-
 
     @OneToMany(mappedBy = "booking")
     private List<BookingDetail> bookingDetails;
+
+    private String bookingCode;
 
 }

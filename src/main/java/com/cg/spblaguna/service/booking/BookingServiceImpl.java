@@ -96,6 +96,8 @@ public class BookingServiceImpl implements IBookingService {
     public BookingResDTO saveBooking(BookingReqCreDTO bookingReqCreDTO) {
         // Lưu mới booking
         Booking booking = new Booking();
+        String bookingCode = AppUtils.randomCode();
+        booking.setBookingCode(bookingCode);
         booking.setCreateAt(LocalDateTime.now());
         bookingRepository.save(booking);
 

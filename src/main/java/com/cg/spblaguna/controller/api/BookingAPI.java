@@ -6,6 +6,7 @@ import com.cg.spblaguna.model.dto.req.BookingReqUpdate_BookingServiceCreUpdateDT
 import com.cg.spblaguna.model.dto.req.BookingReqUpdate_RoomAddDTO;
 import com.cg.spblaguna.model.dto.res.BookingResDTO;
 import com.cg.spblaguna.service.booking.IBookingService;
+import com.cg.spblaguna.util.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +35,7 @@ public class BookingAPI {
         return new ResponseEntity<>(bookingResDTO, HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping()
     public ResponseEntity<?> createBooking(@RequestBody BookingReqCreDTO bookingReqCreDTO) {
         BookingResDTO bookingResDTO = bookingService.saveBooking(bookingReqCreDTO);
         return new ResponseEntity<>(bookingResDTO, HttpStatus.OK);
