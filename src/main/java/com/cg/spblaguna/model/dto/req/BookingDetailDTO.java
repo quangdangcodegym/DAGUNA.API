@@ -19,4 +19,5 @@ public class BookingDetailDTO {
     private BigDecimal totalAmount;
     private BigDecimal price;
     private BigDecimal total;
+    private Boolean checkInStatus = true;
 }

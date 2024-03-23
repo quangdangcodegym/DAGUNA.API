@@ -107,6 +107,7 @@ public class BookingServiceImpl implements IBookingService {
         BookingDetail bookingDetail = new BookingDetail();
         bookingDetail.setCheckIn(bookingReqCreDTO.getBookingDetail().getCheckIn());
         bookingDetail.setCheckOut(bookingReqCreDTO.getBookingDetail().getCheckOut());
+        bookingDetail.setCheckInStatus(true);
 
         Room room = roomRepository.findById(bookingReqCreDTO.getBookingDetail().getRoomId()).get();
         bookingDetail.setRoom(room);

@@ -23,9 +23,8 @@ public class BookingDetailResDTO {
     private Integer numberAdult;
     private Integer numberChildren;
     private String discountCode;
-
+    private Boolean checkInStatus = true;
     private RoomResDTO room;
-
     private List<BookingDetailServiceResDTO> bookingDetailServiceResDTOS;
 
 

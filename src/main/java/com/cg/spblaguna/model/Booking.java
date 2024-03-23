@@ -33,6 +33,7 @@ public class Booking {
      */
     private BigDecimal total;
 
+
     @Enumerated(EnumType.STRING)
     @Column(name = "booking_status")
     private EBookingStatus bookingStatus;
