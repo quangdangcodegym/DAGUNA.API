@@ -38,7 +38,7 @@ public class RoomRealServiceImpl implements IRoomRealService {
 
 
     @Override
-    public User save(RoomReal roomReal) {
+    public RoomReal save(RoomReal roomReal) {
         roomRealRepository.save(roomReal);
         return null;
     }

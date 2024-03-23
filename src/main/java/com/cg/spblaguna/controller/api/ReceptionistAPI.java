@@ -1,16 +1,12 @@
 package com.cg.spblaguna.controller.api;
 
-import com.cg.spblaguna.model.Room;
 import com.cg.spblaguna.model.User;
 import com.cg.spblaguna.model.dto.req.ReceptionistReqDTO;
-import com.cg.spblaguna.model.dto.req.RoomReqDTO;
 import com.cg.spblaguna.model.dto.res.ReceptionistResDTO;
-import com.cg.spblaguna.model.dto.res.RoomResDTO;
 import com.cg.spblaguna.model.enumeration.ELockStatus;
 import com.cg.spblaguna.model.enumeration.ERole;
-import com.cg.spblaguna.model.enumeration.EStatusRoom;
 import com.cg.spblaguna.service.receptionist.IReceptionistService;
-import com.cg.spblaguna.service.user.UserService;
+import com.cg.spblaguna.service.user.IUserService;
 import com.cg.spblaguna.util.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,9 +17,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.HashMap;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/receptionists")
@@ -33,7 +27,7 @@ public class ReceptionistAPI {
     @Autowired
     private IReceptionistService receptionistService;
     @Autowired
-    private UserService userService;
+    private IUserService userService;
 
     @Autowired
     private AppUtils appUtils;

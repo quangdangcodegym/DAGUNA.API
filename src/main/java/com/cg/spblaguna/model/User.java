@@ -1,9 +1,11 @@
 package com.cg.spblaguna.model;
 
+import com.cg.spblaguna.model.dto.res.CustomerInfoResDTO;
 import com.cg.spblaguna.model.dto.res.ImageResDTO;
 import com.cg.spblaguna.model.dto.res.ReceptionistResDTO;
 import com.cg.spblaguna.model.enumeration.EBookingStatus;
 import com.cg.spblaguna.model.enumeration.ELockStatus;
+import com.cg.spblaguna.model.enumeration.EPrefix;
 import com.cg.spblaguna.model.enumeration.ERole;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
@@ -31,17 +33,43 @@ public class User {
     private LocalDate dob;
     @Column(unique = true, nullable = false)
     private String email;
-    @NotEmpty(message = "Tên lễ tân không được trống")
+
+    private String password;
+//    @NotEmpty(message = "Tên lễ tân không được trống")
     @Column(name = "receptionist_name")
     private String receptionistName;
+
+
+    @Column(name = "prefix")
+    @Enumerated(EnumType.STRING)
+    private EPrefix ePrefix;
+
+    @Column(name = "first_name")
+    private String firstName;
+
+    @Column(name = "last_name")
+    private String lastName;
+
     private String phone;
+
     private String address;
+
+
+    private String country;
+
+    @Column(name = "zip_code")
+    private String zipCode;
+
 
     @Column(name = "create_at")
     private LocalDate createAt;
 
-    @Column(name = "deleted", columnDefinition = "int default 0")
-    private int deleted = 0;
+    @Column(name = "deleted", columnDefinition = "boolean default false")
+    private Boolean deleted;
+
+
+
+
     @Column(name = "receptionist_info", columnDefinition = "LONGTEXT")
     private String receptionistInfo;
 
@@ -50,8 +78,8 @@ public class User {
     private CardPayment cardPayment;
 
 
-    @Enumerated(EnumType.STRING)
-    private EBookingStatus eBookStatubookStatus;
+//    @Enumerated(EnumType.STRING)
+//    private EBookingStatus eBookStatubookStatus;
 
     @OneToMany(mappedBy = "user")
     private List<Image> userImages;
@@ -98,5 +126,26 @@ public class User {
     }
 
 
+    public CustomerInfoResDTO toCustomerInfoResDTO(){
+
+        CustomerInfoResDTO customerInfoResDTO = new CustomerInfoResDTO();
+
+        customerInfoResDTO.setEPrefix(this.getEPrefix());
+        customerInfoResDTO.setFirstName(this.getFirstName());
+        customerInfoResDTO.setLastName(this.getLastName());
+        customerInfoResDTO.setPhone(this.getPhone());
+        customerInfoResDTO.setAddress(this.getAddress());
+        customerInfoResDTO.setCountry(this.getCountry());
+        customerInfoResDTO.setEmail(this.getEmail());
+        customerInfoResDTO.setNameCard(this.getCardPayment().getNameCard());
+        customerInfoResDTO.setCardType(this.getCardPayment().getCardType());
+        customerInfoResDTO.setNameCard(this.getCardPayment().getNameCard());
+        customerInfoResDTO.setExpirationDate(this.getCardPayment().getExpirationDate());
+        customerInfoResDTO.setCvv(this.getCardPayment().getCvv());
+
+
+        return null;
+
+    }
 
 }

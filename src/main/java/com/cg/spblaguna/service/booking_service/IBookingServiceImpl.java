@@ -28,7 +28,7 @@ public class IBookingServiceImpl implements IBookingService{
     }
 
     @Override
-    public User save(BookingService bookingService) {
+    public BookingService save(BookingService bookingService) {
 
         return null;
     }

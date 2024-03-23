@@ -25,7 +25,7 @@ public class KindOfRoomService implements IKindOfRoomService {
     }
 
     @Override
-    public User save(KindOfRoom kindOfRoom) {
+    public KindOfRoom save(KindOfRoom kindOfRoom) {
 
         return null;
     }

@@ -144,7 +144,7 @@ public class RoomServiceImpl implements IRoomService {
 
 
     @Override
-    public User save(Room room) {
+    public Room save(Room room) {
 
         return null;
     }
