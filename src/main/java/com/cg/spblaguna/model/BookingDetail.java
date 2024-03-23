@@ -30,8 +30,12 @@ public class BookingDetail {
     @JoinColumn(name = "booking_id")
     private Booking booking;
 
+    @Column(name = "status_checkin")
+    private Boolean checkInStatus;
+
     @Column(name = "checkin")
     private LocalDateTime checkIn;
+
     @Column(name = "checkout")
     private LocalDateTime checkOut;
 
@@ -43,6 +47,10 @@ public class BookingDetail {
     @ManyToOne
     @JoinColumn(name = "room_id")
     private Room room;
+
+    @ManyToOne
+    @JoinColumn(name = "roomreal_id")
+    private RoomReal roomReal;
 
     @OneToMany(mappedBy = "bookingDetail")
     private List<BookingDetailService> bookingDetailServices = new ArrayList<>();
