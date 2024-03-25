@@ -96,7 +96,7 @@ public class ReceptionistAPI {
     @PatchMapping("/open/{id}")
     public ResponseEntity<?> openReceptionist(@PathVariable Long id){
         User user = userService.findById(id).get();
-        user.setELockStatus(ELockStatus.LOCK);
+        user.setELockStatus(ELockStatus.UNLOCK);
         receptionistService.changeUser(user);
         return new ResponseEntity<>(HttpStatus.OK);
     }

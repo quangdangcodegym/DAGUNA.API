@@ -3,12 +3,14 @@ package com.cg.spblaguna.service.roomreal;
 import com.cg.spblaguna.model.Room;
 import com.cg.spblaguna.model.RoomReal;
 import com.cg.spblaguna.model.User;
+import com.cg.spblaguna.model.dto.res.RoomRealResDTO;
 import com.cg.spblaguna.repository.IRoomRealRepository;
 import com.cg.spblaguna.repository.IRoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -53,5 +55,10 @@ public class RoomRealServiceImpl implements IRoomRealService {
         }
         Room currentRoom = room.get();
         return roomRealRepository.findAllByRoomId(currentRoom);
+    }
+
+    @Override
+    public List<RoomRealResDTO> getAllRoomRealResDTOBy(Long roomId, LocalDate checkIn, LocalDate checkOut) {
+        return null;
     }
 }

@@ -103,6 +103,7 @@ public class ReceptionistServiceImpl implements IReceptionistService {
         receptionistResDTO.setDob(user.getDob());
         receptionistResDTO.setEmail(user.getEmail());
         receptionistResDTO.setPhone(user.getPhone());
+        receptionistResDTO.setELockStatus(user.getELockStatus());
         receptionistResDTO.setAddress(user.getAddress());
         receptionistResDTO.setCreateAt(user.getCreateAt());
         receptionistResDTO.setReceptionistInfo(user.getReceptionistInfo());

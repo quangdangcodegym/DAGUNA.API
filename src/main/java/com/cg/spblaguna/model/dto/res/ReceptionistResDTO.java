@@ -3,6 +3,7 @@ package com.cg.spblaguna.model.dto.res;
 
 import com.cg.spblaguna.model.Image;
 import com.cg.spblaguna.model.User;
+import com.cg.spblaguna.model.enumeration.ELockStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,10 +29,12 @@ public class ReceptionistResDTO {
     private LocalDate createAt;
     private String avatarImgResDTO;
     private String receptionistInfo;
+    private ELockStatus eLockStatus;
 
-    public ReceptionistResDTO(Long id, String receptionistName, LocalDate dob, String email, String phone, String address, LocalDate createAt, String receptionistInfo) {
+    public ReceptionistResDTO(Long id, ELockStatus eLockStatus, String receptionistName, LocalDate dob, String email, String phone, String address, LocalDate createAt, String receptionistInfo) {
         this.id = id;
         this.receptionistName = receptionistName;
+        this.eLockStatus = eLockStatus;
         this.dob = dob;
         this.email = email;
         this.phone = phone;
@@ -40,11 +43,13 @@ public class ReceptionistResDTO {
         this.receptionistInfo = receptionistInfo;
     }
 
+
     public ReceptionistResDTO(User user){
         this.setId(user.getId());
         this.setReceptionistName(user.getReceptionistName());
         this.setDob(user.getDob());
         this.setEmail(user.getEmail());
+        this.setELockStatus(user.getELockStatus());
         this.setPhone(user.getPhone());
         this.setAddress(user.getAddress());
 

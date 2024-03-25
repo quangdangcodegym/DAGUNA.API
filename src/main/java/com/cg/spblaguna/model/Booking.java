@@ -33,6 +33,7 @@ public class Booking {
      */
     private BigDecimal total;
 
+
     @Enumerated(EnumType.STRING)
     @Column(name = "booking_status")
     private EBookingStatus bookingStatus;
@@ -48,12 +49,15 @@ public class Booking {
     @Column(name = "deleted", columnDefinition = "boolean default false")
     private Boolean deleted;
 
-
-
     private Boolean reminderSent = false ;
-
 
     @OneToMany(mappedBy = "booking")
     private List<BookingDetail> bookingDetails;
+
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private User user;
+
+    private String bookingCode;
 
 }
