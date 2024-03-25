@@ -1,7 +1,5 @@
 package com.cg.spblaguna.controller.api;
 
-import com.cg.spblaguna.model.Booking;
-import com.cg.spblaguna.model.Room;
 import com.cg.spblaguna.model.dto.req.BookingReqCreDTO;
 import com.cg.spblaguna.model.dto.req.BookingReqUpdate_BookingServiceCreUpdateDTO;
 import com.cg.spblaguna.model.dto.req.BookingReqUpdate_RoomAddDTO;
@@ -20,6 +18,7 @@ import java.util.List;
 public class BookingAPI {
     @Autowired
     private IBookingService bookingService;
+
     @GetMapping
     public ResponseEntity<?> getAllBooking() {
         List<BookingResDTO> bookingList = bookingService.findAllBookingResDTO();
@@ -55,7 +54,6 @@ public class BookingAPI {
         BookingResDTO bookingResDTO = bookingService.saveBookingReqUpdate_RoomDeleteDTO( bookingId , roomId);
         return new ResponseEntity<>(bookingResDTO, HttpStatus.OK);
     }
-
 
     @PatchMapping("/booking-services/add")
     public ResponseEntity<?> addBookingService(@RequestBody BookingReqUpdate_BookingServiceCreUpdateDTO bookingReqUpdateBookingServiceCreUpdateDTO) {

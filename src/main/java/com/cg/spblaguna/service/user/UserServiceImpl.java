@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class UserService implements IUserServiceImpl {
+public class UserServiceImpl implements IUserService {
     @Autowired
     private IUserRepository iUserRepository;
     @Override
