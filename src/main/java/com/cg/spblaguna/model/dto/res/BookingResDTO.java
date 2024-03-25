@@ -19,6 +19,10 @@ public class BookingResDTO {
     private List<BookingDetailResDTO> bookingDetails;
     private String bookingCode;
 
+    private CustomerInfoResDTO customerInfo;
+
+
+
     public BookingResDTO(Booking booking) {
         this.setBookingId(booking.getId());
        this.setBookingCode(booking.getBookingCode());

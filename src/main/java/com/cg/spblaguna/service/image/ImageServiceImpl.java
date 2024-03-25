@@ -60,7 +60,7 @@ public class ImageServiceImpl implements IImageService {
     }
 
     @Override
-    public User save(Image image) {
+    public Image save(Image image) {
 
         return null;
     }

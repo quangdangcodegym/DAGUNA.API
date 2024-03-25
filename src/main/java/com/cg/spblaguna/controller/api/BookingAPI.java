@@ -1,13 +1,12 @@
 package com.cg.spblaguna.controller.api;
 
-import com.cg.spblaguna.model.Booking;
-import com.cg.spblaguna.model.Room;
 import com.cg.spblaguna.model.dto.req.BookingReqCreDTO;
 import com.cg.spblaguna.model.dto.req.BookingReqUpdate_BookingServiceCreUpdateDTO;
+import com.cg.spblaguna.model.dto.req.BookingReqUpdate_CustomerDTO;
 import com.cg.spblaguna.model.dto.req.BookingReqUpdate_RoomAddDTO;
 import com.cg.spblaguna.model.dto.res.BookingResDTO;
 import com.cg.spblaguna.service.booking.IBookingService;
-import com.cg.spblaguna.util.AppUtils;
+import com.cg.spblaguna.service.cardpayment.ICardPaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +20,9 @@ import java.util.List;
 public class BookingAPI {
     @Autowired
     private IBookingService bookingService;
+
+    @Autowired
+    private ICardPaymentService cardPayment;
     @GetMapping
     public ResponseEntity<?> getAllBooking() {
         List<BookingResDTO> bookingList = bookingService.findAllBookingResDTO();
@@ -56,7 +58,13 @@ public class BookingAPI {
         BookingResDTO bookingResDTO = bookingService.saveBookingReqUpdate_RoomDeleteDTO( bookingId , roomId);
         return new ResponseEntity<>(bookingResDTO, HttpStatus.OK);
     }
+    @PatchMapping("/{bookingId}/customer")
+    public ResponseEntity<?> updateBooking_AddCustomer(@PathVariable Long bookingId, @RequestBody BookingReqUpdate_CustomerDTO bookingReqUpdateCustomerDTO){
 
+        bookingReqUpdateCustomerDTO.setBookingId(bookingId);
+        BookingResDTO bookingResDTO = bookingService.updateBooking_AddCustomer(bookingReqUpdateCustomerDTO);
+        return new ResponseEntity<>(bookingResDTO, HttpStatus.OK);
+    }
 
     @PatchMapping("/booking-services/add")
     public ResponseEntity<?> addBookingService(@RequestBody BookingReqUpdate_BookingServiceCreUpdateDTO bookingReqUpdateBookingServiceCreUpdateDTO) {

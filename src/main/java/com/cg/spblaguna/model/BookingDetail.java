@@ -4,10 +4,12 @@ import com.cg.spblaguna.model.dto.res.BookingDetailResDTO;
 import com.cg.spblaguna.model.dto.res.BookingDetailServiceResDTO;
 import com.cg.spblaguna.model.dto.res.BookingServiceResDTO;
 import com.cg.spblaguna.model.enumeration.EBookingStatus;
+import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -67,8 +69,11 @@ public class BookingDetail {
 
     @Column(name = "number_adult")
     private Integer numberAdult;
-    @Column(name = "number_children")
-    private Integer numberChildren;
+
+    @Column(name = "number_children", columnDefinition = "json", nullable = false)
+    @Type(JsonType.class)
+    private String numberChildren;
+
     @Column(name = "discount_code")
     private String discountCode;
 

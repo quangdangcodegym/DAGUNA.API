@@ -5,5 +5,5 @@ import com.cg.spblaguna.service.IGeneralService;
 
 public interface IUserServiceImpl extends IGeneralService<User,Long> {
 
-
+    User findUserByEmailAndPhone(String email, String phone);
 }

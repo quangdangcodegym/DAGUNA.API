@@ -21,7 +21,7 @@ public class BookingDetailResDTO {
     private BigDecimal total;
     private BigDecimal vat;
     private Integer numberAdult;
-    private Integer numberChildren;
+    private String numberChildren;
     private String discountCode;
     private Boolean checkInStatus = true;
     private RoomResDTO room;

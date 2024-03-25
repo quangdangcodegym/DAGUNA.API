@@ -25,7 +25,7 @@ public class PerTypeService implements IPerTypeService{
     }
 
     @Override
-    public User save(PerType perType) {
+    public PerType save(PerType perType) {
 
         return null;
     }

@@ -24,7 +24,7 @@ public class UtilityService implements IUtilityService {
     }
 
     @Override
-    public User save(Utilitie utilitie) {
+    public Utilitie save(Utilitie utilitie) {
 
         return null;
     }

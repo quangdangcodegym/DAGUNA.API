@@ -1,5 +1,6 @@
 package com.cg.spblaguna.model;
 
+import com.cg.spblaguna.model.enumeration.ECardType;
 import com.cg.spblaguna.model.enumeration.EMethod;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,6 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
+
 @Entity
 
 @NoArgsConstructor
@@ -26,9 +29,8 @@ public class Payment {
 
     private Long vat;
 
-    private Timestamp date;
-    @Enumerated(EnumType.STRING)
 
+    @Enumerated(EnumType.STRING)
     private EMethod method;
 
     private Long total;

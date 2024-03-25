@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class UserService implements IUserServiceImpl {
+public class IUserService implements IUserServiceImpl {
     @Autowired
     private IUserRepository iUserRepository;
     @Override
@@ -35,4 +35,8 @@ public class UserService implements IUserServiceImpl {
         iUserRepository.deleteById(id);
     }
 
+    @Override
+    public User findUserByEmailAndPhone(String email, String phone) {
+        return iUserRepository.findUserByEmailAndPhone(email, phone);
+    }
 }

@@ -47,13 +47,8 @@ public class RoomAPI {
     public ResponseEntity<?> filterRooms(
             @RequestParam(required = false) String kw,
             @RequestParam(defaultValue = "0") int page,
-<<<<<<< HEAD
-            @RequestParam(defaultValue = "5") int size,
-=======
 
             @RequestParam(defaultValue = "5") int size,
-
->>>>>>> a7b00c3b848d76bcd426babf6dfd5df077ab9d57
             @RequestParam(defaultValue = "") String roomType,
             @RequestParam(required = false) BigDecimal minPrice,
             @RequestParam(required = false) BigDecimal maxPrice,

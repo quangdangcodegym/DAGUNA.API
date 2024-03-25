@@ -4,6 +4,7 @@ import com.cg.spblaguna.model.Booking;
 import com.cg.spblaguna.model.Room;
 import com.cg.spblaguna.model.dto.req.BookingReqCreDTO;
 import com.cg.spblaguna.model.dto.req.BookingReqUpdate_BookingServiceCreUpdateDTO;
+import com.cg.spblaguna.model.dto.req.BookingReqUpdate_CustomerDTO;
 import com.cg.spblaguna.model.dto.req.BookingReqUpdate_RoomAddDTO;
 import com.cg.spblaguna.model.dto.res.BookingResDTO;
 import com.cg.spblaguna.service.IGeneralService;
@@ -31,4 +32,5 @@ public interface IBookingService extends IGeneralService<Booking,Long> {
     BookingResDTO saveBookingReqUpdate_RoomDeleteDTO(Long bookingId , Long roomId);
 
 
+    BookingResDTO updateBooking_AddCustomer(BookingReqUpdate_CustomerDTO bookingReqUpdateCustomerDTO);
 }
