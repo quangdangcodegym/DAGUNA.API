@@ -21,59 +21,6 @@ public interface IRoomRealRepository extends JpaRepository<RoomReal, Long> {
 
     boolean existsByRoomCode(String roomCode);
 
-//        @Query(value = "SELECT " +
-//            "CASE " +
-//            "WHEN rrl.roomId.id IS NOT NULL " +
-//            "THEN  (new com.cg.spblaguna.model.dto.req.RoomRealReqDTO ( " +
-//            "            rrl.id, rrl.roomCode,rrl.statusRoom,rrl.eRangeRoom,rrl.floor,rrl.roomId.id ) " +
-//            "      FROM RoomReal rrl " +
-//            "      WHERE rrl.id NOT IN ( " +
-//            "      SELECT DISTINCT " +
-//            "      bds.roomReal.id " +
-//            "      FROM BookingDetail bds " +
-//            "      WHERE (" +
-//            "      bds.checkIn BETWEEN :selectFirstDay AND :selectLastDay " +
-//            "      OR bds.checkOut BETWEEN :selectFirstDay AND :selectLastDay " +
-//            "      OR :selectFirstDay BETWEEN bds.checkIn AND bds.checkOut " +
-//            "      OR :selectLastDay BETWEEN bds.checkIn AND bds.checkOut )" +
-//                ")" +
-//            "      AND rrl.roomId.id= :roomId " +
-//            "      UNION " +
-//            "      SELECT new com.cg.spblaguna.model.dto.req.RoomRealReqDTO ( " +
-//            "      rrl.id, rrl.roomCode,rrl.statusRoom,rrl.eRangeRoom,rrl.floor,rrl.roomId.id )" +
-//            "      FROM RoomReal  rrl " +
-//            "      WHERE  rrl.id NOT IN (" +
-//            "      SELECT DISTINCT bds2.roomReal.id " +
-//            "      FROM BookingDetail bds2 " +
-//            "      WHERE bds2.roomReal.id = rrl.id)" +
-//            "      AND (rrl.roomId.id= :roomId) ) " +
-//            "ELSE (new com.cg.spblaguna.model.dto.req.RoomRealReqDTO ( " +
-//            "           rrl.id, rrl.roomCode,rrl.statusRoom,rrl.eRangeRoom,rrl.floor,rrl.roomId.id ) " +
-//            "      FROM RoomReal rrl " +
-//            "      WHERE rrl.id NOT IN (" +
-//            "      SELECT DISTINCT " +
-//            "      bds.roomReal.id" +
-//            "      FROM BookingDetail bds " +
-//            "      WHERE ( " +
-//            "      bds.checkIn BETWEEN :selectFirstDay AND :selectLastDay " +
-//            "      OR bds.checkOut BETWEEN :selectFirstDay AND :selectLastDay " +
-//            "      OR :selectFirstDay BETWEEN bds.checkIn AND bds.checkOut " +
-//            "      OR :selectLastDay BETWEEN bds.checkIn AND bds.checkOut ))" +
-//            "      AND rrl.roomId.id= :roomId " +
-//            "      UNION " +
-//            "      SELECT new com.cg.spblaguna.model.dto.req.RoomRealReqDTO ( " +
-//            "      rrl.id, rrl.roomCode,rrl.statusRoom,rrl.eRangeRoom,rrl.floor,rrl.roomId.id )" +
-//            "      FROM RoomReal  rrl " +
-//            "      WHERE  rrl.id NOT IN (" +
-//            "      SELECT DISTINCT bds2.roomReal.id " +
-//            "      FROM BookingDetail bds2 " +
-//            "      WHERE bds2.roomReal.id = rrl.id)) " +
-//            " END " +
-//            "FROM RoomReal rrl")
-//    List<RoomRealReqDTO> findRoomRealByCheckInAndCheckOut(@Param("selectFirstDay") LocalDateTime selectFirstDay,
-//                                                          @Param("selectLastDay") LocalDateTime selectLastDay,
-//                                                          @Param("roomId") Long roomId);
-//
     @Query(value = "SELECT new com.cg.spblaguna.model.dto.req.RoomRealReqDTO ( " +
             "rrl.id, rrl.roomCode,rrl.statusRoom,rrl.eRangeRoom,rrl.floor,rrl.roomId.id )" +
             "FROM RoomReal rrl " +
