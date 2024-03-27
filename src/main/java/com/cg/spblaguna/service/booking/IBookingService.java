@@ -6,6 +6,7 @@ import com.cg.spblaguna.model.dto.req.BookingReqCreDTO;
 import com.cg.spblaguna.model.dto.req.BookingReqUpdate_BookingServiceCreUpdateDTO;
 import com.cg.spblaguna.model.dto.req.BookingReqUpdate_RoomAddDTO;
 import com.cg.spblaguna.model.dto.res.BookingResDTO;
+import com.cg.spblaguna.model.enumeration.ERoomType;
 import com.cg.spblaguna.service.IGeneralService;
 import org.springframework.data.domain.Page;
 
@@ -30,5 +31,6 @@ public interface IBookingService extends IGeneralService<Booking,Long> {
 
     BookingResDTO saveBookingReqUpdate_RoomDeleteDTO(Long bookingId , Long roomId);
 
+    void updateBooking_Complete(Long bookingId);
 
 }

@@ -29,4 +29,5 @@ public class BookingResDTO {
         this.setBookingDetails(bookingDetailResDTOS);
 
     }
+
 }

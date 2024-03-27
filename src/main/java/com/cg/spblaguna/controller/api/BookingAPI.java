@@ -4,6 +4,7 @@ import com.cg.spblaguna.model.dto.req.BookingReqCreDTO;
 import com.cg.spblaguna.model.dto.req.BookingReqUpdate_BookingServiceCreUpdateDTO;
 import com.cg.spblaguna.model.dto.req.BookingReqUpdate_RoomAddDTO;
 import com.cg.spblaguna.model.dto.res.BookingResDTO;
+import com.cg.spblaguna.model.enumeration.ERoomType;
 import com.cg.spblaguna.service.booking.IBookingService;
 import com.cg.spblaguna.util.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,5 +67,11 @@ public class BookingAPI {
         BookingResDTO bookingResDTO = bookingService.editBookingReqUpdate_BookingServiceEditDTO(bookingReqUpdateBookingServiceCreUpdateDTO);
         return new ResponseEntity<>(bookingResDTO, HttpStatus.OK);
     }
+    @PatchMapping("/{bookingId}/complete")
+    public ResponseEntity<?> updateBooking_Complete(@PathVariable Long bookingId){
+        bookingService.updateBooking_Complete(bookingId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 
 }
