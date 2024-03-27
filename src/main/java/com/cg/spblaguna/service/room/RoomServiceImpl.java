@@ -141,7 +141,7 @@ public class RoomServiceImpl implements IRoomService {
 
 
     @Override
-    public User save(Room room) {
+    public Room save(Room room) {
 
         return null;
     }
@@ -227,9 +227,9 @@ public class RoomServiceImpl implements IRoomService {
 //                    throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Room with code '" + roomCode + "' already exists");
 //                }
 //            }
-           if ( roomRealRepository.existsByRoomCode(roomCode)){
-               throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Room with code '" + roomCode + "' already exists");
-           }
+//           if ( roomRealRepository.existsByRoomCode(roomCode)){
+//               throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Room with code '" + roomCode + "' already exists");
+//           }
             Integer floor = roomRealReqDTO.getFloor();
 
             RoomReal roomReal = roomRealRepository.findById(roomRealId).orElseThrow(() -> new RuntimeException("RoomReal not found with id: " + roomRealId));
@@ -237,7 +237,7 @@ public class RoomServiceImpl implements IRoomService {
 
             roomReal.setRoomCode(roomCode);
             roomReal.setERangeRoom(roomRealReqDTO.getRangeRoom());
-            roomReal.setStatusRoom(EStatusRoom.NOT_READY);
+            roomReal.setStatusRoom(roomRealReqDTO.getStatusRoom());
             roomReal.setFloor(floor);
             roomReal.setRoomId(room);
 

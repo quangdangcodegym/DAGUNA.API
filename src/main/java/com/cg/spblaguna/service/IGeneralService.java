@@ -10,7 +10,7 @@ public interface IGeneralService <E, T>{
 
     Optional<E> findById(T id);
 
-    User save(E e);
+    E save(E e);
 
     void deleteById(T id);
 }

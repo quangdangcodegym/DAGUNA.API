@@ -4,12 +4,18 @@ import com.cg.spblaguna.exception.ResourceExistsException;
 import com.cg.spblaguna.model.*;
 import com.cg.spblaguna.model.dto.req.BookingReqCreDTO;
 import com.cg.spblaguna.model.dto.req.BookingReqUpdate_BookingServiceCreUpdateDTO;
+import com.cg.spblaguna.model.dto.req.BookingReqUpdate_CustomerDTO;
 import com.cg.spblaguna.model.dto.req.BookingReqUpdate_RoomAddDTO;
 import com.cg.spblaguna.model.dto.res.BookingDetailResDTO;
 import com.cg.spblaguna.model.dto.res.BookingResDTO;
 import com.cg.spblaguna.model.enumeration.EBookingServiceType;
-import com.cg.spblaguna.model.enumeration.ERoomType;
+
+import com.cg.spblaguna.model.enumeration.ELockStatus;
+import com.cg.spblaguna.model.enumeration.ERole;
+
 import com.cg.spblaguna.repository.*;
+import com.cg.spblaguna.service.cardpayment.ICardPaymentService;
+import com.cg.spblaguna.service.user.IUserService;
 import com.cg.spblaguna.util.AppUtils;
 import com.cg.spblaguna.util.EmailUtil;
 import jakarta.transaction.Transactional;
@@ -19,9 +25,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -58,6 +64,12 @@ public class BookingServiceImpl implements IBookingService {
     @Autowired
     private EmailUtil emailUtil;
 
+
+    private ICardPaymentService cardPaymentService;
+
+    @Autowired
+    private IUserService userService;
+
     @Override
     public List<Booking> findAll() {
         return bookingRepository.findAll();
@@ -69,7 +81,7 @@ public class BookingServiceImpl implements IBookingService {
     }
 
     @Override
-    public User save(Booking booking) {
+    public Booking save(Booking booking) {
         bookingRepository.save(booking);
         return null;
     }
@@ -376,6 +388,54 @@ public class BookingServiceImpl implements IBookingService {
         } else {
             throw new IllegalArgumentException("Booking with id " + bookingId + " not found.");
         }
+    }
+
+    @Override
+    public BookingResDTO updateBooking_AddCustomer(BookingReqUpdate_CustomerDTO bookingReqUpdateCustomerDTO) {
+        Optional<Booking> optionalBooking = bookingRepository.findById(bookingReqUpdateCustomerDTO.getBookingId());
+
+
+        CardPayment cardPayment = cardPaymentService.findCardPaymentByEmailAndPhone(bookingReqUpdateCustomerDTO.getCardType(), bookingReqUpdateCustomerDTO.getPhone());
+        if (cardPayment == null) {
+            cardPayment = new CardPayment();
+            cardPayment.setCardNumber(bookingReqUpdateCustomerDTO.getCardNumber());
+            cardPayment.setCardType(bookingReqUpdateCustomerDTO.getCardType());
+            cardPayment.setCvv(bookingReqUpdateCustomerDTO.getCvv());
+            cardPayment.setExpirationDate(bookingReqUpdateCustomerDTO.getExpirationDate());
+            cardPayment.setNameCard(bookingReqUpdateCustomerDTO.getNameCard());
+            cardPaymentService.save(cardPayment);
+        }
+
+        User user = userService.findUserByEmailAndPhone(bookingReqUpdateCustomerDTO.getEmail(), bookingReqUpdateCustomerDTO.getPhone());
+        if (user == null) {
+            user = new User();
+            user.setAddress(bookingReqUpdateCustomerDTO.getAddress());
+            user.setCreateAt(LocalDate.now());
+            user.setDeleted(false);
+            user.setERole(ERole.CUSTOMER);
+            user.setPhone(bookingReqUpdateCustomerDTO.getPhone());
+            user.setEmail(bookingReqUpdateCustomerDTO.getEmail());
+            user.setELockStatus(ELockStatus.UNLOCK);
+            user.setCardPayment(cardPayment);
+
+            user.setCountry(bookingReqUpdateCustomerDTO.getCountry());
+            user.setEPrefix(bookingReqUpdateCustomerDTO.getEPrefix());
+
+
+            userService.save(user);
+        }
+
+
+        List<BookingDetail> bookingDetails = bookingDetailRepository.findBookingDetailsByBooking_Id(bookingReqUpdateCustomerDTO.getBookingId());
+        BookingResDTO bookingResDTO = new BookingResDTO();
+        bookingResDTO.setBookingId(bookingReqUpdateCustomerDTO.getBookingId());
+        List<BookingDetailResDTO> bookingDetailResDTOS = bookingDetails.stream()
+                .map(BookingDetail::toBookingDetailResDTO)
+                .collect(Collectors.toList());
+        bookingResDTO.setBookingDetails(bookingDetailResDTOS);
+
+        bookingResDTO.setCustomerInfo(user.toCustomerInfoResDTO());
+        return null;
     }
 
     @Override

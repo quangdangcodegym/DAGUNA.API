@@ -18,4 +18,7 @@ public class RoomRealReqDTO {
     private EStatusRoom statusRoom;
     private ERangeRoom rangeRoom;
     private Integer floor;
+    private Long roomId;
+
+
 }
