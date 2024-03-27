@@ -1,6 +1,7 @@
 package com.cg.spblaguna.repository;
 
 import com.cg.spblaguna.model.Room;
+import com.cg.spblaguna.model.dto.res.RoomRealResDTO;
 import com.cg.spblaguna.model.dto.res.RoomResDTO;
 import com.cg.spblaguna.model.enumeration.ERoomType;
 import com.cg.spblaguna.model.enumeration.EStatusRoom;
@@ -14,6 +15,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository

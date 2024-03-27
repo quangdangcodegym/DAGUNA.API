@@ -6,6 +6,7 @@ import com.cg.spblaguna.model.dto.req.RoomInfoReqDTO;
 import com.cg.spblaguna.model.dto.req.RoomRealReqDTO;
 import com.cg.spblaguna.model.dto.req.RoomReqDTO;
 import com.cg.spblaguna.model.dto.req.SearchBarRoomReqDTO;
+import com.cg.spblaguna.model.dto.res.RoomRealResDTO;
 import com.cg.spblaguna.model.dto.res.RoomResDTO;
 import com.cg.spblaguna.model.enumeration.EImageType;
 import com.cg.spblaguna.model.enumeration.ERoomType;
@@ -24,6 +25,7 @@ import org.springframework.web.server.ResponseStatusException;
 import org.thymeleaf.standard.expression.MessageExpression;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -52,8 +54,6 @@ public class RoomServiceImpl implements IRoomService {
     @Autowired
     private IImageRepository imageRepository;
 
-    @Autowired
-    private IRoomRealService roomRealService;
 
     public List<RoomResDTO> getRooms() {
         List<Room> rooms = roomRepository.findAll();
@@ -248,6 +248,7 @@ public class RoomServiceImpl implements IRoomService {
         }
         return new RoomResDTO(room);
     }
+
 
 
 }

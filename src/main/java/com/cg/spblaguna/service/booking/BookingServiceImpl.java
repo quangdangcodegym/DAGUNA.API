@@ -59,6 +59,9 @@ public class BookingServiceImpl implements IBookingService {
     private IBookingDetailServiceRepository bookingDetailServiceRepository;
 
     @Autowired
+    private IRoomRealRepository roomRealRepository;
+
+    @Autowired
     private ICardPaymentService cardPaymentService;
 
     @Autowired
@@ -429,6 +432,18 @@ public class BookingServiceImpl implements IBookingService {
 
         bookingResDTO.setCustomerInfo(user.toCustomerInfoResDTO());
         return null;
+    }
+
+    @Override
+    public BookingResDTO updateBooking_UpdateBookingDetail_UpdateRoomReal(Long bookingDetailId, Long roomRealId) {
+        BookingDetail bookingDetail = bookingDetailRepository.findById(bookingDetailId).get();
+        RoomReal roomReal = roomRealRepository.findById(roomRealId).get();
+
+        bookingDetail.setRoomReal(roomReal);
+        bookingDetailRepository.save(bookingDetail);
+
+
+        return findBookingResDTOById(bookingDetail.getBooking().getId());
     }
 
 

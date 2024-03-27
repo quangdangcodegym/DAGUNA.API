@@ -6,11 +6,13 @@ import com.cg.spblaguna.model.User;
 import com.cg.spblaguna.model.dto.res.RoomRealResDTO;
 import com.cg.spblaguna.repository.IRoomRealRepository;
 import com.cg.spblaguna.repository.IRoomRepository;
+import com.cg.spblaguna.service.room.IRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +25,7 @@ public class RoomRealServiceImpl implements IRoomRealService {
 
     @Autowired
     private IRoomRepository roomRepository;
+
 
 
     @Override
@@ -47,7 +50,7 @@ public class RoomRealServiceImpl implements IRoomRealService {
     public void deleteById(Long id) {
         roomRealRepository.deleteById(id);
     }
-
+    @Override
     public List<RoomReal> findAllRoomRealsByRoomId(Long roomId) {
         Optional<Room> room = roomRepository.findById(roomId);
         if (room.isEmpty()) {
@@ -58,7 +61,9 @@ public class RoomRealServiceImpl implements IRoomRealService {
     }
 
     @Override
-    public List<RoomRealResDTO> getAllRoomRealResDTOBy(Long roomId, LocalDate checkIn, LocalDate checkOut) {
-        return null;
+    public List<RoomRealResDTO> getAvailable(LocalDateTime checkIn, LocalDateTime checkOut, Long roomId) {
+        return roomRealRepository.getAvailable(checkIn,checkOut,roomId);
     }
+
+
 }

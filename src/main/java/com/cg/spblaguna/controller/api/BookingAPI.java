@@ -77,4 +77,11 @@ public class BookingAPI {
         return new ResponseEntity<>(bookingResDTO, HttpStatus.OK);
     }
 
+    @PatchMapping("/update/booking-detail/{bookingDetailId}")
+    public ResponseEntity<?> updateBooking_UpdateBookingDetail_UpdateRoomReal(@PathVariable Long bookingDetailId, @RequestParam Long roomRealId){
+        BookingResDTO bookingResDTO = bookingService.updateBooking_UpdateBookingDetail_UpdateRoomReal(bookingDetailId, roomRealId);
+
+        return new ResponseEntity<>(bookingResDTO, HttpStatus.OK);
+    }
+
 }

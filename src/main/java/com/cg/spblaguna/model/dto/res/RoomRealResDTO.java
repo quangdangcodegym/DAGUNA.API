@@ -12,13 +12,19 @@ import lombok.experimental.Accessors;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @Accessors(chain = true)
 public class RoomRealResDTO {
     private Long id;
     private String roomCode;
-    private Room roomId;
     private EStatusRoom statusRoom;
     private ERangeRoom eRangeRoom;
     private Integer floor;
+
+    public RoomRealResDTO(Long id, String roomCode, EStatusRoom statusRoom, ERangeRoom eRangeRoom, Integer floor) {
+        this.id = id;
+        this.roomCode = roomCode;
+        this.statusRoom = statusRoom;
+        this.eRangeRoom = eRangeRoom;
+        this.floor = floor;
+    }
 }
