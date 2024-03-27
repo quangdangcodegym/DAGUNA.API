@@ -6,7 +6,7 @@ import com.cg.spblaguna.model.dto.res.ReceptionistResDTO;
 import com.cg.spblaguna.model.enumeration.ELockStatus;
 import com.cg.spblaguna.model.enumeration.ERole;
 import com.cg.spblaguna.service.receptionist.IReceptionistService;
-import com.cg.spblaguna.service.user.IUserService;
+import com.cg.spblaguna.service.user.UserServiceImpl;
 import com.cg.spblaguna.util.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,7 +27,7 @@ public class ReceptionistAPI {
     @Autowired
     private IReceptionistService receptionistService;
     @Autowired
-    private IUserService userService;
+    private UserServiceImpl userService;
 
     @Autowired
     private AppUtils appUtils;
