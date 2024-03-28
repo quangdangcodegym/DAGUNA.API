@@ -43,4 +43,6 @@ public interface IRoomService extends IGeneralService<Room,Long> {
 
     List<RoomFindAvailableRoom> findAvailableRoom(LocalDateTime selectFirstDay, LocalDateTime selectLastDay);
 
+
+    List<RoomFindAvailableRoom> findAvailableRoomHavePer(LocalDateTime selectFirstDay, LocalDateTime selectLastDay, Long current);
 }
