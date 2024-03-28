@@ -34,4 +34,7 @@ public interface IRoomService extends IGeneralService<Room,Long> {
     RoomResDTO findByIdDTO(Long id);
 
     RoomResDTO updateRoom_updateRoomReal(RoomInfoReqDTO roomInfoReqDTO);
+
+//    List<RoomResDTO> searchBarRoomHeader(SearchBarRoomReqDTO searchBarRoomReqDTO);
+
 }

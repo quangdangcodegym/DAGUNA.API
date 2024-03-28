@@ -1,15 +1,9 @@
 package com.cg.spblaguna.service.booking;
 
 import com.cg.spblaguna.model.Booking;
-import com.cg.spblaguna.model.Room;
-import com.cg.spblaguna.model.dto.req.BookingReqCreDTO;
-import com.cg.spblaguna.model.dto.req.BookingReqUpdate_BookingServiceCreUpdateDTO;
-import com.cg.spblaguna.model.dto.req.BookingReqUpdate_CustomerDTO;
-import com.cg.spblaguna.model.dto.req.BookingReqUpdate_RoomAddDTO;
+import com.cg.spblaguna.model.dto.req.*;
 import com.cg.spblaguna.model.dto.res.BookingResDTO;
-import com.cg.spblaguna.model.enumeration.ERoomType;
 import com.cg.spblaguna.service.IGeneralService;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -35,4 +29,9 @@ public interface IBookingService extends IGeneralService<Booking,Long> {
     void updateBooking_Complete(Long bookingId);
 
     BookingResDTO updateBooking_AddCustomer(BookingReqUpdate_CustomerDTO bookingReqUpdateCustomerDTO);
+
+
+
+
+
 }

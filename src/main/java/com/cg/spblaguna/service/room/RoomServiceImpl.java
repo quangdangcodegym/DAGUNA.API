@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -245,6 +246,26 @@ public class RoomServiceImpl implements IRoomService {
         }
         return new RoomResDTO(room);
     }
+
+//    @Override
+//    public List<RoomResDTO> searchBarRoomHeader(SearchBarRoomReqDTO searchBarRoomReqDTO) {
+//        int numberOfAdults = Math.toIntExact(searchBarRoomReqDTO.getGuest().getNumberAdult());
+//        // Do something with the childrenAge if needed
+//
+//        LocalDate checkIn = searchBarRoomReqDTO.getCheckIn();
+//        LocalDate checkOut = searchBarRoomReqDTO.getCheckOut();
+//
+//        // Truy vấn cơ sở dữ liệu để tìm kiếm các phòng phù hợp
+//        List<Room> matchingRooms = roomRepository.findAvailableRooms(numberOfAdults, checkIn, checkOut);
+//
+//        // Chuyển đổi danh sách các phòng thành danh sách DTO để trả về
+//        List<RoomResDTO> matchingRoomsDTO = matchingRooms.stream()
+//                .map(Room::toRoomResDto)
+//                .collect(Collectors.toList());
+//
+//        return matchingRoomsDTO;
+//
+//    }
 
 
 }
