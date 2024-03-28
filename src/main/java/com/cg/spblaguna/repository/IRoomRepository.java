@@ -34,6 +34,10 @@ public interface IRoomRepository extends JpaRepository<Room, Long> {
                                          @Param("priceMin") BigDecimal priceMin, @Param("priceMax") BigDecimal priceMax,
                                          Pageable pageable
     );
+    @Query("select " +
+            "new com.cg.spblaguna.model.dto.res.RoomResDTO(r) " +
+            "from Room  r")
+    Page<RoomResDTO> searchBarFake(Pageable pageable);
 
     @Query("select " +
             "new com.cg.spblaguna.model.dto.res.RoomResDTO(r) " +

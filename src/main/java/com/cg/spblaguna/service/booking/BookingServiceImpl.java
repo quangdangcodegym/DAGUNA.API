@@ -2,10 +2,7 @@ package com.cg.spblaguna.service.booking;
 
 import com.cg.spblaguna.exception.ResourceExistsException;
 import com.cg.spblaguna.model.*;
-import com.cg.spblaguna.model.dto.req.BookingReqCreDTO;
-import com.cg.spblaguna.model.dto.req.BookingReqUpdate_BookingServiceCreUpdateDTO;
-import com.cg.spblaguna.model.dto.req.BookingReqUpdate_CustomerDTO;
-import com.cg.spblaguna.model.dto.req.BookingReqUpdate_RoomAddDTO;
+import com.cg.spblaguna.model.dto.req.*;
 import com.cg.spblaguna.model.dto.res.BookingDetailResDTO;
 import com.cg.spblaguna.model.dto.res.BookingResDTO;
 import com.cg.spblaguna.model.enumeration.EBookingServiceType;
@@ -28,6 +25,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -132,7 +130,7 @@ public class BookingServiceImpl implements IBookingService {
         bookingDetail.setBooking(booking);
         bookingDetail.setPrice(room.getPricePerNight());
         bookingDetail.setNumberAdult(bookingReqCreDTO.getBookingDetail().getNumberAdult());
-        bookingDetail.setNumberChildren(bookingReqCreDTO.getBookingDetail().getNumberChildren());
+        bookingDetail.setChildrenAge(bookingReqCreDTO.getBookingDetail().getChildrenAge());
         bookingDetail.setDiscountCode(bookingReqCreDTO.getBookingDetail().getDiscountCode());
         bookingDetail.setTotalAmount(appUtils.calculateVAT(bookingDetail.getPrice(), vatBookingDetail));
         bookingDetail.setVat(new BigDecimal(vatBookingDetail));
@@ -150,7 +148,6 @@ public class BookingServiceImpl implements IBookingService {
         BookingResDTO bookingResDTO = new BookingResDTO();
         bookingResDTO.setBookingId(booking.getId());
         bookingResDTO.setBookingDetails(bookingDetailResDTOS);
-
 
         return bookingResDTO;
     }
@@ -284,7 +281,7 @@ public class BookingServiceImpl implements IBookingService {
             bookingDetail.setRoom(room);
             bookingDetail.setBooking(booking);
             bookingDetail.setNumberAdult(bookingReqUpdateRoomAddDTO.getBookingDetail().getNumberAdult());
-            bookingDetail.setNumberChildren(bookingReqUpdateRoomAddDTO.getBookingDetail().getNumberChildren());
+            bookingDetail.setChildrenAge(bookingReqUpdateRoomAddDTO.getBookingDetail().getChildrenAge());
             bookingDetail.setDiscountCode(bookingReqUpdateRoomAddDTO.getBookingDetail().getDiscountCode());
             bookingDetail.setTotalAmount(room.getPricePerNight());
             bookingDetail.setVat(new BigDecimal(vatBookingDetail));
@@ -328,7 +325,7 @@ public class BookingServiceImpl implements IBookingService {
                 bookingDetail.setCheckIn(bookingReqUpdateRoomAddDTO.getBookingDetail().getCheckIn());
                 bookingDetail.setCheckOut(bookingReqUpdateRoomAddDTO.getBookingDetail().getCheckOut());
                 bookingDetail.setNumberAdult(bookingReqUpdateRoomAddDTO.getBookingDetail().getNumberAdult());
-                bookingDetail.setNumberChildren(bookingReqUpdateRoomAddDTO.getBookingDetail().getNumberChildren());
+                bookingDetail.setChildrenAge(bookingReqUpdateRoomAddDTO.getBookingDetail().getChildrenAge());
                 bookingDetail.setDiscountCode(bookingReqUpdateRoomAddDTO.getBookingDetail().getDiscountCode());
                 bookingDetail.setTotalAmount(bookingReqUpdateRoomAddDTO.getBookingDetail().getTotalAmount());
                 bookingDetail.setPrice(bookingReqUpdateRoomAddDTO.getBookingDetail().getPrice());
@@ -438,6 +435,7 @@ public class BookingServiceImpl implements IBookingService {
         return null;
     }
 
+
     @Override
     public void updateBooking_Complete(Long bookingId) {
         Booking booking = bookingRepository.findById(bookingId).get();
@@ -460,6 +458,36 @@ public class BookingServiceImpl implements IBookingService {
 
         emailUtil.sendEmail(booking.getUser().getEmail(), "Thông tin đặt phòng của bạn", emailContent);
     }
+
+
+//    @Override
+//    public List<BookingResDTO> searchBookings(BookingDetailResDTO bookingSearchDTO) {
+//        List<Booking> bookings = bookingRepository.findByCheckInAndCheckOutAndNumberAdultAndChildrenAge(
+//                bookingSearchDTO.getCheckIn(),
+//                bookingSearchDTO.getCheckOut(),
+//                bookingSearchDTO.getNumberAdult(),
+//                bookingSearchDTO.getChildrenAge()
+//        );
+//
+//        List<BookingResDTO> bookingResDTOs = new ArrayList<>();
+//        for (Booking booking : bookings) {
+//            BookingResDTO bookingResDTO = new BookingResDTO();
+//            bookingResDTO.setBookingId(booking.getId());
+//
+//            List<BookingDetail> bookingDetails = booking.getBookingDetails();
+//            List<BookingDetailResDTO> bookingDetailResDTOS = new ArrayList<>();
+//            for (BookingDetail bookingDetail : bookingDetails) {
+//                BookingDetailResDTO bookingDetailResDTO = bookingDetail.toBookingDetailResDTO();
+//                bookingDetailResDTOS.add(bookingDetailResDTO);
+//            }
+//
+//            bookingResDTO.setBookingDetails(bookingDetailResDTOS);
+//            bookingResDTOs.add(bookingResDTO);
+//        }
+//
+//        return bookingResDTOs;
+//    }
+
 
 
     private boolean checkRoomIdExistsBookingDetails(List<BookingDetail> bookingDetails, Long roomId) {

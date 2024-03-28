@@ -1,9 +1,7 @@
 package com.cg.spblaguna.controller.api;
 
-import com.cg.spblaguna.model.dto.req.BookingReqCreDTO;
-import com.cg.spblaguna.model.dto.req.BookingReqUpdate_BookingServiceCreUpdateDTO;
-import com.cg.spblaguna.model.dto.req.BookingReqUpdate_CustomerDTO;
-import com.cg.spblaguna.model.dto.req.BookingReqUpdate_RoomAddDTO;
+import com.cg.spblaguna.model.dto.req.*;
+import com.cg.spblaguna.model.dto.res.BookingDetailResDTO;
 import com.cg.spblaguna.model.dto.res.BookingResDTO;
 import com.cg.spblaguna.model.enumeration.ERoomType;
 import com.cg.spblaguna.service.booking.IBookingService;
@@ -45,24 +43,27 @@ public class BookingAPI {
         BookingResDTO bookingResDTO = bookingService.saveBooking(bookingReqCreDTO);
         return new ResponseEntity<>(bookingResDTO, HttpStatus.OK);
     }
+
     @PatchMapping("/rooms/add")
     public ResponseEntity<?> addRoomBookingService(@RequestBody BookingReqUpdate_RoomAddDTO bookingReqUpdateRoomAddDTO) {
         BookingResDTO bookingResDTO = bookingService.saveBookingReqUpdate_RoomAddDTO(bookingReqUpdateRoomAddDTO);
         return new ResponseEntity<>(bookingResDTO, HttpStatus.OK);
     }
+
     @PatchMapping("/rooms/edit")
-    public ResponseEntity<?> editRoomBookingService(@RequestBody BookingReqUpdate_RoomAddDTO bookingReqUpdateRoomAddDTO){
+    public ResponseEntity<?> editRoomBookingService(@RequestBody BookingReqUpdate_RoomAddDTO bookingReqUpdateRoomAddDTO) {
         BookingResDTO bookingResDTO = bookingService.saveBookingReqUpdate_RoomEditDTO(bookingReqUpdateRoomAddDTO);
         return new ResponseEntity<>(bookingResDTO, HttpStatus.OK);
     }
+
     @DeleteMapping("/{bookingId}/rooms/{roomId}/delete")
-    public ResponseEntity<?> updateBooking_DeleteRoom(@PathVariable Long bookingId, @PathVariable Long roomId){
-        BookingResDTO bookingResDTO = bookingService.saveBookingReqUpdate_RoomDeleteDTO( bookingId , roomId);
+    public ResponseEntity<?> updateBooking_DeleteRoom(@PathVariable Long bookingId, @PathVariable Long roomId) {
+        BookingResDTO bookingResDTO = bookingService.saveBookingReqUpdate_RoomDeleteDTO(bookingId, roomId);
         return new ResponseEntity<>(bookingResDTO, HttpStatus.OK);
     }
-    @PatchMapping("/{bookingId}/customer")
-    public ResponseEntity<?> updateBooking_AddCustomer(@PathVariable Long bookingId, @RequestBody BookingReqUpdate_CustomerDTO bookingReqUpdateCustomerDTO){
 
+    @PatchMapping("/{bookingId}/customer")
+    public ResponseEntity<?> updateBooking_AddCustomer(@PathVariable Long bookingId, @RequestBody BookingReqUpdate_CustomerDTO bookingReqUpdateCustomerDTO) {
         bookingReqUpdateCustomerDTO.setBookingId(bookingId);
         BookingResDTO bookingResDTO = bookingService.updateBooking_AddCustomer(bookingReqUpdateCustomerDTO);
         return new ResponseEntity<>(bookingResDTO, HttpStatus.OK);
@@ -74,13 +75,15 @@ public class BookingAPI {
         BookingResDTO bookingResDTO = bookingService.saveBookingReqUpdate_BookingServiceAddDTO(bookingReqUpdateBookingServiceCreUpdateDTO);
         return new ResponseEntity<>(bookingResDTO, HttpStatus.OK);
     }
+
     @PatchMapping("/booking-services/edit")
     public ResponseEntity<?> editBookingService(@RequestBody BookingReqUpdate_BookingServiceCreUpdateDTO bookingReqUpdateBookingServiceCreUpdateDTO) {
         BookingResDTO bookingResDTO = bookingService.editBookingReqUpdate_BookingServiceEditDTO(bookingReqUpdateBookingServiceCreUpdateDTO);
         return new ResponseEntity<>(bookingResDTO, HttpStatus.OK);
     }
+
     @PatchMapping("/{bookingId}/complete")
-    public ResponseEntity<?> updateBooking_Complete(@PathVariable Long bookingId){
+    public ResponseEntity<?> updateBooking_Complete(@PathVariable Long bookingId) {
         bookingService.updateBooking_Complete(bookingId);
         return new ResponseEntity<>(HttpStatus.OK);
     }

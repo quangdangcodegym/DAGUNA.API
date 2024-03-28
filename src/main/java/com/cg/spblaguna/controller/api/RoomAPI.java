@@ -100,6 +100,11 @@ public class RoomAPI {
         Page<RoomResDTO> roomResDTOPage = roomService.searchBarRoomReqDTO(searchBarRoomReqDTO, pageable);
         return new ResponseEntity<>(roomResDTOPage, HttpStatus.OK);
     }
+//    @PostMapping("/search-bar")
+//    public ResponseEntity<?> searchBarRoomsHeader(@RequestBody SearchBarRoomReqDTO searchBarRoomReqDTO ) {
+//        List<RoomResDTO> roomHeaderSearchBar = roomService.searchBarRoomHeader(searchBarRoomReqDTO);
+//        return new ResponseEntity<>(roomHeaderSearchBar, HttpStatus.OK);
+//    }
 
     /**
      * Chức năng tạo phòng

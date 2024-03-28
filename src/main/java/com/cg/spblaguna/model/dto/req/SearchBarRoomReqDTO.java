@@ -17,7 +17,7 @@ public class SearchBarRoomReqDTO {
     @Setter
     public static class GuestReqDTO{
         private Long numberAdult;
-        private Long numberChildren;
+        private String childrenAge;
     }
     private GuestReqDTO guest;
     private LocalDate checkIn;

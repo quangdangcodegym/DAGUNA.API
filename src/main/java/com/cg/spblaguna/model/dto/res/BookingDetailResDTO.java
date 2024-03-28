@@ -21,12 +21,11 @@ public class BookingDetailResDTO {
     private BigDecimal total;
     private BigDecimal vat;
     private Integer numberAdult;
-    private String numberChildren;
+    private String childrenAge;
     private String discountCode;
     private Boolean checkInStatus = true;
     private RoomResDTO room;
     private List<BookingDetailServiceResDTO> bookingDetailServiceResDTOS;
-
 
 
 }
