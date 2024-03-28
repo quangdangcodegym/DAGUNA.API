@@ -39,7 +39,7 @@ public interface IRoomRealRepository extends JpaRepository<RoomReal, Long> {
     @Query(value = "SELECT new com.cg.spblaguna.model.dto.req.RoomRealReqDTO (" +
             "rrl.id, rrl.roomCode,rrl.statusRoom,rrl.eRangeRoom,rrl.floor,rrl.roomId.id )" +
             "FROM RoomReal rrl " +
-            "WHERE rrl.id NOT IN ( " +
+            "WHERE NOT EXISTS ( " +
             "SELECT DISTINCT " +
             "bds.roomReal.id " +
             "FROM BookingDetail bds " +
@@ -47,18 +47,10 @@ public interface IRoomRealRepository extends JpaRepository<RoomReal, Long> {
             "bds.checkIn BETWEEN :selectFirstDay AND :selectLastDay " +
             "OR bds.checkOut BETWEEN :selectFirstDay AND :selectLastDay " +
             "OR :selectFirstDay BETWEEN bds.checkIn AND bds.checkOut " +
-            "OR :selectLastDay BETWEEN bds.checkIn AND bds.checkOut ))" +
-            "AND (rrl.roomId.id= :roomId OR :roomId is null) " +
-            "UNION " +
-            "SELECT new com.cg.spblaguna.model.dto.req.RoomRealReqDTO ( " +
-            " rrl.id, rrl.roomCode,rrl.statusRoom,rrl.eRangeRoom,rrl.floor,rrl.roomId.id )" +
-            "FROM RoomReal  rrl " +
-            "WHERE  rrl.id NOT IN (" +
-            "SELECT DISTINCT bds2.roomReal.id " +
-            "FROM BookingDetail bds2 " +
-            "WHERE bds2.roomReal.id = rrl.id)" +
-            "AND (rrl.roomId.id= :roomId OR :roomId is null )"
-    )
+            "OR :selectLastDay BETWEEN bds.checkIn AND bds.checkOut )" +
+            "AND rrl.id=bds.roomReal.id" +
+            ")" +
+            "AND (rrl.roomId.id= :roomId OR :roomId is null) ")
     List<RoomRealReqDTO> findRoomRealByCheckInAndCheckOut(@Param("selectFirstDay") LocalDateTime selectFirstDay,
                                                           @Param("selectLastDay") LocalDateTime selectLastDay,
                                                           @Param("roomId") Long roomId);

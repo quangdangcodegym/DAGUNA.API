@@ -5,6 +5,7 @@ import com.cg.spblaguna.model.dto.req.BookingReqUpdate_BookingServiceCreUpdateDT
 import com.cg.spblaguna.model.dto.req.BookingReqUpdate_CustomerDTO;
 import com.cg.spblaguna.model.dto.req.BookingReqUpdate_RoomAddDTO;
 import com.cg.spblaguna.model.dto.res.BookingResDTO;
+import com.cg.spblaguna.model.enumeration.ERoomType;
 import com.cg.spblaguna.service.booking.IBookingService;
 import com.cg.spblaguna.service.cardpayment.ICardPaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ public class BookingAPI {
 
     @Autowired
     private ICardPaymentService cardPayment;
+
     @GetMapping
     public ResponseEntity<?> getAllBooking() {
         List<BookingResDTO> bookingList = bookingService.findAllBookingResDTO();
@@ -66,6 +68,7 @@ public class BookingAPI {
         return new ResponseEntity<>(bookingResDTO, HttpStatus.OK);
     }
 
+
     @PatchMapping("/booking-services/add")
     public ResponseEntity<?> addBookingService(@RequestBody BookingReqUpdate_BookingServiceCreUpdateDTO bookingReqUpdateBookingServiceCreUpdateDTO) {
         BookingResDTO bookingResDTO = bookingService.saveBookingReqUpdate_BookingServiceAddDTO(bookingReqUpdateBookingServiceCreUpdateDTO);
@@ -76,6 +79,12 @@ public class BookingAPI {
         BookingResDTO bookingResDTO = bookingService.editBookingReqUpdate_BookingServiceEditDTO(bookingReqUpdateBookingServiceCreUpdateDTO);
         return new ResponseEntity<>(bookingResDTO, HttpStatus.OK);
     }
+    @PatchMapping("/{bookingId}/complete")
+    public ResponseEntity<?> updateBooking_Complete(@PathVariable Long bookingId){
+        bookingService.updateBooking_Complete(bookingId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 
     @PatchMapping("/update/booking-detail/{bookingDetailId}")
     public ResponseEntity<?> updateBooking_UpdateBookingDetail_UpdateRoomReal(@PathVariable Long bookingDetailId, @RequestParam Long roomRealId){

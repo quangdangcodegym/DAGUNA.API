@@ -60,4 +60,8 @@ public class Booking {
 
     private String bookingCode;
 
+
+    @Column(name = "active", columnDefinition = "boolean default false")
+    private Boolean active;
+
 }
