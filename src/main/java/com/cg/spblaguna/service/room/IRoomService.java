@@ -38,4 +38,6 @@ public interface IRoomService extends IGeneralService<Room,Long> {
     RoomResDTO updateRoom_updateRoomReal(RoomInfoReqDTO roomInfoReqDTO);
 
     List<RoomFindAvailableRoom> findAvailableRoom(LocalDateTime selectFirstDay, LocalDateTime selectLastDay);
+
+    List<RoomFindAvailableRoom> findAvailableRoomHavePer(LocalDateTime selectFirstDay, LocalDateTime selectLastDay, Long current);
 }
