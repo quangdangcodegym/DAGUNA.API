@@ -2,10 +2,7 @@ package com.cg.spblaguna.service.room;
 
 import com.cg.spblaguna.exception.ResourceNotFoundException;
 import com.cg.spblaguna.model.*;
-import com.cg.spblaguna.model.dto.req.RoomInfoReqDTO;
-import com.cg.spblaguna.model.dto.req.RoomRealReqDTO;
-import com.cg.spblaguna.model.dto.req.RoomReqDTO;
-import com.cg.spblaguna.model.dto.req.SearchBarRoomReqDTO;
+import com.cg.spblaguna.model.dto.req.*;
 import com.cg.spblaguna.model.dto.res.RoomResDTO;
 import com.cg.spblaguna.model.enumeration.EImageType;
 import com.cg.spblaguna.model.enumeration.ERoomType;
@@ -21,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -95,9 +93,9 @@ public class RoomServiceImpl implements IRoomService {
 
     public RoomResDTO update(RoomReqDTO roomReqDTO) {
         KindOfRoom kindOfRoom = kindOfRoomRepository.findById(roomReqDTO.getKindOfRoomId())
-                .orElseThrow(()->new ResourceNotFoundException("KindOfRoom not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("KindOfRoom not found"));
         PerType perType = perTypeRepository.findById(roomReqDTO.getPerTypId())
-                .orElseThrow(()->new ResourceNotFoundException("PerType not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("PerType not found"));
         Room room = roomRepository.findById(roomReqDTO.getId()).orElseThrow();
         room.setName(roomReqDTO.getName());
         room.setRoomType(roomReqDTO.getRoomType());
@@ -246,5 +244,17 @@ public class RoomServiceImpl implements IRoomService {
         return new RoomResDTO(room);
     }
 
-
+    @Override
+    public List<RoomFindAvailableRoom> findAvailableRoom(LocalDateTime selectFirstDay, LocalDateTime selectLastDay) {
+        try {
+            List<RoomFindAvailableRoom> roomReqDTOS = roomRepository.findAvailableRoom(selectFirstDay, selectLastDay);
+            if (roomReqDTOS == null || roomReqDTOS.isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "room cannot be null or empty");
+            }
+            return roomReqDTOS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Error: Unexpected exception occurred");
+        }
+    }
 }
