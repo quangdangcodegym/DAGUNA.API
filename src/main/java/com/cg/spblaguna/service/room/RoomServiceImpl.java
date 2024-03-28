@@ -257,4 +257,18 @@ public class RoomServiceImpl implements IRoomService {
             throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Error: Unexpected exception occurred");
         }
     }
+
+    @Override
+    public  List<RoomFindAvailableRoom> findAvailableRoomHavePer(LocalDateTime selectFirstDay, LocalDateTime selectLastDay,Long current){
+        try {
+            List<RoomFindAvailableRoom> roomReqDTOS = roomRepository.findAvailableRoomHavePer(selectFirstDay, selectLastDay,current);
+            if (roomReqDTOS == null || roomReqDTOS.isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "room cannot be null or empty");
+            }
+            return roomReqDTOS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Error: Unexpected exception occurred");
+        }
+    }
 }

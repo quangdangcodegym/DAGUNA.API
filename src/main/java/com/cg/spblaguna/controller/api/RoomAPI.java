@@ -180,8 +180,16 @@ public class RoomAPI {
 //    }
     @PostMapping("/findAvailableRoom")
     public List<RoomFindAvailableRoom> findAvailableRoom(@RequestBody RoomFindForCheckInAndCheckOutReqDTO roomFindForCheckInAndCheckOutReqDTO) {
-        LocalDateTime selectFirstDay= roomFindForCheckInAndCheckOutReqDTO.getSelectFirstDay();
-        LocalDateTime selectLastDay= roomFindForCheckInAndCheckOutReqDTO.getSelectLastDay();
+        LocalDateTime selectFirstDay = roomFindForCheckInAndCheckOutReqDTO.getSelectFirstDay();
+        LocalDateTime selectLastDay = roomFindForCheckInAndCheckOutReqDTO.getSelectLastDay();
         return roomService.findAvailableRoom(selectFirstDay, selectLastDay);
+    }
+
+    @PostMapping("/findAvailableRoomHavePer")
+    public List<RoomFindAvailableRoom> findAvailableRoomHavePer(@RequestBody RoomFindForCheckInAndCheckOutReqDTO roomFindForCheckInAndCheckOutReqDTO,
+                                                                @RequestParam(required = false) Long current) {
+        LocalDateTime selectFirstDay = roomFindForCheckInAndCheckOutReqDTO.getSelectFirstDay();
+        LocalDateTime selectLastDay = roomFindForCheckInAndCheckOutReqDTO.getSelectLastDay();
+        return roomService.findAvailableRoomHavePer(selectFirstDay, selectLastDay, current);
     }
 }
