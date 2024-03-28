@@ -1,9 +1,7 @@
 package com.cg.spblaguna.controller.api;
 
 import com.cg.spblaguna.exception.ResourceNotFoundException;
-import com.cg.spblaguna.model.dto.req.RoomInfoReqDTO;
-import com.cg.spblaguna.model.dto.req.RoomReqDTO;
-import com.cg.spblaguna.model.dto.req.SearchBarRoomReqDTO;
+import com.cg.spblaguna.model.dto.req.*;
 import com.cg.spblaguna.model.dto.res.RoomResDTO;
 import com.cg.spblaguna.model.enumeration.ERoomType;
 import com.cg.spblaguna.service.room.IRoomService;
@@ -20,6 +18,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -52,9 +51,9 @@ public class RoomAPI {
             @RequestParam(defaultValue = "") String roomType,
             @RequestParam(required = false) BigDecimal minPrice,
             @RequestParam(required = false) BigDecimal maxPrice,
-            @RequestParam(defaultValue = "id,desc") String[] sort){
+            @RequestParam(defaultValue = "id,desc") String[] sort) {
 
-        try{
+        try {
             List<Order> orders = new ArrayList<Order>();
             if (sort[0].contains(",")) {
                 for (String sortOrder : sort) {
@@ -71,20 +70,21 @@ public class RoomAPI {
             if (roomType == null) {
                 throw new ResourceNotFoundException("Param not valid");
             }
-            Page<RoomResDTO> roomResDTOS = roomService.filterRoomsByPrice(kw, eRoomType,minPrice, maxPrice, pagingSort );
+            Page<RoomResDTO> roomResDTOS = roomService.filterRoomsByPrice(kw, eRoomType, minPrice, maxPrice, pagingSort);
 
 
             if (roomResDTOS.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }else {
+            } else {
                 return new ResponseEntity<>(roomResDTOS, HttpStatus.OK);
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
+
     private Sort.Direction getSortDirection(String direction) {
         if (direction.equalsIgnoreCase("asc")) {
             return Sort.Direction.ASC;
@@ -94,6 +94,7 @@ public class RoomAPI {
 
         throw new IllegalArgumentException("Invalid sort direction: " + direction);
     }
+
     @PostMapping("/search")
     public ResponseEntity<?> searchBarRooms(@RequestBody SearchBarRoomReqDTO searchBarRoomReqDTO, BindingResult bindingResult, Pageable pageable) {
         Page<RoomResDTO> roomResDTOPage = roomService.searchBarRoomReqDTO(searchBarRoomReqDTO, pageable);
@@ -107,22 +108,22 @@ public class RoomAPI {
 
     /**
      * Chức năng tạo phòng
-     * @param roomReqDTO
-     * thuộc tính utilities kiểu chuỗi theo định dạng JSON
-     * roomReqDTO:
-     * {
-     *     "name": "kkkaaa",
-     *     "roomType": "SUPERIOR",
-     *     "statusRoom": "PLACED",
-     *     "viewType": "GARDEN_VIEW",
-     *     "kingOfRoomId": 1,
-     *     "perTypId":1,
-     *     "pricePerNight": 200000.00,
-     *     "acreage": 100.00,
-     *     "sleep": 3,
-     *     "description": "aaaaaaa",
-     *     "utilitie": "{\"Shower\": true, \"Room Safe\": true, \"Mini Bar\": false}"
-     * }
+     *
+     * @param roomReqDTO    thuộc tính utilities kiểu chuỗi theo định dạng JSON
+     *                      roomReqDTO:
+     *                      {
+     *                      "name": "kkkaaa",
+     *                      "roomType": "SUPERIOR",
+     *                      "statusRoom": "PLACED",
+     *                      "viewType": "GARDEN_VIEW",
+     *                      "kingOfRoomId": 1,
+     *                      "perTypId":1,
+     *                      "pricePerNight": 200000.00,
+     *                      "acreage": 100.00,
+     *                      "sleep": 3,
+     *                      "description": "aaaaaaa",
+     *                      "utilitie": "{\"Shower\": true, \"Room Safe\": true, \"Mini Bar\": false}"
+     *                      }
      * @param bindingResult
      * @return
      */
@@ -167,7 +168,7 @@ public class RoomAPI {
         return ResponseEntity.ok(roomResDTO);
     }
 
-//    @PatchMapping("/lock/{id}")
+    //    @PatchMapping("/lock/{id}")
 //    public ResponseEntity<?> lockRoom(@PathVariable Long id){
 //        Room room = roomService.findById(id).get();
 //        room.setStatusRoom(EStatusRoom.NOT_READY);
@@ -182,5 +183,10 @@ public class RoomAPI {
 //        roomService.change(room);
 //        return new ResponseEntity<>(HttpStatus.OK);
 //    }
-
+    @PostMapping("/findAvailableRoom")
+    public List<RoomFindAvailableRoom> findAvailableRoom(@RequestBody RoomFindForCheckInAndCheckOutReqDTO roomFindForCheckInAndCheckOutReqDTO) {
+        LocalDateTime selectFirstDay= roomFindForCheckInAndCheckOutReqDTO.getSelectFirstDay();
+        LocalDateTime selectLastDay= roomFindForCheckInAndCheckOutReqDTO.getSelectLastDay();
+        return roomService.findAvailableRoom(selectFirstDay, selectLastDay);
+    }
 }
