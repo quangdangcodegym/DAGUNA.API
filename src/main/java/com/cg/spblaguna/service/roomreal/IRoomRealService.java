@@ -1,6 +1,7 @@
 package com.cg.spblaguna.service.roomreal;
 
 import com.cg.spblaguna.model.RoomReal;
+import com.cg.spblaguna.model.dto.req.RoomRealReqDTO;
 import com.cg.spblaguna.model.dto.res.RoomRealResDTO;
 import com.cg.spblaguna.service.IGeneralService;
 import org.springframework.data.jpa.repository.Query;
@@ -14,5 +15,10 @@ public interface IRoomRealService extends IGeneralService <RoomReal, Long> {
     List<RoomReal> findAllRoomRealsByRoomId(Long roomId);
         List<RoomRealResDTO> getAvailable(LocalDateTime checkIn,
                                            LocalDateTime checkOut,
-                                          Long roomId);}
+                                          Long roomId);
+
+
+    List<RoomRealResDTO> getAllRoomRealResDTOBy(Long roomId, LocalDate checkIn, LocalDate checkOut);
+ List<RoomRealReqDTO> findRoomRealByCheckInAndCheckOut(LocalDateTime selectFirstDay, LocalDateTime selectLastDay,Long roomId);
+}
 

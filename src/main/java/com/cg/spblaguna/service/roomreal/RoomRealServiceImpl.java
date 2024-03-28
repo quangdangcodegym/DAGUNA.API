@@ -1,15 +1,21 @@
 package com.cg.spblaguna.service.roomreal;
 
+import com.cg.spblaguna.exception.ResourceExistsException;
+import com.cg.spblaguna.exception.ResourceNotFoundException;
 import com.cg.spblaguna.model.Room;
 import com.cg.spblaguna.model.RoomReal;
 import com.cg.spblaguna.model.User;
+import com.cg.spblaguna.model.dto.req.RoomRealReqDTO;
 import com.cg.spblaguna.model.dto.res.RoomRealResDTO;
 import com.cg.spblaguna.repository.IRoomRealRepository;
 import com.cg.spblaguna.repository.IRoomRepository;
 import com.cg.spblaguna.service.room.IRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -65,5 +71,23 @@ public class RoomRealServiceImpl implements IRoomRealService {
         return roomRealRepository.getAvailable(checkIn,checkOut,roomId);
     }
 
+    @Override
+    public List<RoomRealResDTO> getAllRoomRealResDTOBy(Long roomId, LocalDate checkIn, LocalDate checkOut) {
+        return null;
+    }
+
+    @Override
+    public List<RoomRealReqDTO> findRoomRealByCheckInAndCheckOut(LocalDateTime selectFirstDay, LocalDateTime selectLastDay, Long roomId) {
+       try {
+           List<RoomRealReqDTO> roomReals = roomRealRepository.findRoomRealByCheckInAndCheckOut(selectFirstDay,selectLastDay,roomId);
+           if (roomReals == null || roomReals.isEmpty()) {
+               throw new ResponseStatusException(HttpStatus.NOT_FOUND,"roomReals cannot be null or empty") ;
+           }
+           return roomReals;
+       }catch (Exception e){
+           e.printStackTrace();
+           throw  new ResponseStatusException(HttpStatus.NO_CONTENT, "Error: Unexpected exception occurred");
+       }
+    }
 
 }
