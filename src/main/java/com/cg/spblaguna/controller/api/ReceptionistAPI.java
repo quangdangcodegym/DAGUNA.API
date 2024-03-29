@@ -43,7 +43,7 @@ public class ReceptionistAPI {
 
     @GetMapping()
     public ResponseEntity<?> getAllReceptionists(Pageable pageable) {
-        Page<ReceptionistResDTO> receptionists = receptionistService.findReceptionistResDTOByRole(ERole.RECEPTIONIST, pageable);
+        Page<ReceptionistResDTO> receptionists = receptionistService.findReceptionistResDTOByRole(ERole.ROLE_RECEPTIONIST, pageable);
         return new ResponseEntity<>(receptionists, HttpStatus.OK);
     }
 

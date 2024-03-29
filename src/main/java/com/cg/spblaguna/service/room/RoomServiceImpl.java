@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -170,17 +171,19 @@ public class RoomServiceImpl implements IRoomService {
 
 
     public Page<RoomResDTO> searchBarRoomReqDTO(SearchBarRoomReqDTO searchBarRoomReqDTO, Pageable pageable) {
-        int actualChildren = (int) Math.ceil((searchBarRoomReqDTO.getGuest().getNumberChildren() + 1) / 2);
-        Page<RoomResDTO> rooms = roomRepository.searchBarRoomReqDTO(searchBarRoomReqDTO.getGuest().getNumberAdult() + actualChildren,
-                searchBarRoomReqDTO.getRoomType(), searchBarRoomReqDTO.getPerType(),
-                searchBarRoomReqDTO.getViewType(),
-                searchBarRoomReqDTO.getPriceMin(), searchBarRoomReqDTO.getPriceMax(),
-                pageable);
+//        int actualChildren = (int) Math.ceil((searchBarRoomReqDTO.getGuest().getNumberChildren() + 1) / 2);
+//        Page<RoomResDTO> rooms = roomRepository.searchBarRoomReqDTO(searchBarRoomReqDTO.getGuest().getNumberAdult() + actualChildren,
+//                searchBarRoomReqDTO.getRoomType(), searchBarRoomReqDTO.getPerType(),
+//                searchBarRoomReqDTO.getViewType(),
+//                searchBarRoomReqDTO.getPriceMin(), searchBarRoomReqDTO.getPriceMax(),
+//                pageable);
+//
+//        List<RoomResDTO> rooms1 = roomRepository.searchBarRoomReqDTO(searchBarRoomReqDTO.getGuest().getNumberAdult() + actualChildren,
+//                searchBarRoomReqDTO.getRoomType(), searchBarRoomReqDTO.getPerType(),
+//                searchBarRoomReqDTO.getViewType(),
+//                searchBarRoomReqDTO.getPriceMin(), searchBarRoomReqDTO.getPriceMax());
 
-        List<RoomResDTO> rooms1 = roomRepository.searchBarRoomReqDTO(searchBarRoomReqDTO.getGuest().getNumberAdult() + actualChildren,
-                searchBarRoomReqDTO.getRoomType(), searchBarRoomReqDTO.getPerType(),
-                searchBarRoomReqDTO.getViewType(),
-                searchBarRoomReqDTO.getPriceMin(), searchBarRoomReqDTO.getPriceMax());
+        Page<RoomResDTO> rooms = roomRepository.searchBarFake(pageable);
         return rooms;
     }
 
@@ -244,6 +247,27 @@ public class RoomServiceImpl implements IRoomService {
         return new RoomResDTO(room);
     }
 
+//    @Override
+//    public List<RoomResDTO> searchBarRoomHeader(SearchBarRoomReqDTO searchBarRoomReqDTO) {
+//        int numberOfAdults = Math.toIntExact(searchBarRoomReqDTO.getGuest().getNumberAdult());
+//        // Do something with the childrenAge if needed
+//
+//        LocalDate checkIn = searchBarRoomReqDTO.getCheckIn();
+//        LocalDate checkOut = searchBarRoomReqDTO.getCheckOut();
+//
+//        // Truy vấn cơ sở dữ liệu để tìm kiếm các phòng phù hợp
+//        List<Room> matchingRooms = roomRepository.findAvailableRooms(numberOfAdults, checkIn, checkOut);
+//
+//        // Chuyển đổi danh sách các phòng thành danh sách DTO để trả về
+//        List<RoomResDTO> matchingRoomsDTO = matchingRooms.stream()
+//                .map(Room::toRoomResDto)
+//                .collect(Collectors.toList());
+//
+//        return matchingRoomsDTO;
+//
+//    }
+
+
     @Override
     public List<RoomFindAvailableRoom> findAvailableRoom(LocalDateTime selectFirstDay, LocalDateTime selectLastDay) {
         try {
@@ -257,4 +281,19 @@ public class RoomServiceImpl implements IRoomService {
             throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Error: Unexpected exception occurred");
         }
     }
+
+    @Override
+    public  List<RoomFindAvailableRoom> findAvailableRoomHavePer(LocalDateTime selectFirstDay, LocalDateTime selectLastDay,Long current){
+        try {
+            List<RoomFindAvailableRoom> roomReqDTOS = roomRepository.findAvailableRoomHavePer(selectFirstDay, selectLastDay,current);
+            if (roomReqDTOS == null || roomReqDTOS.isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "room cannot be null or empty");
+            }
+            return roomReqDTOS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Error: Unexpected exception occurred");
+        }
+    }
+
 }
