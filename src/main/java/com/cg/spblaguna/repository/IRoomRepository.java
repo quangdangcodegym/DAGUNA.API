@@ -97,11 +97,21 @@ public interface IRoomRepository extends JpaRepository<Room, Long> {
             "OR bds.checkOut BETWEEN :selectFirstDay AND :selectLastDay " +
             "OR :selectFirstDay BETWEEN bds.checkIn AND bds.checkOut " +
             "OR :selectLastDay BETWEEN bds.checkIn AND bds.checkOut) " +
-            "AND rrl.id = bds.roomReal.id) " +
+            "AND rrl.id = bds.roomReal.id )" +
             "AND r.sleep >= :current " +
-            "GROUP BY rrl.roomId.id ")
+            "AND (r.pricePerNight >= :minPrice OR :minPrice IS NULL )" +
+            "AND (r.pricePerNight <= :maxPrice OR :maxPrice IS NULL )" +
+            "AND (r.viewType= :view OR :view IS NULL )" +
+            "GROUP BY rrl.roomId.id " +
+            "ORDER BY  " +
+            "CASE WHEN :sort = 'ASC' THEN r.pricePerNight END ASC, " +
+            "CASE WHEN :sort = 'DESC' THEN r.pricePerNight END DESC")
     Page<RoomResDTO> findAvailableRoomHavePerWithPageable(@Param("selectFirstDay") LocalDateTime selectFirstDay,
                                                          @Param("selectLastDay") LocalDateTime selectLastDay,
+                                                          @Param("minPrice") BigDecimal minPrice,
+                                                          @Param("maxPrice") BigDecimal maxPrice,
+                                                          @Param("view") EViewType view,
+                                                          @Param("sort") String sort,
                                                          @Param("current") Long current, Pageable pageable);
 
 }
