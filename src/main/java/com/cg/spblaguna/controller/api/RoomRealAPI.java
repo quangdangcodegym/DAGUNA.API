@@ -44,7 +44,7 @@ public class RoomRealAPI {
         return new ResponseEntity<>(roomRealReqDTOS, HttpStatus.OK);
     }
 
-    @PostMapping("/findUn-available-room-real")
+    @PostMapping("/find-un-available-room-real")
     public ResponseEntity<?> findUnAvailableRoomRealByCheckInAndCheckOut(@RequestBody RoomRealFindForCheckInAndCheckOutReqDTO roomRealFindForCheckInAndCheckOutReqDTO,
                                                                          @RequestParam(required = false) Long roomId) {
         LocalDateTime selectFirstDay = roomRealFindForCheckInAndCheckOutReqDTO.getSelectFirstDay();
