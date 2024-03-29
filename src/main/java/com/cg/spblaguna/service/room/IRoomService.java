@@ -45,4 +45,6 @@ public interface IRoomService extends IGeneralService<Room,Long> {
 
 
     List<RoomFindAvailableRoom> findAvailableRoomHavePer(LocalDateTime selectFirstDay, LocalDateTime selectLastDay, Long current);
+
+    Page<RoomResDTO> findAvailableRoomHavePerWithPageable(LocalDateTime selectFirstDay, LocalDateTime selectLastDay, Long current, Pageable pageable);
 }

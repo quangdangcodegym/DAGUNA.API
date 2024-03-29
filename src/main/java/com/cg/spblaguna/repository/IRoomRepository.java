@@ -85,4 +85,23 @@ public interface IRoomRepository extends JpaRepository<Room, Long> {
                                                          @Param("selectLastDay") LocalDateTime selectLastDay,
                                                          @Param("current") Long current);
 
+
+    @Query(value = "SELECT new com.cg.spblaguna.model.dto.res.RoomResDTO(r, COUNT(r) ) " +
+            "FROM " +
+            "RoomReal rrl " +
+            "JOIN Room r ON r.id = rrl.roomId.id " +
+            "WHERE " +
+            "NOT EXISTS( SELECT DISTINCT bds.roomReal.id " +
+            "FROM BookingDetail bds " +
+            "WHERE (bds.checkIn BETWEEN :selectFirstDay AND :selectLastDay " +
+            "OR bds.checkOut BETWEEN :selectFirstDay AND :selectLastDay " +
+            "OR :selectFirstDay BETWEEN bds.checkIn AND bds.checkOut " +
+            "OR :selectLastDay BETWEEN bds.checkIn AND bds.checkOut) " +
+            "AND rrl.id = bds.roomReal.id) " +
+            "AND r.sleep >= :current " +
+            "GROUP BY rrl.roomId.id ")
+    Page<RoomResDTO> findAvailableRoomHavePerWithPageable(@Param("selectFirstDay") LocalDateTime selectFirstDay,
+                                                         @Param("selectLastDay") LocalDateTime selectLastDay,
+                                                         @Param("current") Long current, Pageable pageable);
+
 }

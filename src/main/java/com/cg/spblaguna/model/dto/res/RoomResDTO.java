@@ -75,4 +75,30 @@ public class RoomResDTO {
     }
 
 
+    public RoomResDTO(Room room, Long emptyRoom) {
+        this.setId(room.getId());
+        this.setName(room.getName());
+        this.setRoomType(room.getRoomType());
+        this.setQuantity(room.getQuantity());
+        this.setViewType(room.getViewType());
+        this.setKindOfRoom(room.getKindOfRoom().toKindOfRoomResDTO());
+        this.setPerType(room.getPerType().toPerTypeResDTO());
+        this.setPricePerNight(room.getPricePerNight());
+        this.setAcreage(room.getAcreage());
+        this.setSleep(room.getSleep());
+        this.setDescription(room.getDescription());
+        this.setUtilitie(room.getUtilitie());
+        List<ImageResDTO> imageResDTOS = room.getImages()
+                .stream()
+                .map(m -> {
+                    ImageResDTO imageResDTO = new ImageResDTO();
+                    imageResDTO.setId(m.getId());
+                    imageResDTO.setFileUrl(m.getFileUrl());
+                    return imageResDTO;
+                })
+                .collect(Collectors.toList());
+        this.setImageResDTOS(imageResDTOS);
+    }
+
+
 }
