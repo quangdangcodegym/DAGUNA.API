@@ -36,10 +36,16 @@ public class RoomRealAPI {
     }
 
     @PostMapping("/findAvailableRoomReal")
-    public List<RoomRealReqDTO> findRoomRealByCheckInAndCheckOut(@RequestBody RoomRealFindForCheckInAndCheckOutReqDTO roomRealFindForCheckInAndCheckOutReqDTO,
+    public List<RoomRealReqDTO> findAvailableRoomRealByCheckInAndCheckOut(@RequestBody RoomRealFindForCheckInAndCheckOutReqDTO roomRealFindForCheckInAndCheckOutReqDTO,
                                                                  @RequestParam(required = false) Long roomId) {
         LocalDateTime selectFirstDay = roomRealFindForCheckInAndCheckOutReqDTO.getSelectFirstDay();
         LocalDateTime selectLastDay = roomRealFindForCheckInAndCheckOutReqDTO.getSelectLastDay();
-        return roomRealService.findRoomRealByCheckInAndCheckOut(selectFirstDay, selectLastDay, roomId);
+        return roomRealService.findAvailableRoomRealByCheckInAndCheckOut(selectFirstDay, selectLastDay, roomId);
+    } @PostMapping("/findUnAvailableRoomReal")
+    public List<RoomRealReqDTO> findUnAvailableRoomRealByCheckInAndCheckOut(@RequestBody RoomRealFindForCheckInAndCheckOutReqDTO roomRealFindForCheckInAndCheckOutReqDTO,
+                                                                 @RequestParam(required = false) Long roomId) {
+        LocalDateTime selectFirstDay = roomRealFindForCheckInAndCheckOutReqDTO.getSelectFirstDay();
+        LocalDateTime selectLastDay = roomRealFindForCheckInAndCheckOutReqDTO.getSelectLastDay();
+        return roomRealService.findUnAvailableRoomRealByCheckInAndCheckOut(selectFirstDay, selectLastDay, roomId);
     }
 }

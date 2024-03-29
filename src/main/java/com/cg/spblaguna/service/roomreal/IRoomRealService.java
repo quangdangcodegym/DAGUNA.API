@@ -12,5 +12,7 @@ import java.util.List;
 public interface IRoomRealService extends IGeneralService <RoomReal, Long> {
 
     List<RoomRealResDTO> getAllRoomRealResDTOBy(Long roomId, LocalDate checkIn, LocalDate checkOut);
- List<RoomRealReqDTO> findRoomRealByCheckInAndCheckOut(LocalDateTime selectFirstDay, LocalDateTime selectLastDay,Long roomId);
+ List<RoomRealReqDTO> findAvailableRoomRealByCheckInAndCheckOut(LocalDateTime selectFirstDay, LocalDateTime selectLastDay,Long roomId);
+
+    List<RoomRealReqDTO> findUnAvailableRoomRealByCheckInAndCheckOut(LocalDateTime selectFirstDay, LocalDateTime selectLastDay, Long roomId);
 }
