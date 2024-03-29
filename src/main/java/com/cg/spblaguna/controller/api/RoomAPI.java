@@ -184,14 +184,14 @@ public class RoomAPI {
 //        roomService.change(room);
 //        return new ResponseEntity<>(HttpStatus.OK);
 //    }
-    @PostMapping("/findAvailableRoom")
+    @PostMapping("/find-available-room")
     public ResponseEntity<?> findAvailableRoom(@RequestBody RoomFindForCheckInAndCheckOutReqDTO roomFindForCheckInAndCheckOutReqDTO) {
         LocalDateTime selectFirstDay = roomFindForCheckInAndCheckOutReqDTO.getSelectFirstDay();
         LocalDateTime selectLastDay = roomFindForCheckInAndCheckOutReqDTO.getSelectLastDay();
         return new ResponseEntity<>(roomService.findAvailableRoom(selectFirstDay, selectLastDay), HttpStatus.OK);
     }
 
-    @PostMapping("/findAvailableRoomHavePer")
+    @PostMapping("/find-available-room-have-per")
     public ResponseEntity<?> findAvailableRoomHavePer(@RequestBody RoomFindForCheckInAndCheckOutReqDTO roomFindForCheckInAndCheckOutReqDTO,
                                                                 @RequestParam(required = false) Long current) {
         LocalDateTime selectFirstDay = roomFindForCheckInAndCheckOutReqDTO.getSelectFirstDay();
