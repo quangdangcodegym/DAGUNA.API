@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -183,18 +184,29 @@ public class RoomAPI {
 //        roomService.change(room);
 //        return new ResponseEntity<>(HttpStatus.OK);
 //    }
-    @PostMapping("/findAvailableRoom")
-    public List<RoomFindAvailableRoom> findAvailableRoom(@RequestBody RoomFindForCheckInAndCheckOutReqDTO roomFindForCheckInAndCheckOutReqDTO) {
+
+    @PostMapping("/find-available-room")
+    public ResponseEntity<?> findAvailableRoom(@RequestBody RoomFindForCheckInAndCheckOutReqDTO roomFindForCheckInAndCheckOutReqDTO) {
         LocalDateTime selectFirstDay = roomFindForCheckInAndCheckOutReqDTO.getSelectFirstDay();
         LocalDateTime selectLastDay = roomFindForCheckInAndCheckOutReqDTO.getSelectLastDay();
-        return roomService.findAvailableRoom(selectFirstDay, selectLastDay);
+        return new ResponseEntity<>(roomService.findAvailableRoom(selectFirstDay, selectLastDay), HttpStatus.OK);
     }
 
-    @PostMapping("/findAvailableRoomHavePer")
-    public List<RoomFindAvailableRoom> findAvailableRoomHavePer(@RequestBody RoomFindForCheckInAndCheckOutReqDTO roomFindForCheckInAndCheckOutReqDTO,
-                                                                @RequestParam(required = false) Long current) {
+    @PostMapping("/find-available-room-have-per")
+    public ResponseEntity<?> findAvailableRoomHavePer(@RequestBody RoomFindForCheckInAndCheckOutReqDTO roomFindForCheckInAndCheckOutReqDTO,
+                                                      @RequestParam(required = false) Long current) {
         LocalDateTime selectFirstDay = roomFindForCheckInAndCheckOutReqDTO.getSelectFirstDay();
         LocalDateTime selectLastDay = roomFindForCheckInAndCheckOutReqDTO.getSelectLastDay();
-        return roomService.findAvailableRoomHavePer(selectFirstDay, selectLastDay, current);
+        return new ResponseEntity<>(roomService.findAvailableRoomHavePer(selectFirstDay, selectLastDay, current), HttpStatus.OK);
+    }
+
+    @PostMapping("/find-available-room-have-per-pageable")
+    public ResponseEntity<?> findAvailableRoomHavePerPageable(@RequestBody RoomFindForCheckInAndCheckOutReqDTO roomFindForCheckInAndCheckOutReqDTO,
+                                                              @RequestParam(required = false) Long current, @PageableDefault(size = 5, page = 0) Pageable pageable) {
+        LocalDateTime selectFirstDay = roomFindForCheckInAndCheckOutReqDTO.getSelectFirstDay();
+        LocalDateTime selectLastDay = roomFindForCheckInAndCheckOutReqDTO.getSelectLastDay();
+
+        Page<RoomResDTO> roomResDTOPage = roomService.findAvailableRoomHavePerWithPageable(selectFirstDay, selectLastDay, current, pageable);
+        return new ResponseEntity<>(roomResDTOPage, HttpStatus.OK);
     }
 }

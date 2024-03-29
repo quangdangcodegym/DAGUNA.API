@@ -296,4 +296,19 @@ public class RoomServiceImpl implements IRoomService {
         }
     }
 
+
+    @Override
+    public Page<RoomResDTO> findAvailableRoomHavePerWithPageable(LocalDateTime selectFirstDay, LocalDateTime selectLastDay, Long current, Pageable pageable) {
+        try {
+            Page<RoomResDTO> romRoomResDTOS = roomRepository.findAvailableRoomHavePerWithPageable(selectFirstDay, selectLastDay,current, pageable);
+            if (romRoomResDTOS == null || romRoomResDTOS.isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "room cannot be null or empty");
+            }
+            return romRoomResDTOS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Error: Unexpected exception occurred");
+        }
+    }
+
 }
