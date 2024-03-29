@@ -4,12 +4,14 @@ import com.cg.spblaguna.exception.ResourceNotFoundException;
 import com.cg.spblaguna.model.Image;
 import com.cg.spblaguna.model.User;
 import com.cg.spblaguna.model.dto.req.ReceptionistReqDTO;
+import com.cg.spblaguna.model.dto.req.SearchBarReceptionistReqDTO;
 import com.cg.spblaguna.model.dto.res.ReceptionistResDTO;
 import com.cg.spblaguna.model.enumeration.EImageType;
 import com.cg.spblaguna.model.enumeration.ERole;
 import com.cg.spblaguna.repository.IImageRepository;
 import com.cg.spblaguna.repository.IReceptionistRepository;
 import com.cg.spblaguna.service.user.IUserService;
+import com.cg.spblaguna.util.PasswordEncryptionUtil;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -36,7 +38,7 @@ public class ReceptionistServiceImpl implements IReceptionistService {
 
     @Override
     public List<User> findAll() {
-        return receptionistRepository.findUsersByERole(ERole.RECEPTIONIST);
+        return receptionistRepository.findUsersByERole(ERole.ROLE_RECEPTIONIST);
     }
 
     @Override
@@ -90,10 +92,11 @@ public class ReceptionistServiceImpl implements IReceptionistService {
         user.setPhone(receptionistReqDTO.getPhone());
         user.setAddress(receptionistReqDTO.getAddress());
         user.setUnlock(true);
-        user.setERole(ERole.RECEPTIONIST);
+        user.setERole(ERole.ROLE_RECEPTIONIST);
         user.setCreateAt(LocalDate.now());
         user.setReceptionistInfo(receptionistReqDTO.getReceptionistInfo());
 
+        user.setPassword(PasswordEncryptionUtil.encryptPassword("123123"));
         // Lưu đối tượng User vào cơ sở dữ liệu
         user = userService.save(user);
 
@@ -156,5 +159,10 @@ public class ReceptionistServiceImpl implements IReceptionistService {
             return null;
         }
         return new ReceptionistResDTO(user);
+    }
+
+    @Override
+    public List<ReceptionistResDTO> searchBarRoomReqDTO(SearchBarReceptionistReqDTO searchBarReceptionistReqDTO) {
+        return null;
     }
 }

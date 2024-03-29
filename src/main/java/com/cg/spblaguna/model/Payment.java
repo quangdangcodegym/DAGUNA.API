@@ -20,23 +20,15 @@ public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @OneToOne
     @JoinColumn(name = "booking_id", nullable = false)
     private Booking booking;
-
     private Long amount;
-
     private Long vat;
-
-
     @Enumerated(EnumType.STRING)
     private EMethod method;
-
     private Long total;
-
     private Long transfer;
-
     @Column(columnDefinition = "LONGTEXT")
     private String fileName;
     @Column(columnDefinition = "LONGTEXT")

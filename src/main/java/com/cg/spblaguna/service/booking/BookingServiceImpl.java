@@ -409,7 +409,7 @@ public class BookingServiceImpl implements IBookingService {
             user.setAddress(bookingReqUpdateCustomerDTO.getAddress());
             user.setCreateAt(LocalDate.now());
             user.setDeleted(false);
-            user.setERole(ERole.CUSTOMER);
+            user.setERole(ERole.ROLE_CUSTOMER);
             user.setPhone(bookingReqUpdateCustomerDTO.getPhone());
             user.setEmail(bookingReqUpdateCustomerDTO.getEmail());
             user.setELockStatus(ELockStatus.UNLOCK);
