@@ -7,6 +7,7 @@ import com.cg.spblaguna.model.dto.res.RoomResDTO;
 import com.cg.spblaguna.model.enumeration.EImageType;
 import com.cg.spblaguna.model.enumeration.ERoomType;
 import com.cg.spblaguna.model.enumeration.EStatusRoom;
+import com.cg.spblaguna.model.enumeration.EViewType;
 import com.cg.spblaguna.repository.*;
 import com.cg.spblaguna.service.roomreal.IRoomRealService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -298,9 +299,14 @@ public class RoomServiceImpl implements IRoomService {
 
 
     @Override
-    public Page<RoomResDTO> findAvailableRoomHavePerWithPageable(LocalDateTime selectFirstDay, LocalDateTime selectLastDay, Long current, Pageable pageable) {
+    public Page<RoomResDTO> findAvailableRoomHavePerWithPageable(LocalDateTime selectFirstDay, LocalDateTime selectLastDay,BigDecimal minPrice,BigDecimal maxPrice,
+                                                                 EViewType view,
+                                                                 String sort,
+                                                                 Long current, Pageable pageable) {
         try {
-            Page<RoomResDTO> romRoomResDTOS = roomRepository.findAvailableRoomHavePerWithPageable(selectFirstDay, selectLastDay,current, pageable);
+            Page<RoomResDTO> romRoomResDTOS = roomRepository.findAvailableRoomHavePerWithPageable(selectFirstDay, selectLastDay,minPrice,maxPrice,view
+                    ,sort
+                    ,current, pageable);
             if (romRoomResDTOS == null || romRoomResDTOS.isEmpty()) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "room cannot be null or empty");
             }

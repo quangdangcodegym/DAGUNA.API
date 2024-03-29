@@ -7,6 +7,7 @@ import com.cg.spblaguna.model.dto.req.RoomReqDTO;
 import com.cg.spblaguna.model.dto.req.SearchBarRoomReqDTO;
 import com.cg.spblaguna.model.dto.res.RoomResDTO;
 import com.cg.spblaguna.model.enumeration.ERoomType;
+import com.cg.spblaguna.model.enumeration.EViewType;
 import com.cg.spblaguna.service.IGeneralService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -47,6 +48,9 @@ public interface IRoomService extends IGeneralService<Room,Long> {
     List<RoomFindAvailableRoom> findAvailableRoomHavePer(LocalDateTime selectFirstDay, LocalDateTime selectLastDay, Long current);
 
 
-    Page<RoomResDTO> findAvailableRoomHavePerWithPageable(LocalDateTime selectFirstDay, LocalDateTime selectLastDay, Long current, Pageable pageable);
+    Page<RoomResDTO> findAvailableRoomHavePerWithPageable(LocalDateTime selectFirstDay, LocalDateTime selectLastDay, BigDecimal minPrice, BigDecimal maxPrice, EViewType view,
+                                                          String sort,
+                                                          Long current, Pageable pageable);
+
 
 }

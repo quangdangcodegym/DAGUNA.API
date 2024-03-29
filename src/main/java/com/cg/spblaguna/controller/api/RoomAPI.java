@@ -4,6 +4,7 @@ import com.cg.spblaguna.exception.ResourceNotFoundException;
 import com.cg.spblaguna.model.dto.req.*;
 import com.cg.spblaguna.model.dto.res.RoomResDTO;
 import com.cg.spblaguna.model.enumeration.ERoomType;
+import com.cg.spblaguna.model.enumeration.EViewType;
 import com.cg.spblaguna.service.room.IRoomService;
 import com.cg.spblaguna.util.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -202,11 +203,18 @@ public class RoomAPI {
 
     @PostMapping("/find-available-room-have-per-pageable")
     public ResponseEntity<?> findAvailableRoomHavePerPageable(@RequestBody RoomFindForCheckInAndCheckOutReqDTO roomFindForCheckInAndCheckOutReqDTO,
-                                                              @RequestParam(required = false) Long current, @PageableDefault(size = 5, page = 0) Pageable pageable) {
+                                                              @RequestParam(required = false) Long current,
+                                                              @RequestParam(required = false) BigDecimal minPrice,
+                                                              @RequestParam(required = false) BigDecimal maxPrice,
+                                                              @RequestParam(required = false) EViewType view,
+                                                              @RequestParam(required = false) String sort,
+                                                              @PageableDefault(size = 5, page = 0) Pageable pageable) {
         LocalDateTime selectFirstDay = roomFindForCheckInAndCheckOutReqDTO.getSelectFirstDay();
         LocalDateTime selectLastDay = roomFindForCheckInAndCheckOutReqDTO.getSelectLastDay();
 
-        Page<RoomResDTO> roomResDTOPage = roomService.findAvailableRoomHavePerWithPageable(selectFirstDay, selectLastDay, current, pageable);
+        Page<RoomResDTO> roomResDTOPage = roomService.findAvailableRoomHavePerWithPageable(selectFirstDay, selectLastDay, minPrice, maxPrice, view,
+                sort,
+                current, pageable);
         return new ResponseEntity<>(roomResDTOPage, HttpStatus.OK);
     }
 }
