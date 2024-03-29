@@ -8,8 +8,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 
-@Service
-@Transactional
+
 public interface IUserService extends IGeneralService<User,Long> {
 
     User findUserByEmailAndPhone(String email, String phone);

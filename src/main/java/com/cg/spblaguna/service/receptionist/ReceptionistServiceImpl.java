@@ -4,6 +4,7 @@ import com.cg.spblaguna.exception.ResourceNotFoundException;
 import com.cg.spblaguna.model.Image;
 import com.cg.spblaguna.model.User;
 import com.cg.spblaguna.model.dto.req.ReceptionistReqDTO;
+import com.cg.spblaguna.model.dto.req.SearchBarReceptionistReqDTO;
 import com.cg.spblaguna.model.dto.res.ReceptionistResDTO;
 import com.cg.spblaguna.model.enumeration.EImageType;
 import com.cg.spblaguna.model.enumeration.ERole;
@@ -156,5 +157,10 @@ public class ReceptionistServiceImpl implements IReceptionistService {
             return null;
         }
         return new ReceptionistResDTO(user);
+    }
+
+    @Override
+    public List<ReceptionistResDTO> searchBarRoomReqDTO(SearchBarReceptionistReqDTO searchBarReceptionistReqDTO) {
+        return null;
     }
 }

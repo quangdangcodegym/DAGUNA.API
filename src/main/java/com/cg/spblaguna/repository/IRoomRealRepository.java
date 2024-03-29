@@ -3,12 +3,11 @@ package com.cg.spblaguna.repository;
 import com.cg.spblaguna.model.Room;
 import com.cg.spblaguna.model.RoomReal;
 import com.cg.spblaguna.model.dto.req.RoomRealReqDTO;
-import com.cg.spblaguna.model.dto.res.RoomRealResDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.PathVariable;
+
 
 import java.time.LocalDateTime;
 import java.util.List;

@@ -42,4 +42,6 @@ public class RoomRealAPI {
         LocalDateTime selectLastDay = roomRealFindForCheckInAndCheckOutReqDTO.getSelectLastDay();
         return roomRealService.findRoomRealByCheckInAndCheckOut(selectFirstDay, selectLastDay, roomId);
     }
+
+
 }

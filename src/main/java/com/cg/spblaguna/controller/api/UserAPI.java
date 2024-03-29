@@ -28,8 +28,4 @@ public class UserAPI {
     @Autowired
     private IUserService userService;
 
-
-
-
-
 }
