@@ -184,6 +184,7 @@ public class RoomAPI {
 //        roomService.change(room);
 //        return new ResponseEntity<>(HttpStatus.OK);
 //    }
+
     @PostMapping("/find-available-room")
     public ResponseEntity<?> findAvailableRoom(@RequestBody RoomFindForCheckInAndCheckOutReqDTO roomFindForCheckInAndCheckOutReqDTO) {
         LocalDateTime selectFirstDay = roomFindForCheckInAndCheckOutReqDTO.getSelectFirstDay();

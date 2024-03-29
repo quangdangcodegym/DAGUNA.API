@@ -19,15 +19,9 @@ public class CardPayment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-
-
-
     @Column(name = "card_type")
     @Enumerated(EnumType.STRING)
     private ECardType cardType;
-
-
     @Column(name = "card_number")
     private String cardNumber;
     @Column(name = "expiration_date")

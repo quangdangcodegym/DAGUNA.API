@@ -2,7 +2,10 @@ package com.cg.spblaguna.controller.api;
 
 import com.cg.spblaguna.model.User;
 import com.cg.spblaguna.model.dto.req.ReceptionistReqDTO;
+import com.cg.spblaguna.model.dto.req.SearchBarReceptionistReqDTO;
+import com.cg.spblaguna.model.dto.req.SearchBarRoomReqDTO;
 import com.cg.spblaguna.model.dto.res.ReceptionistResDTO;
+import com.cg.spblaguna.model.dto.res.RoomResDTO;
 import com.cg.spblaguna.model.enumeration.ELockStatus;
 import com.cg.spblaguna.model.enumeration.ERole;
 import com.cg.spblaguna.service.receptionist.IReceptionistService;
@@ -18,6 +21,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/receptionists")
@@ -39,7 +43,7 @@ public class ReceptionistAPI {
 
     @GetMapping()
     public ResponseEntity<?> getAllReceptionists(Pageable pageable) {
-        Page<ReceptionistResDTO> receptionists = receptionistService.findReceptionistResDTOByRole(ERole.RECEPTIONIST, pageable);
+        Page<ReceptionistResDTO> receptionists = receptionistService.findReceptionistResDTOByRole(ERole.ROLE_RECEPTIONIST, pageable);
         return new ResponseEntity<>(receptionists, HttpStatus.OK);
     }
 
@@ -105,5 +109,11 @@ public class ReceptionistAPI {
     public ResponseEntity<?> deleteReceptionist(@PathVariable Long id) {
         userService.deleteById(id);
         return new ResponseEntity<>(new HashMap<>(), HttpStatus.OK);
+    }
+
+    @PostMapping("/search")
+    public ResponseEntity<?> searchBarReceptionist(@RequestBody SearchBarReceptionistReqDTO searchBarReceptionistReqDTO, BindingResult bindingResult) {
+        List<ReceptionistResDTO> receptionistResDTOS = receptionistService.searchBarRoomReqDTO(searchBarReceptionistReqDTO);
+        return new ResponseEntity<>(receptionistResDTOS, HttpStatus.OK);
     }
 }

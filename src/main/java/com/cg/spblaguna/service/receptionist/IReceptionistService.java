@@ -3,6 +3,7 @@ package com.cg.spblaguna.service.receptionist;
 import com.cg.spblaguna.model.User;
 import com.cg.spblaguna.model.dto.req.ReceptionistReqDTO;
 import com.cg.spblaguna.model.dto.req.RoomReqDTO;
+import com.cg.spblaguna.model.dto.req.SearchBarReceptionistReqDTO;
 import com.cg.spblaguna.model.dto.res.ReceptionistResDTO;
 import com.cg.spblaguna.model.dto.res.RoomResDTO;
 import com.cg.spblaguna.model.enumeration.ERole;
@@ -25,4 +26,6 @@ public interface IReceptionistService extends IGeneralService<User,Long> {
     void changeUser(User receptionistReqDTO1);
 
     ReceptionistResDTO findReceptionistByIdDTO(Long id);
+
+    List<ReceptionistResDTO> searchBarRoomReqDTO(SearchBarReceptionistReqDTO searchBarReceptionistReqDTO);
 }
