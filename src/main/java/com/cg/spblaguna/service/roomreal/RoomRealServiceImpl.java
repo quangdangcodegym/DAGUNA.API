@@ -91,4 +91,18 @@ public class RoomRealServiceImpl implements IRoomRealService {
             throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Error: Unexpected exception occurred");
         }
     }
+
+    @Override
+    public List<RoomRealReqDTO> findAvailableRoomRealByCheckInAndCheckOutByRoomIdAndRoomReal(LocalDateTime selectFirstDay, LocalDateTime selectLastDay, Long roomId,Long roomRealId) {
+        try {
+            List<RoomRealReqDTO> roomReals = roomRealRepository.findAvailableRoomRealByCheckInAndCheckOutByRoomIdAndRoomReal(selectFirstDay,selectLastDay,roomId,roomRealId);
+            if (roomReals == null || roomReals.isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND,"roomReals cannot be null or empty") ;
+            }
+            return roomReals;
+        }catch (Exception e){
+            e.printStackTrace();
+            throw  new ResponseStatusException(HttpStatus.NO_CONTENT, "Error: Unexpected exception occurred");
+        }
+    }
 }
