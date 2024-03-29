@@ -21,4 +21,14 @@ public class RoomRealResDTO {
     private EStatusRoom statusRoom;
     private ERangeRoom eRangeRoom;
     private Integer floor;
+    private Long idRoom;
+
+    public RoomRealResDTO(Long id, String roomCode,Room roomId, EStatusRoom statusRoom, ERangeRoom eRangeRoom, Integer floor){
+        this.id = id;
+        this.roomCode = roomCode;
+        this.roomId = roomId;
+        this.statusRoom = statusRoom;
+        this.eRangeRoom = eRangeRoom;
+        this.floor = floor;
+    }
 }

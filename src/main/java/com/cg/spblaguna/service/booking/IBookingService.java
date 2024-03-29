@@ -31,7 +31,5 @@ public interface IBookingService extends IGeneralService<Booking,Long> {
     BookingResDTO updateBooking_AddCustomer(BookingReqUpdate_CustomerDTO bookingReqUpdateCustomerDTO);
 
 
-
-
-
+    void updateBooking_UpdateBookingDetail_UpdateRoomReal(Long bookingDetailId, Long roomRealId);
 }
