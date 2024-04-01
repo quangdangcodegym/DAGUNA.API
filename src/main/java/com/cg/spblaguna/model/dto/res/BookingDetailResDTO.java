@@ -15,6 +15,8 @@ import java.util.stream.Collectors;
 @Setter
 public class BookingDetailResDTO {
     private Long bookingDetailId;
+
+
     private LocalDateTime checkIn;
     private LocalDateTime checkOut;
     private BigDecimal totalAmount;

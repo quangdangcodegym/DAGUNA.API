@@ -200,6 +200,10 @@ public class RoomAPI {
         LocalDateTime selectLastDay = roomFindForCheckInAndCheckOutReqDTO.getSelectLastDay();
         return new ResponseEntity<>(roomService.findAvailableRoomHavePer(selectFirstDay, selectLastDay, current), HttpStatus.OK);
     }
+    /*
+    /find-available-room-have-per-pageable?current=4&minPrice=1000&maxPrice=100000&sort=id,desc
+    sort: sort=id,asc
+     */
 
     @PostMapping("/find-available-room-have-per-pageable")
     public ResponseEntity<?> findAvailableRoomHavePerPageable(@RequestBody RoomFindForCheckInAndCheckOutReqDTO roomFindForCheckInAndCheckOutReqDTO,
@@ -209,7 +213,7 @@ public class RoomAPI {
                                                               @RequestParam(required = false) EViewType view,
                                                               @RequestParam(required = false) String sort,
                                                               @PageableDefault(size = 5, page = 0) Pageable pageable) {
-        LocalDateTime selectFirstDay = roomFindForCheckInAndCheckOutReqDTO.getSelectFirstDay();
+       LocalDateTime selectFirstDay = roomFindForCheckInAndCheckOutReqDTO.getSelectFirstDay();
         LocalDateTime selectLastDay = roomFindForCheckInAndCheckOutReqDTO.getSelectLastDay();
 
         Page<RoomResDTO> roomResDTOPage = roomService.findAvailableRoomHavePerWithPageable(selectFirstDay, selectLastDay, minPrice, maxPrice, view,
