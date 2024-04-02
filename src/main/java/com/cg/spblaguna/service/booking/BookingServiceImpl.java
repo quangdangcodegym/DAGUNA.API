@@ -20,14 +20,14 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -181,7 +181,7 @@ public class BookingServiceImpl implements IBookingService {
 
         if (bookingReqUpdateBookingServiceCreUpdateDTO.getBookingServiceType().equals(EBookingServiceType.SCAR)) {
             bookingDetailService.setNumberCar(bookingReqUpdateBookingServiceCreUpdateDTO.getNumberCarOrPerson());
-        }else{
+        } else {
             bookingDetailService.setNumberPerson(bookingReqUpdateBookingServiceCreUpdateDTO.getNumberCarOrPerson());
             bookingDetailService.setDateChooseService(bookingReqUpdateBookingServiceCreUpdateDTO.getDateChooseService());
         }
@@ -220,7 +220,7 @@ public class BookingServiceImpl implements IBookingService {
         List<BookingDetailService> bookingDetailServices = bookingDetailServiceRepository.findBookingDetailServiceByBookingDetail_Id(bookingDetail.getId());
 
 
-        boolean checkExists = checkBookingServiceIdExistsBookingDetailService(bookingDetailServices,bookingReqUpdateBookingServiceCreUpdateDTO.getBookingServiceId() );
+        boolean checkExists = checkBookingServiceIdExistsBookingDetailService(bookingDetailServices, bookingReqUpdateBookingServiceCreUpdateDTO.getBookingServiceId());
 
         if (checkExists) {
             BookingDetailService bookingDetailService = bookingDetailServiceRepository.
@@ -295,7 +295,7 @@ public class BookingServiceImpl implements IBookingService {
 
             bookingDetailRepository.save(bookingDetail);
 
-        }else{
+        } else {
             throw new ResourceExistsException("Room is exists in Booking");
         }
         // findBookingDetails again
@@ -504,7 +504,6 @@ public class BookingServiceImpl implements IBookingService {
 //    }
 
 
-
     private boolean checkRoomIdExistsBookingDetails(List<BookingDetail> bookingDetails, Long roomId) {
         for (BookingDetail bdt : bookingDetails) {
             if (bdt.getRoom().getId().equals(roomId)) {
@@ -513,6 +512,7 @@ public class BookingServiceImpl implements IBookingService {
         }
         return false;
     }
+
     private boolean checkBookingServiceIdExistsBookingDetailService(List<BookingDetailService> bookingDetailServices, Long bookingServiceId) {
         for (BookingDetailService bdts : bookingDetailServices) {
             if (bdts.getBookingService().getId().equals(bookingServiceId)) {
@@ -522,5 +522,22 @@ public class BookingServiceImpl implements IBookingService {
         return false;
     }
 
+    @Override
+    public RevenueReqDTO findRevenueForByTime(LocalDateTime selectFirstDay, LocalDateTime selectLastDay) {
+        try {
+            RevenueReqDTO revenues = bookingDetailRepository.findRevenueForByTime(selectFirstDay, selectLastDay);
+            if (revenues==null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "There is no revenue during this period");
+            }
+            BigDecimal total = revenues.getTotal();
+            if (total == null ) {
+                revenues.setTotal(BigDecimal.ZERO);
+            }
+            return revenues;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Error: Unexpected exception occurred");
 
+        }
+    }
 }
