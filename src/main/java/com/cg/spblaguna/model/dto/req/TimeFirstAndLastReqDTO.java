@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Setter
-public class RoomRealFindForCheckInAndCheckOutReqDTO {
+public class TimeFirstAndLastReqDTO {
     private LocalDateTime selectFirstDay;
     private LocalDateTime selectLastDay;
 }

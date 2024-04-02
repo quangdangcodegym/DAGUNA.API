@@ -27,6 +27,9 @@ public class Booking {
     @Column(name = "create_at")
     private LocalDateTime createAt;
 
+    @Column(name = "booking_at")
+    private LocalDateTime bookingAt;
+
 
     /**
      * total: is full total_booking_details
