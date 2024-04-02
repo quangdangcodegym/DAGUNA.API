@@ -91,6 +91,11 @@ public class BookingDetail {
         bookingDetailResDTO.setTotal(this.getTotal());
         bookingDetailResDTO.setVat(this.getVat());
         bookingDetailResDTO.setDiscountCode(this.getDiscountCode());
+        bookingDetailResDTO.setCheckInStatus(this.getCheckInStatus());
+        if (this.roomReal != null) {
+            bookingDetailResDTO.setRoomReal(this.roomReal.toRoomRealResDTO());
+        }
+
 
         List<BookingDetailServiceResDTO> bookingDetailServiceResDTOS = this.bookingDetailServices.stream()
                 .map(bookingDetailService -> bookingDetailService.toBookingDetailServiceResDTO())
@@ -99,5 +104,11 @@ public class BookingDetail {
 
         return bookingDetailResDTO;
     }
+//    public void setRoomRealId(Long roomRealId) {
+//        if (this.roomReal == null) {
+//            this.roomReal = new RoomReal();
+//        }
+//        this.roomReal.setId(roomRealId);
+//    }
 
 }

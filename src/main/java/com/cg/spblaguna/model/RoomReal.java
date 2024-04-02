@@ -1,5 +1,6 @@
 package com.cg.spblaguna.model;
 
+import com.cg.spblaguna.model.dto.res.RoomRealResDTO;
 import com.cg.spblaguna.model.enumeration.ERangeRoom;
 import com.cg.spblaguna.model.enumeration.EStatusRoom;
 import jakarta.persistence.*;
@@ -30,5 +31,16 @@ public class RoomReal {
     @Column(name = "range_room")
     private ERangeRoom eRangeRoom;
     private Integer floor;
+
+    public RoomRealResDTO toRoomRealResDTO(){
+        RoomRealResDTO roomRealResDTO = new RoomRealResDTO();
+        roomRealResDTO.setIdRoom(this.roomId.getId());
+        roomRealResDTO.setId(this.id);
+        roomRealResDTO.setRoomCode(this.getRoomCode());
+        roomRealResDTO.setStatusRoom(this.getStatusRoom());
+        roomRealResDTO.setERangeRoom(this.getERangeRoom());
+        roomRealResDTO.setFloor(this.getFloor());
+        return roomRealResDTO;
+    }
 
 }

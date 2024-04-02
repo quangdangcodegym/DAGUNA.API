@@ -1,6 +1,7 @@
 package com.cg.spblaguna.service.booking;
 
 import com.cg.spblaguna.exception.ResourceExistsException;
+import com.cg.spblaguna.exception.ResourceNotFoundException;
 import com.cg.spblaguna.model.*;
 import com.cg.spblaguna.model.dto.req.*;
 import com.cg.spblaguna.model.dto.res.BookingDetailResDTO;
@@ -19,6 +20,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -58,6 +60,9 @@ public class BookingServiceImpl implements IBookingService {
 
     @Autowired
     private IBookingDetailServiceRepository bookingDetailServiceRepository;
+
+    @Autowired
+    private IRoomRealRepository roomRealRepository;
 
     @Autowired
     private EmailUtil emailUtil;
@@ -129,8 +134,13 @@ public class BookingServiceImpl implements IBookingService {
         bookingDetail.setRoom(room);
         bookingDetail.setBooking(booking);
         bookingDetail.setPrice(room.getPricePerNight());
+
         bookingDetail.setNumberAdult(bookingReqCreDTO.getBookingDetail().getNumberAdult());
-        bookingDetail.setChildrenAge(bookingReqCreDTO.getBookingDetail().getChildrenAge());
+        if (bookingReqCreDTO.getBookingDetail().getChildrenAge() == null) {
+            bookingDetail.setChildrenAge("0");
+        } else {
+            bookingDetail.setChildrenAge(bookingReqCreDTO.getBookingDetail().getChildrenAge());
+        }
         bookingDetail.setDiscountCode(bookingReqCreDTO.getBookingDetail().getDiscountCode());
         bookingDetail.setTotalAmount(appUtils.calculateVAT(bookingDetail.getPrice(), vatBookingDetail));
         bookingDetail.setVat(new BigDecimal(vatBookingDetail));
@@ -433,6 +443,16 @@ public class BookingServiceImpl implements IBookingService {
 
         bookingResDTO.setCustomerInfo(user.toCustomerInfoResDTO());
         return null;
+    }
+
+    @Override
+    public void updateBooking_UpdateBookingDetail_UpdateRoomReal(Long bookingDetailId, Long roomRealId) {
+        BookingDetail bookingDetail = bookingDetailRepository.findById(bookingDetailId).orElseThrow(() -> new ResourceNotFoundException("Booking Detail not found"));
+        RoomReal r = roomRealRepository.findById(roomRealId).get();
+
+        bookingDetail.setRoomReal(r);
+        bookingDetail.setCheckInStatus(true);
+        bookingDetailRepository.save(bookingDetail);
     }
 
 
