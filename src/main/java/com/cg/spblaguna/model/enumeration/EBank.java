@@ -1,10 +1,10 @@
 package com.cg.spblaguna.model.enumeration;
 
-public enum EMethod {
-    CARD(1L, "Card"), TRANSFER(2L, "Transfer"), MONEY(3L, "Money");
+public enum EBank {
+    ACB(1L, "ACB"), VIETTINBANK(2L, "VIETTINBANK"), VIETCOMBANK(3L, "VIETCOMBANK");
     private Long id;
     private String name;
-    private EMethod(Long id, String name){
+    private EBank(Long id, String name){
         this.id = id;
         this.name = name;
     }
@@ -24,5 +24,4 @@ public enum EMethod {
     public void setName(String name) {
         this.name = name;
     }
-
 }

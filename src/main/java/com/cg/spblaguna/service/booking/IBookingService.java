@@ -3,8 +3,11 @@ package com.cg.spblaguna.service.booking;
 import com.cg.spblaguna.model.Booking;
 import com.cg.spblaguna.model.dto.req.*;
 import com.cg.spblaguna.model.dto.res.BookingResDTO;
+import com.cg.spblaguna.model.report.RevenueByMonth;
 import com.cg.spblaguna.service.IGeneralService;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface IBookingService extends IGeneralService<Booking,Long> {
@@ -31,5 +34,10 @@ public interface IBookingService extends IGeneralService<Booking,Long> {
     BookingResDTO updateBooking_AddCustomer(BookingReqUpdate_CustomerDTO bookingReqUpdateCustomerDTO);
 
 
+    List<RevenueByMonth> showRevenue();
+
     void updateBooking_UpdateBookingDetail_UpdateRoomReal(Long bookingDetailId, Long roomRealId);
+
+    void depositBooking(DepositReqDTO depositReqDTO);
+    RevenueReqDTO findRevenueForByTime(LocalDateTime selectFirstDay, LocalDateTime selectLastDay);
 }
