@@ -19,6 +19,7 @@ public class BookingServiceResDTO {
     private String description;
     private BigDecimal price;
     private EBookingServiceType bookingServiceType;
+    private String fileUrl;
 
     public BookingServiceResDTO(BookingService bookingService){
         this.id = bookingService.getId();
@@ -26,5 +27,6 @@ public class BookingServiceResDTO {
         this.description = bookingService.getDescription();
         this.price = bookingService.getPrice();
         this.bookingServiceType = bookingService.getBookingServiceType();
+        this.fileUrl = bookingService.getFileUrl();
     }
 }

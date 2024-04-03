@@ -23,11 +23,14 @@ public class BookingService {
     private String description;
     private BigDecimal price;
 
+    @Column(name = "file_url")
+    private String fileUrl;
+
     @Enumerated(EnumType.STRING)
     private EBookingServiceType bookingServiceType;
 
     public BookingServiceResDTO toBookingServiceDTO(){
-        return new BookingServiceResDTO(this.id, this.name, this.description, this.price, this.bookingServiceType);
+        return new BookingServiceResDTO(this.id, this.name, this.description, this.price, this.bookingServiceType, this.fileUrl);
     }
 
 }

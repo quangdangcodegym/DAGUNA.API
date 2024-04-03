@@ -38,9 +38,9 @@ import java.util.stream.Collectors;
 @ConfigurationProperties(prefix = "application.vat")
 public class BookingServiceImpl implements IBookingService {
 
-    @Value("${application.vat.booking-detail}")
+    @Value("13.4")
     private Float vatBookingDetail;
-    @Value("${application.vat.booking-detail-service}")
+    @Value("13.4")
     private Float vatBookingDetailService;
 
 
@@ -138,8 +138,13 @@ public class BookingServiceImpl implements IBookingService {
         bookingDetail.setRoom(room);
         bookingDetail.setBooking(booking);
         bookingDetail.setPrice(room.getPricePerNight());
+
         bookingDetail.setNumberAdult(bookingReqCreDTO.getBookingDetail().getNumberAdult());
-        bookingDetail.setChildrenAge(bookingReqCreDTO.getBookingDetail().getChildrenAge());
+        if (bookingReqCreDTO.getBookingDetail().getChildrenAge() == null) {
+            bookingDetail.setChildrenAge("0"); // Thiết lập giá trị mặc định là "0"
+        } else {
+            bookingDetail.setChildrenAge(bookingReqCreDTO.getBookingDetail().getChildrenAge());
+        }
         bookingDetail.setDiscountCode(bookingReqCreDTO.getBookingDetail().getDiscountCode());
         bookingDetail.setTotalAmount(appUtils.calculateVAT(bookingDetail.getPrice(), vatBookingDetail));
         bookingDetail.setVat(new BigDecimal(vatBookingDetail));
