@@ -11,6 +11,7 @@ import com.cg.spblaguna.model.dto.res.BookingResDTO;
 import com.cg.spblaguna.model.enumeration.EBookingServiceType;
 import com.cg.spblaguna.model.enumeration.ELockStatus;
 import com.cg.spblaguna.model.enumeration.ERole;
+import com.cg.spblaguna.model.report.RevenueByMonth;
 import com.cg.spblaguna.repository.*;
 import com.cg.spblaguna.service.cardpayment.ICardPaymentService;
 import com.cg.spblaguna.service.user.IUserService;
@@ -63,6 +64,7 @@ public class BookingServiceImpl implements IBookingService {
 
     @Autowired
     private IUserService userService;
+
     @Override
     public List<Booking> findAll() {
         return bookingRepository.findAll();
@@ -172,7 +174,7 @@ public class BookingServiceImpl implements IBookingService {
 
         if (bookingReqUpdateBookingServiceCreUpdateDTO.getBookingServiceType().equals(EBookingServiceType.SCAR)) {
             bookingDetailService.setNumberCar(bookingReqUpdateBookingServiceCreUpdateDTO.getNumberCarOrPerson());
-        }else{
+        } else {
             bookingDetailService.setNumberPerson(bookingReqUpdateBookingServiceCreUpdateDTO.getNumberCarOrPerson());
             bookingDetailService.setDateChooseService(bookingReqUpdateBookingServiceCreUpdateDTO.getDateChooseService());
         }
@@ -211,7 +213,7 @@ public class BookingServiceImpl implements IBookingService {
         List<BookingDetailService> bookingDetailServices = bookingDetailServiceRepository.findBookingDetailServiceByBookingDetail_Id(bookingDetail.getId());
 
 
-        boolean checkExists = checkBookingServiceIdExistsBookingDetailService(bookingDetailServices,bookingReqUpdateBookingServiceCreUpdateDTO.getBookingServiceId() );
+        boolean checkExists = checkBookingServiceIdExistsBookingDetailService(bookingDetailServices, bookingReqUpdateBookingServiceCreUpdateDTO.getBookingServiceId());
 
         if (checkExists) {
             BookingDetailService bookingDetailService = bookingDetailServiceRepository.
@@ -286,7 +288,7 @@ public class BookingServiceImpl implements IBookingService {
 
             bookingDetailRepository.save(bookingDetail);
 
-        }else{
+        } else {
             throw new ResourceExistsException("Room is exists in Booking");
         }
         // findBookingDetails again
@@ -440,6 +442,7 @@ public class BookingServiceImpl implements IBookingService {
         }
         return false;
     }
+
     private boolean checkBookingServiceIdExistsBookingDetailService(List<BookingDetailService> bookingDetailServices, Long bookingServiceId) {
         for (BookingDetailService bdts : bookingDetailServices) {
             if (bdts.getBookingService().getId().equals(bookingServiceId)) {
@@ -449,5 +452,8 @@ public class BookingServiceImpl implements IBookingService {
         return false;
     }
 
-
+    @Override
+    public List<RevenueByMonth> showRevenue() {
+        return bookingRepository.showRevenue();
+    }
 }

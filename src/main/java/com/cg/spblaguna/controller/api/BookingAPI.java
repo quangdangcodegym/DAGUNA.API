@@ -5,6 +5,7 @@ import com.cg.spblaguna.model.dto.req.BookingReqUpdate_BookingServiceCreUpdateDT
 import com.cg.spblaguna.model.dto.req.BookingReqUpdate_CustomerDTO;
 import com.cg.spblaguna.model.dto.req.BookingReqUpdate_RoomAddDTO;
 import com.cg.spblaguna.model.dto.res.BookingResDTO;
+import com.cg.spblaguna.model.report.RevenueByMonthDTO;
 import com.cg.spblaguna.service.booking.IBookingService;
 import com.cg.spblaguna.service.cardpayment.ICardPaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/bookings")
@@ -76,5 +78,11 @@ public class BookingAPI {
         BookingResDTO bookingResDTO = bookingService.editBookingReqUpdate_BookingServiceEditDTO(bookingReqUpdateBookingServiceCreUpdateDTO);
         return new ResponseEntity<>(bookingResDTO, HttpStatus.OK);
     }
+    @GetMapping("/show-revenue-by-month")
+    public  ResponseEntity<?> showRevenue(){
+//        List<RevenueByMonthDTO> revenueByMonthDTOS = bookingService.showRevenue()
+//                .stream().map(item -> new RevenueByMonthDTO(item.getMonth_Year(), item.getTotal_Amount())).collect(Collectors.toList());
+        return new ResponseEntity<>(bookingService.showRevenue(), HttpStatus.OK);
 
+    }
 }

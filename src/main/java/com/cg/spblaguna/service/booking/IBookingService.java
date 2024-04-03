@@ -7,6 +7,7 @@ import com.cg.spblaguna.model.dto.req.BookingReqUpdate_BookingServiceCreUpdateDT
 import com.cg.spblaguna.model.dto.req.BookingReqUpdate_CustomerDTO;
 import com.cg.spblaguna.model.dto.req.BookingReqUpdate_RoomAddDTO;
 import com.cg.spblaguna.model.dto.res.BookingResDTO;
+import com.cg.spblaguna.model.report.RevenueByMonth;
 import com.cg.spblaguna.service.IGeneralService;
 import org.springframework.data.domain.Page;
 
@@ -33,4 +34,6 @@ public interface IBookingService extends IGeneralService<Booking,Long> {
 
 
     BookingResDTO updateBooking_AddCustomer(BookingReqUpdate_CustomerDTO bookingReqUpdateCustomerDTO);
+
+    List<RevenueByMonth> showRevenue();
 }
