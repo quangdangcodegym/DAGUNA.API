@@ -1,8 +1,8 @@
 package com.cg.spblaguna.controller.api;
 
 import com.cg.spblaguna.model.RoomReal;
-import com.cg.spblaguna.model.dto.req.RoomRealFindForCheckInAndCheckOutReqDTO;
 import com.cg.spblaguna.model.dto.req.RoomRealReqDTO;
+import com.cg.spblaguna.model.dto.req.TimeFirstAndLastReqDTO;
 import com.cg.spblaguna.service.roomreal.RoomRealServiceImpl;
 import com.cg.spblaguna.util.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,7 @@ public class RoomRealAPI {
     }
 
     @PostMapping("/find-available-room-real")
-    public ResponseEntity<?> findAvailableRoomRealByCheckInAndCheckOut(@RequestBody RoomRealFindForCheckInAndCheckOutReqDTO roomRealFindForCheckInAndCheckOutReqDTO,
+    public ResponseEntity<?> findAvailableRoomRealByCheckInAndCheckOut(@RequestBody TimeFirstAndLastReqDTO roomRealFindForCheckInAndCheckOutReqDTO,
                                                                        @RequestParam(required = false) Long roomId) {
         LocalDateTime selectFirstDay = roomRealFindForCheckInAndCheckOutReqDTO.getSelectFirstDay();
         LocalDateTime selectLastDay = roomRealFindForCheckInAndCheckOutReqDTO.getSelectLastDay();
@@ -45,7 +45,7 @@ public class RoomRealAPI {
     }
 
     @PostMapping("/find-un-available-room-real")
-    public ResponseEntity<?> findUnAvailableRoomRealByCheckInAndCheckOut(@RequestBody RoomRealFindForCheckInAndCheckOutReqDTO roomRealFindForCheckInAndCheckOutReqDTO,
+    public ResponseEntity<?> findUnAvailableRoomRealByCheckInAndCheckOut(@RequestBody TimeFirstAndLastReqDTO roomRealFindForCheckInAndCheckOutReqDTO,
                                                                          @RequestParam(required = false) Long roomId) {
         LocalDateTime selectFirstDay = roomRealFindForCheckInAndCheckOutReqDTO.getSelectFirstDay();
         LocalDateTime selectLastDay = roomRealFindForCheckInAndCheckOutReqDTO.getSelectLastDay();
@@ -55,7 +55,7 @@ public class RoomRealAPI {
 
     @PostMapping("/find-available-room-real-detail")
     public ResponseEntity<?> findAvailableRoomRealByCheckInAndCheckOutByRoomIdAndRoomReal
-            (@RequestBody RoomRealFindForCheckInAndCheckOutReqDTO roomRealFindForCheckInAndCheckOutReqDTO,
+            (@RequestBody TimeFirstAndLastReqDTO roomRealFindForCheckInAndCheckOutReqDTO,
              @RequestParam(required = false) Long roomId, @RequestParam(required = false) Long roomRealId) {
         LocalDateTime selectFirstDay = roomRealFindForCheckInAndCheckOutReqDTO.getSelectFirstDay();
         LocalDateTime selectLastDay = roomRealFindForCheckInAndCheckOutReqDTO.getSelectLastDay();
