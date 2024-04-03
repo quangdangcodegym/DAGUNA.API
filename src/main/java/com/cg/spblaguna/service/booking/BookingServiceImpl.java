@@ -6,6 +6,10 @@ import com.cg.spblaguna.model.*;
 import com.cg.spblaguna.model.dto.req.*;
 import com.cg.spblaguna.model.dto.res.BookingDetailResDTO;
 import com.cg.spblaguna.model.dto.res.BookingResDTO;
+import com.cg.spblaguna.model.enumeration.EBookingServiceType;
+import com.cg.spblaguna.model.enumeration.ELockStatus;
+import com.cg.spblaguna.model.enumeration.ERole;
+import com.cg.spblaguna.model.report.RevenueByMonth;
 import com.cg.spblaguna.model.enumeration.*;
 
 import com.cg.spblaguna.repository.*;
@@ -453,6 +457,15 @@ public class BookingServiceImpl implements IBookingService {
     public void depositBooking(DepositReqDTO depositReqDTO) {
         Long bookingId = depositReqDTO.getBookingId();
         Payment payment = new Payment();
+        payment.setBooking(bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new RuntimeException("Booking not found")));
+        payment.setMethod(EMethod.TRANSFER);
+        payment.setTotal(payment.getTotal());
+        payment.setTransferId(payment.getTransferId());
+        paymentRepository.save(payment);
+
+
+        // Cập nhật thông tin trong Booking
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new RuntimeException("Booking not found"));
         payment.setBooking(booking);
@@ -476,7 +489,6 @@ public class BookingServiceImpl implements IBookingService {
 
 
     }
-
 
 
     @Override
@@ -551,14 +563,18 @@ public class BookingServiceImpl implements IBookingService {
     }
 
     @Override
+    public List<RevenueByMonth> showRevenue() {
+        return bookingRepository.showRevenue();
+    }
+
     public RevenueReqDTO findRevenueForByTime(LocalDateTime selectFirstDay, LocalDateTime selectLastDay) {
         try {
             RevenueReqDTO revenues = bookingDetailRepository.findRevenueForByTime(selectFirstDay, selectLastDay);
-            if (revenues==null) {
+            if (revenues == null) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "There is no revenue during this period");
             }
             BigDecimal total = revenues.getTotal();
-            if (total == null ) {
+            if (total == null) {
                 revenues.setTotal(BigDecimal.ZERO);
             }
             return revenues;
