@@ -1,5 +1,6 @@
 package com.cg.spblaguna.model;
 
+import com.cg.spblaguna.model.enumeration.EBank;
 import com.cg.spblaguna.model.enumeration.ECardType;
 import com.cg.spblaguna.model.enumeration.EMethod;
 import jakarta.persistence.*;
@@ -31,4 +32,11 @@ public class Payment {
 
     private Long transferId;
 
+    @Enumerated(EnumType.STRING)
+    private EBank bank;
+
+    private String note;
+
+    @Column(name = "transfer_date")
+    private LocalDate transferDate;
 }
