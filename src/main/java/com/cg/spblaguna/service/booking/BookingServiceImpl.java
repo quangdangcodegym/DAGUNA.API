@@ -6,10 +6,7 @@ import com.cg.spblaguna.model.*;
 import com.cg.spblaguna.model.dto.req.*;
 import com.cg.spblaguna.model.dto.res.BookingDetailResDTO;
 import com.cg.spblaguna.model.dto.res.BookingResDTO;
-import com.cg.spblaguna.model.enumeration.EBookingServiceType;
-
-import com.cg.spblaguna.model.enumeration.ELockStatus;
-import com.cg.spblaguna.model.enumeration.ERole;
+import com.cg.spblaguna.model.enumeration.*;
 
 import com.cg.spblaguna.repository.*;
 import com.cg.spblaguna.service.cardpayment.ICardPaymentService;
@@ -69,6 +66,9 @@ public class BookingServiceImpl implements IBookingService {
 
 
     private ICardPaymentService cardPaymentService;
+
+    @Autowired
+    private IPaymentRepository paymentRepository;
 
     @Autowired
     private IUserService userService;
@@ -444,11 +444,38 @@ public class BookingServiceImpl implements IBookingService {
     public void updateBooking_UpdateBookingDetail_UpdateRoomReal(Long bookingDetailId, Long roomRealId) {
         BookingDetail bookingDetail = bookingDetailRepository.findById(bookingDetailId).orElseThrow(() -> new ResourceNotFoundException("Booking Detail not found"));
         RoomReal r = roomRealRepository.findById(roomRealId).get();
-
         bookingDetail.setRoomReal(r);
         bookingDetail.setCheckInStatus(true);
         bookingDetailRepository.save(bookingDetail);
     }
+
+    @Override
+    public void depositBooking(DepositReqDTO depositReqDTO) {
+        // Lấy thông tin từ DepositReqDTO
+        Long bookingId = depositReqDTO.getBookingId();
+
+        // Tạo một đối tượng Payment mới
+        Payment payment = new Payment();
+        payment.setBooking(bookingRepository.findById(bookingId)
+                .orElseThrow(()-> new RuntimeException("Booking not found")));
+        payment.setMethod(EMethod.TRANSFER);
+        payment.setTotal(payment.getTotal());
+        payment.setTransferId(payment.getTransferId());
+        paymentRepository.save(payment);
+
+
+        // Cập nhật thông tin trong Booking
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new RuntimeException("Booking not found"));
+        BigDecimal depositedNumber = depositReqDTO.getDepositedAmount();
+        booking.setDepositedNumber(depositedNumber);
+        booking.setDepositedStatus(EDepositedStatus.ACCOMPLISHED);
+        booking.setBookingStatus(EBookingStatus.DEPOSITED);
+        bookingRepository.save(booking);
+
+
+    }
+
 
 
     @Override

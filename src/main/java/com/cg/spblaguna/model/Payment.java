@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 
@@ -20,22 +21,14 @@ public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "booking_id", nullable = false)
     private Booking booking;
-    private Long amount;
-    private Long vat;
     @Enumerated(EnumType.STRING)
     private EMethod method;
-    private Long total;
-    private Long transfer;
-    @Column(columnDefinition = "LONGTEXT")
-    private String fileName;
-    @Column(columnDefinition = "LONGTEXT")
-    private String fileType;
-    @Lob
-    @Column(name = "file", columnDefinition = "LONGBLOB")
-    private byte[] file;
-    @Column(name = "note", columnDefinition = "LONGTEXT")
-    private String note;
+    private BigDecimal total;
+    @Column(name = "transfer_id")
+
+    private Long transferId;
+
 }
