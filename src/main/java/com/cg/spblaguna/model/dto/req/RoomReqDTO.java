@@ -47,4 +47,19 @@ public class RoomReqDTO {
 
     List<String> imageIds;
 
+    public RoomReqDTO(Long id, String name, ERoomType roomType, Integer quantity, EViewType viewType, Long kindOfRoomId, Long perTypId, BigDecimal pricePerNight, BigDecimal acreage, Integer sleep, String description, String utilitie) {
+        this.id = id;
+        this.name = name;
+        this.roomType = roomType;
+        this.quantity = quantity;
+        this.viewType = viewType;
+        this.kindOfRoomId = kindOfRoomId;
+        this.perTypId = perTypId;
+        this.pricePerNight = pricePerNight;
+        this.acreage = acreage;
+        this.sleep = sleep;
+        this.description = description;
+        this.utilitie = utilitie;
+    }
+
 }

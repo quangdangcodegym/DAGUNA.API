@@ -2,7 +2,7 @@ package com.cg.spblaguna.model.enumeration;
 
 public enum ERole {
 
-    CUSTOMER(1L, "Customer"), RECEPTIONIST(2L,"Receptionist"), ADMIN(3L, "Admin");
+    ROLE_CUSTOMER(1L, "Customer"), ROLE_RECEPTIONIST(2L,"Receptionist"), ROLE_ADMIN(3L, "Admin");
 
     private Long id;
     private String name;

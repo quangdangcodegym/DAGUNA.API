@@ -10,7 +10,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
+
 @NoArgsConstructor
 public class RoomRealReqDTO {
     private Long id;
@@ -18,4 +18,14 @@ public class RoomRealReqDTO {
     private EStatusRoom statusRoom;
     private ERangeRoom rangeRoom;
     private Integer floor;
+    private Long roomId;
+
+    public RoomRealReqDTO(Long id, String roomCode, EStatusRoom statusRoom, ERangeRoom rangeRoom, Integer floor, Long roomId) {
+        this.id = id;
+        this.roomCode = roomCode;
+        this.statusRoom = statusRoom;
+        this.rangeRoom = rangeRoom;
+        this.floor = floor;
+        this.roomId = roomId;
+    }
 }

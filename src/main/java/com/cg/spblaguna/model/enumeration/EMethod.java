@@ -1,7 +1,7 @@
 package com.cg.spblaguna.model.enumeration;
 
 public enum EMethod {
-    CARD(1L, "Card"), TRANSFER(2L, "Transfer");
+    CARD(1L, "Card"), TRANSFER(2L, "Transfer"), MONEY(3L, "Money");
     private Long id;
     private String name;
     private EMethod(Long id, String name){

@@ -1,42 +1,25 @@
 package com.cg.spblaguna.service.user;
 
 import com.cg.spblaguna.model.User;
-import com.cg.spblaguna.repository.IUserRepository;
+
+import com.cg.spblaguna.model.dto.req.CustomerReqDTO;
+import com.cg.spblaguna.model.dto.req.EmailReqDTO;
+import com.cg.spblaguna.model.dto.req.ForgotPassword;
+import com.cg.spblaguna.model.dto.req.UserReqDTO;
+import com.cg.spblaguna.service.IGeneralService;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
 
-@Service
-@Transactional
-public class IUserService implements IUserServiceImpl {
-    @Autowired
-    private IUserRepository iUserRepository;
-    @Override
-    public List<User> findAll() {
-        return iUserRepository.findAll();
-    }
 
-    @Override
-    public Optional<User> findById(Long id) {
-        return iUserRepository.findById(id);
-    }
+public interface IUserService extends IGeneralService<User,Long>, UserDetailsService {
 
-    @Override
-    public User save(User user) {
-        iUserRepository.save(user);
-        return user;
-    }
+    User findUserByEmailAndPhone(String email, String phone);
 
-    @Override
-    public void deleteById(Long id) {
-        iUserRepository.deleteById(id);
-    }
-
-    @Override
-    public User findUserByEmailAndPhone(String email, String phone) {
-        return iUserRepository.findUserByEmailAndPhone(email, phone);
-    }
+    User findByUser_Id(Long id);
+    boolean forgotPassword(ForgotPassword forgotPassword);
+    void register(UserReqDTO userReqDTO);
+    boolean confirmEmail(EmailReqDTO emailReqDTO);
 }

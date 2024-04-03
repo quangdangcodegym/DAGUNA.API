@@ -4,27 +4,22 @@ import com.cg.spblaguna.exception.ResourceNotFoundException;
 import com.cg.spblaguna.model.Image;
 import com.cg.spblaguna.model.User;
 import com.cg.spblaguna.model.dto.req.ReceptionistReqDTO;
-import com.cg.spblaguna.model.dto.res.ImageResDTO;
+import com.cg.spblaguna.model.dto.req.SearchBarReceptionistReqDTO;
 import com.cg.spblaguna.model.dto.res.ReceptionistResDTO;
-import com.cg.spblaguna.model.dto.res.RoomResDTO;
 import com.cg.spblaguna.model.enumeration.EImageType;
-import com.cg.spblaguna.model.enumeration.ELockStatus;
 import com.cg.spblaguna.model.enumeration.ERole;
 import com.cg.spblaguna.repository.IImageRepository;
 import com.cg.spblaguna.repository.IReceptionistRepository;
-import com.cg.spblaguna.service.user.IUserServiceImpl;
+import com.cg.spblaguna.service.user.IUserService;
+import com.cg.spblaguna.util.PasswordEncryptionUtil;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,7 +30,7 @@ public class ReceptionistServiceImpl implements IReceptionistService {
     @Autowired
     private IReceptionistRepository receptionistRepository;
     @Autowired
-    private IUserServiceImpl userService;
+    private IUserService userService;
 
     @Autowired
     private IImageRepository imageRepository;
@@ -43,7 +38,7 @@ public class ReceptionistServiceImpl implements IReceptionistService {
 
     @Override
     public List<User> findAll() {
-        return receptionistRepository.findUsersByERole(ERole.RECEPTIONIST);
+        return receptionistRepository.findUsersByERole(ERole.ROLE_RECEPTIONIST);
     }
 
     @Override
@@ -97,10 +92,11 @@ public class ReceptionistServiceImpl implements IReceptionistService {
         user.setPhone(receptionistReqDTO.getPhone());
         user.setAddress(receptionistReqDTO.getAddress());
         user.setUnlock(true);
-        user.setERole(ERole.RECEPTIONIST);
+        user.setERole(ERole.ROLE_RECEPTIONIST);
         user.setCreateAt(LocalDate.now());
         user.setReceptionistInfo(receptionistReqDTO.getReceptionistInfo());
 
+        user.setPassword(PasswordEncryptionUtil.encryptPassword("123123"));
         // Lưu đối tượng User vào cơ sở dữ liệu
         user = userService.save(user);
 
@@ -163,5 +159,10 @@ public class ReceptionistServiceImpl implements IReceptionistService {
             return null;
         }
         return new ReceptionistResDTO(user);
+    }
+
+    @Override
+    public List<ReceptionistResDTO> searchBarRoomReqDTO(SearchBarReceptionistReqDTO searchBarReceptionistReqDTO) {
+        return null;
     }
 }

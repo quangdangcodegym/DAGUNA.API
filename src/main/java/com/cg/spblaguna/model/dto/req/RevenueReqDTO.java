@@ -1,16 +1,17 @@
-package com.cg.spblaguna.model.dto.res;
+package com.cg.spblaguna.model.dto.req;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
-@Setter
+import java.math.BigDecimal;
+
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginDTO {
-    private String email;
-    private String password;
+@Getter
+@Setter
+public class RevenueReqDTO {
+    private BigDecimal total;
 
 }

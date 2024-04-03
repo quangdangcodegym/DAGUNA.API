@@ -70,9 +70,9 @@ public class BookingDetail {
     @Column(name = "number_adult")
     private Integer numberAdult;
 
-    @Column(name = "number_children", columnDefinition = "json", nullable = false)
+    @Column(name = "children_age", columnDefinition = "json", nullable = false)
     @Type(JsonType.class)
-    private String numberChildren;
+    private String childrenAge;
 
     @Column(name = "discount_code")
     private String discountCode;
@@ -86,11 +86,16 @@ public class BookingDetail {
         bookingDetailResDTO.setCheckOut(this.getCheckOut());
         bookingDetailResDTO.setCheckIn(this.getCheckIn());
         bookingDetailResDTO.setNumberAdult(this.getNumberAdult());
-        bookingDetailResDTO.setNumberChildren(this.getNumberChildren());
+        bookingDetailResDTO.setChildrenAge(this.getChildrenAge());
         bookingDetailResDTO.setTotalAmount(this.getTotalAmount());
         bookingDetailResDTO.setTotal(this.getTotal());
         bookingDetailResDTO.setVat(this.getVat());
         bookingDetailResDTO.setDiscountCode(this.getDiscountCode());
+        bookingDetailResDTO.setCheckInStatus(this.getCheckInStatus());
+        if (this.roomReal != null) {
+            bookingDetailResDTO.setRoomReal(this.roomReal.toRoomRealResDTO());
+        }
+
 
         List<BookingDetailServiceResDTO> bookingDetailServiceResDTOS = this.bookingDetailServices.stream()
                 .map(bookingDetailService -> bookingDetailService.toBookingDetailServiceResDTO())
@@ -99,5 +104,11 @@ public class BookingDetail {
 
         return bookingDetailResDTO;
     }
+//    public void setRoomRealId(Long roomRealId) {
+//        if (this.roomReal == null) {
+//            this.roomReal = new RoomReal();
+//        }
+//        this.roomReal.setId(roomRealId);
+//    }
 
 }

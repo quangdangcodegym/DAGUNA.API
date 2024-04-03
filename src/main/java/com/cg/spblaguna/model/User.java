@@ -59,7 +59,7 @@ public class User {
 
     @Column(name = "zip_code")
     private String zipCode;
-
+    private String code;
 
     @Column(name = "create_at")
     private LocalDate createAt;
@@ -142,10 +142,8 @@ public class User {
         customerInfoResDTO.setNameCard(this.getCardPayment().getNameCard());
         customerInfoResDTO.setExpirationDate(this.getCardPayment().getExpirationDate());
         customerInfoResDTO.setCvv(this.getCardPayment().getCvv());
-
-
         return null;
-
     }
+
 
 }

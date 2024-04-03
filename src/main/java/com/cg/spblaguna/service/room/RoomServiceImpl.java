@@ -2,18 +2,14 @@ package com.cg.spblaguna.service.room;
 
 import com.cg.spblaguna.exception.ResourceNotFoundException;
 import com.cg.spblaguna.model.*;
-import com.cg.spblaguna.model.dto.req.RoomInfoReqDTO;
-import com.cg.spblaguna.model.dto.req.RoomRealReqDTO;
-import com.cg.spblaguna.model.dto.req.RoomReqDTO;
-import com.cg.spblaguna.model.dto.req.SearchBarRoomReqDTO;
+import com.cg.spblaguna.model.dto.req.*;
 import com.cg.spblaguna.model.dto.res.RoomResDTO;
 import com.cg.spblaguna.model.enumeration.EImageType;
 import com.cg.spblaguna.model.enumeration.ERoomType;
 import com.cg.spblaguna.model.enumeration.EStatusRoom;
+import com.cg.spblaguna.model.enumeration.EViewType;
 import com.cg.spblaguna.repository.*;
-import com.cg.spblaguna.service.user.IUserServiceImpl;
 import com.cg.spblaguna.service.roomreal.IRoomRealService;
-import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,9 +17,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
-import org.thymeleaf.standard.expression.MessageExpression;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -98,9 +95,9 @@ public class RoomServiceImpl implements IRoomService {
 
     public RoomResDTO update(RoomReqDTO roomReqDTO) {
         KindOfRoom kindOfRoom = kindOfRoomRepository.findById(roomReqDTO.getKindOfRoomId())
-                .orElseThrow(()->new ResourceNotFoundException("KindOfRoom not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("KindOfRoom not found"));
         PerType perType = perTypeRepository.findById(roomReqDTO.getPerTypId())
-                .orElseThrow(()->new ResourceNotFoundException("PerType not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("PerType not found"));
         Room room = roomRepository.findById(roomReqDTO.getId()).orElseThrow();
         room.setName(roomReqDTO.getName());
         room.setRoomType(roomReqDTO.getRoomType());
@@ -175,17 +172,19 @@ public class RoomServiceImpl implements IRoomService {
 
 
     public Page<RoomResDTO> searchBarRoomReqDTO(SearchBarRoomReqDTO searchBarRoomReqDTO, Pageable pageable) {
-        int actualChildren = (int) Math.ceil((searchBarRoomReqDTO.getGuest().getNumberChildren() + 1) / 2);
-        Page<RoomResDTO> rooms = roomRepository.searchBarRoomReqDTO(searchBarRoomReqDTO.getGuest().getNumberAdult() + actualChildren,
-                searchBarRoomReqDTO.getRoomType(), searchBarRoomReqDTO.getPerType(),
-                searchBarRoomReqDTO.getViewType(),
-                searchBarRoomReqDTO.getPriceMin(), searchBarRoomReqDTO.getPriceMax(),
-                pageable);
+//        int actualChildren = (int) Math.ceil((searchBarRoomReqDTO.getGuest().getNumberChildren() + 1) / 2);
+//        Page<RoomResDTO> rooms = roomRepository.searchBarRoomReqDTO(searchBarRoomReqDTO.getGuest().getNumberAdult() + actualChildren,
+//                searchBarRoomReqDTO.getRoomType(), searchBarRoomReqDTO.getPerType(),
+//                searchBarRoomReqDTO.getViewType(),
+//                searchBarRoomReqDTO.getPriceMin(), searchBarRoomReqDTO.getPriceMax(),
+//                pageable);
+//
+//        List<RoomResDTO> rooms1 = roomRepository.searchBarRoomReqDTO(searchBarRoomReqDTO.getGuest().getNumberAdult() + actualChildren,
+//                searchBarRoomReqDTO.getRoomType(), searchBarRoomReqDTO.getPerType(),
+//                searchBarRoomReqDTO.getViewType(),
+//                searchBarRoomReqDTO.getPriceMin(), searchBarRoomReqDTO.getPriceMax());
 
-        List<RoomResDTO> rooms1 = roomRepository.searchBarRoomReqDTO(searchBarRoomReqDTO.getGuest().getNumberAdult() + actualChildren,
-                searchBarRoomReqDTO.getRoomType(), searchBarRoomReqDTO.getPerType(),
-                searchBarRoomReqDTO.getViewType(),
-                searchBarRoomReqDTO.getPriceMin(), searchBarRoomReqDTO.getPriceMax());
+        Page<RoomResDTO> rooms = roomRepository.searchBarFake(pageable);
         return rooms;
     }
 
@@ -230,9 +229,9 @@ public class RoomServiceImpl implements IRoomService {
 //                    throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Room with code '" + roomCode + "' already exists");
 //                }
 //            }
-           if ( roomRealRepository.existsByRoomCode(roomCode)){
-               throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Room with code '" + roomCode + "' already exists");
-           }
+//           if ( roomRealRepository.existsByRoomCode(roomCode)){
+//               throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Room with code '" + roomCode + "' already exists");
+//           }
             Integer floor = roomRealReqDTO.getFloor();
 
             RoomReal roomReal = roomRealRepository.findById(roomRealId).orElseThrow(() -> new RuntimeException("RoomReal not found with id: " + roomRealId));
@@ -240,7 +239,7 @@ public class RoomServiceImpl implements IRoomService {
 
             roomReal.setRoomCode(roomCode);
             roomReal.setERangeRoom(roomRealReqDTO.getRangeRoom());
-            roomReal.setStatusRoom(EStatusRoom.NOT_READY);
+            roomReal.setStatusRoom(roomRealReqDTO.getStatusRoom());
             roomReal.setFloor(floor);
             roomReal.setRoomId(room);
 
@@ -249,5 +248,73 @@ public class RoomServiceImpl implements IRoomService {
         return new RoomResDTO(room);
     }
 
+//    @Override
+//    public List<RoomResDTO> searchBarRoomHeader(SearchBarRoomReqDTO searchBarRoomReqDTO) {
+//        int numberOfAdults = Math.toIntExact(searchBarRoomReqDTO.getGuest().getNumberAdult());
+//        // Do something with the childrenAge if needed
+//
+//        LocalDate checkIn = searchBarRoomReqDTO.getCheckIn();
+//        LocalDate checkOut = searchBarRoomReqDTO.getCheckOut();
+//
+//        // Truy vấn cơ sở dữ liệu để tìm kiếm các phòng phù hợp
+//        List<Room> matchingRooms = roomRepository.findAvailableRooms(numberOfAdults, checkIn, checkOut);
+//
+//        // Chuyển đổi danh sách các phòng thành danh sách DTO để trả về
+//        List<RoomResDTO> matchingRoomsDTO = matchingRooms.stream()
+//                .map(Room::toRoomResDto)
+//                .collect(Collectors.toList());
+//
+//        return matchingRoomsDTO;
+//
+//    }
+
+
+    @Override
+    public List<RoomFindAvailableRoom> findAvailableRoom(LocalDateTime selectFirstDay, LocalDateTime selectLastDay) {
+        try {
+            List<RoomFindAvailableRoom> roomReqDTOS = roomRepository.findAvailableRoom(selectFirstDay, selectLastDay);
+            if (roomReqDTOS == null || roomReqDTOS.isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "room cannot be null or empty");
+            }
+            return roomReqDTOS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Error: Unexpected exception occurred");
+        }
+    }
+
+    @Override
+    public  List<RoomFindAvailableRoom> findAvailableRoomHavePer(LocalDateTime selectFirstDay, LocalDateTime selectLastDay,Long current){
+        try {
+            List<RoomFindAvailableRoom> roomReqDTOS = roomRepository.findAvailableRoomHavePer(selectFirstDay, selectLastDay,current);
+            if (roomReqDTOS == null || roomReqDTOS.isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "room cannot be null or empty");
+            }
+            return roomReqDTOS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Error: Unexpected exception occurred");
+        }
+    }
+
+
+    @Override
+    public Page<RoomResDTO> findAvailableRoomHavePerWithPageable(LocalDateTime selectFirstDay, LocalDateTime selectLastDay,BigDecimal minPrice,BigDecimal maxPrice,
+                                                                 EViewType view,
+                                                                 String sort,
+                                                                 Long current, Pageable pageable) {
+        try {
+            Page<RoomResDTO> romRoomResDTOS = roomRepository.findAvailableRoomHavePerWithPageable(selectFirstDay, selectLastDay,minPrice,maxPrice,view
+                    ,sort
+                    ,current, pageable);
+            if (romRoomResDTOS == null || romRoomResDTOS.isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "room cannot be null or empty");
+            }
+            return romRoomResDTOS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Error: Unexpected exception occurred");
+        }
+    }
 
 }

@@ -22,10 +22,11 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
-
     @Column(name = "create_at")
     private LocalDateTime createAt;
+
+    @Column(name = "booking_at")
+    private LocalDateTime bookingAt;
 
 
     /**
@@ -59,5 +60,9 @@ public class Booking {
     private User user;
 
     private String bookingCode;
+
+
+    @Column(name = "active", columnDefinition = "boolean default false")
+    private Boolean active;
 
 }

@@ -7,9 +7,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface IBookingRepository extends JpaRepository<Booking, Long> {
+
 
     @Query("select new com.cg.spblaguna.model.dto.res.BookingResDTO(b) from Booking b " +
             "where b.id = :id")
@@ -32,7 +34,6 @@ public interface IBookingRepository extends JpaRepository<Booking, Long> {
             "    DATE_FORMAT(DATE_SUB(CURRENT_DATE(), INTERVAL n.n MONTH), '%Y-%m') " +
             "ORDER BY  " +
             "    month_year; ", nativeQuery = true)
-
     List<RevenueByMonth> showRevenue();
-
+    
 }

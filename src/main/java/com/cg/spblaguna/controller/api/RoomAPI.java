@@ -1,11 +1,10 @@
 package com.cg.spblaguna.controller.api;
 
 import com.cg.spblaguna.exception.ResourceNotFoundException;
-import com.cg.spblaguna.model.dto.req.RoomInfoReqDTO;
-import com.cg.spblaguna.model.dto.req.RoomReqDTO;
-import com.cg.spblaguna.model.dto.req.SearchBarRoomReqDTO;
+import com.cg.spblaguna.model.dto.req.*;
 import com.cg.spblaguna.model.dto.res.RoomResDTO;
 import com.cg.spblaguna.model.enumeration.ERoomType;
+import com.cg.spblaguna.model.enumeration.EViewType;
 import com.cg.spblaguna.service.room.IRoomService;
 import com.cg.spblaguna.util.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -20,6 +20,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,14 +48,14 @@ public class RoomAPI {
     public ResponseEntity<?> filterRooms(
             @RequestParam(required = false) String kw,
             @RequestParam(defaultValue = "0") int page,
-
             @RequestParam(defaultValue = "5") int size,
+
             @RequestParam(defaultValue = "") String roomType,
             @RequestParam(required = false) BigDecimal minPrice,
             @RequestParam(required = false) BigDecimal maxPrice,
-            @RequestParam(defaultValue = "id,desc") String[] sort){
+            @RequestParam(defaultValue = "id,desc") String[] sort) {
 
-        try{
+        try {
             List<Order> orders = new ArrayList<Order>();
             if (sort[0].contains(",")) {
                 for (String sortOrder : sort) {
@@ -71,20 +72,21 @@ public class RoomAPI {
             if (roomType == null) {
                 throw new ResourceNotFoundException("Param not valid");
             }
-            Page<RoomResDTO> roomResDTOS = roomService.filterRoomsByPrice(kw, eRoomType,minPrice, maxPrice, pagingSort );
+            Page<RoomResDTO> roomResDTOS = roomService.filterRoomsByPrice(kw, eRoomType, minPrice, maxPrice, pagingSort);
 
 
             if (roomResDTOS.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }else {
+            } else {
                 return new ResponseEntity<>(roomResDTOS, HttpStatus.OK);
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
+
     private Sort.Direction getSortDirection(String direction) {
         if (direction.equalsIgnoreCase("asc")) {
             return Sort.Direction.ASC;
@@ -94,30 +96,36 @@ public class RoomAPI {
 
         throw new IllegalArgumentException("Invalid sort direction: " + direction);
     }
+
     @PostMapping("/search")
     public ResponseEntity<?> searchBarRooms(@RequestBody SearchBarRoomReqDTO searchBarRoomReqDTO, BindingResult bindingResult, Pageable pageable) {
         Page<RoomResDTO> roomResDTOPage = roomService.searchBarRoomReqDTO(searchBarRoomReqDTO, pageable);
         return new ResponseEntity<>(roomResDTOPage, HttpStatus.OK);
     }
+//    @PostMapping("/search-bar")
+//    public ResponseEntity<?> searchBarRoomsHeader(@RequestBody SearchBarRoomReqDTO searchBarRoomReqDTO ) {
+//        List<RoomResDTO> roomHeaderSearchBar = roomService.searchBarRoomHeader(searchBarRoomReqDTO);
+//        return new ResponseEntity<>(roomHeaderSearchBar, HttpStatus.OK);
+//    }
 
     /**
      * Chức năng tạo phòng
-     * @param roomReqDTO
-     * thuộc tính utilities kiểu chuỗi theo định dạng JSON
-     * roomReqDTO:
-     * {
-     *     "name": "kkkaaa",
-     *     "roomType": "SUPERIOR",
-     *     "statusRoom": "PLACED",
-     *     "viewType": "GARDEN_VIEW",
-     *     "kingOfRoomId": 1,
-     *     "perTypId":1,
-     *     "pricePerNight": 200000.00,
-     *     "acreage": 100.00,
-     *     "sleep": 3,
-     *     "description": "aaaaaaa",
-     *     "utilitie": "{\"Shower\": true, \"Room Safe\": true, \"Mini Bar\": false}"
-     * }
+     *
+     * @param roomReqDTO    thuộc tính utilities kiểu chuỗi theo định dạng JSON
+     *                      roomReqDTO:
+     *                      {
+     *                      "name": "kkkaaa",
+     *                      "roomType": "SUPERIOR",
+     *                      "statusRoom": "PLACED",
+     *                      "viewType": "GARDEN_VIEW",
+     *                      "kingOfRoomId": 1,
+     *                      "perTypId":1,
+     *                      "pricePerNight": 200000.00,
+     *                      "acreage": 100.00,
+     *                      "sleep": 3,
+     *                      "description": "aaaaaaa",
+     *                      "utilitie": "{\"Shower\": true, \"Room Safe\": true, \"Mini Bar\": false}"
+     *                      }
      * @param bindingResult
      * @return
      */
@@ -162,7 +170,7 @@ public class RoomAPI {
         return ResponseEntity.ok(roomResDTO);
     }
 
-//    @PatchMapping("/lock/{id}")
+    //    @PatchMapping("/lock/{id}")
 //    public ResponseEntity<?> lockRoom(@PathVariable Long id){
 //        Room room = roomService.findById(id).get();
 //        room.setStatusRoom(EStatusRoom.NOT_READY);
@@ -178,4 +186,35 @@ public class RoomAPI {
 //        return new ResponseEntity<>(HttpStatus.OK);
 //    }
 
+    @PostMapping("/find-available-room")
+    public ResponseEntity<?> findAvailableRoom(@RequestBody RoomFindForCheckInAndCheckOutReqDTO roomFindForCheckInAndCheckOutReqDTO) {
+        LocalDateTime selectFirstDay = roomFindForCheckInAndCheckOutReqDTO.getSelectFirstDay();
+        LocalDateTime selectLastDay = roomFindForCheckInAndCheckOutReqDTO.getSelectLastDay();
+        return new ResponseEntity<>(roomService.findAvailableRoom(selectFirstDay, selectLastDay), HttpStatus.OK);
+    }
+
+    @PostMapping("/find-available-room-have-per")
+    public ResponseEntity<?> findAvailableRoomHavePer(@RequestBody RoomFindForCheckInAndCheckOutReqDTO roomFindForCheckInAndCheckOutReqDTO,
+                                                      @RequestParam(required = false) Long current) {
+        LocalDateTime selectFirstDay = roomFindForCheckInAndCheckOutReqDTO.getSelectFirstDay();
+        LocalDateTime selectLastDay = roomFindForCheckInAndCheckOutReqDTO.getSelectLastDay();
+        return new ResponseEntity<>(roomService.findAvailableRoomHavePer(selectFirstDay, selectLastDay, current), HttpStatus.OK);
+    }
+
+    @PostMapping("/find-available-room-have-per-pageable")
+    public ResponseEntity<?> findAvailableRoomHavePerPageable(@RequestBody RoomFindForCheckInAndCheckOutReqDTO roomFindForCheckInAndCheckOutReqDTO,
+                                                              @RequestParam(required = false) Long current,
+                                                              @RequestParam(required = false) BigDecimal minPrice,
+                                                              @RequestParam(required = false) BigDecimal maxPrice,
+                                                              @RequestParam(required = false) EViewType view,
+                                                              @RequestParam(required = false) String sort,
+                                                              @PageableDefault(size = 5, page = 0) Pageable pageable) {
+        LocalDateTime selectFirstDay = roomFindForCheckInAndCheckOutReqDTO.getSelectFirstDay();
+        LocalDateTime selectLastDay = roomFindForCheckInAndCheckOutReqDTO.getSelectLastDay();
+
+        Page<RoomResDTO> roomResDTOPage = roomService.findAvailableRoomHavePerWithPageable(selectFirstDay, selectLastDay, minPrice, maxPrice, view,
+                sort,
+                current, pageable);
+        return new ResponseEntity<>(roomResDTOPage, HttpStatus.OK);
+    }
 }

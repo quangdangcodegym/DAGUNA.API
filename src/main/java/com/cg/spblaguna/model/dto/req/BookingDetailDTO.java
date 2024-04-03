@@ -14,7 +14,7 @@ public class BookingDetailDTO {
     private LocalDateTime checkOut;
     private Long roomId;
     private Integer numberAdult;
-    private String numberChildren;
+    private String childrenAge;
     private String discountCode;
     private BigDecimal totalAmount;
     private BigDecimal price;
