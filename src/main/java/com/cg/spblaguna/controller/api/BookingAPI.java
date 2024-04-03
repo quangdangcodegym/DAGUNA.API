@@ -11,7 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+
 import java.util.List;
 
 @RestController
@@ -94,6 +96,11 @@ public class BookingAPI {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PostMapping("/deposit")
+    public ResponseEntity<?> deposit(@RequestBody DepositReqDTO depositReqDTO) {
+        bookingService.depositBooking(depositReqDTO);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
     @PostMapping("/find-revenue")
     public  ResponseEntity<?> findRevenueForByTime(@RequestBody TimeFirstAndLastReqDTO timeFirstAndLastReqDTO ){
         LocalDateTime selectFirstDay = timeFirstAndLastReqDTO.getSelectFirstDay();
