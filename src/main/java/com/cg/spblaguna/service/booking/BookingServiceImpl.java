@@ -451,22 +451,23 @@ public class BookingServiceImpl implements IBookingService {
 
     @Override
     public void depositBooking(DepositReqDTO depositReqDTO) {
-        // Lấy thông tin từ DepositReqDTO
         Long bookingId = depositReqDTO.getBookingId();
-
-        // Tạo một đối tượng Payment mới
         Payment payment = new Payment();
-        payment.setBooking(bookingRepository.findById(bookingId)
-                .orElseThrow(()-> new RuntimeException("Booking not found")));
-        payment.setMethod(EMethod.TRANSFER);
-        payment.setTotal(payment.getTotal());
-        payment.setTransferId(payment.getTransferId());
-        paymentRepository.save(payment);
-
-
-        // Cập nhật thông tin trong Booking
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new RuntimeException("Booking not found"));
+        payment.setBooking(booking);
+        payment.setMethod(depositReqDTO.getMethod());
+        if (depositReqDTO.getBank() != null) {
+            payment.setBank(depositReqDTO.getBank());
+        }
+        BigDecimal total = depositReqDTO.getTotal();
+        payment.setTotal(total);
+        Long transferId = depositReqDTO.getTransfer_id();
+        payment.setTransferId(transferId);
+        payment.setTransferDate(depositReqDTO.getTransferDate());
+        paymentRepository.save(payment);
+
+    // Cập nhật thông tin trong Booking
         BigDecimal depositedNumber = depositReqDTO.getDepositedAmount();
         booking.setDepositedNumber(depositedNumber);
         booking.setDepositedStatus(EDepositedStatus.ACCOMPLISHED);
