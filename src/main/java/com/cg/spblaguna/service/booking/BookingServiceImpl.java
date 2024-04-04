@@ -38,9 +38,9 @@ import java.util.stream.Collectors;
 @ConfigurationProperties(prefix = "application.vat")
 public class BookingServiceImpl implements IBookingService {
 
-    @Value("${application.vat.booking-detail}")
+    @Value("13.4")
     private Float vatBookingDetail;
-    @Value("${application.vat.booking-detail-service}")
+    @Value("13.4")
     private Float vatBookingDetailService;
 
 
@@ -138,8 +138,13 @@ public class BookingServiceImpl implements IBookingService {
         bookingDetail.setRoom(room);
         bookingDetail.setBooking(booking);
         bookingDetail.setPrice(room.getPricePerNight());
+
         bookingDetail.setNumberAdult(bookingReqCreDTO.getBookingDetail().getNumberAdult());
-        bookingDetail.setChildrenAge(bookingReqCreDTO.getBookingDetail().getChildrenAge());
+        if (bookingReqCreDTO.getBookingDetail().getChildrenAge() == null) {
+            bookingDetail.setChildrenAge("0"); // Thiết lập giá trị mặc định là "0"
+        } else {
+            bookingDetail.setChildrenAge(bookingReqCreDTO.getBookingDetail().getChildrenAge());
+        }
         bookingDetail.setDiscountCode(bookingReqCreDTO.getBookingDetail().getDiscountCode());
         bookingDetail.setTotalAmount(appUtils.calculateVAT(bookingDetail.getPrice(), vatBookingDetail));
         bookingDetail.setVat(new BigDecimal(vatBookingDetail));
@@ -455,30 +460,38 @@ public class BookingServiceImpl implements IBookingService {
 
     @Override
     public void depositBooking(DepositReqDTO depositReqDTO) {
-        // Lấy thông tin từ DepositReqDTO
         Long bookingId = depositReqDTO.getBookingId();
-
-        // Tạo một đối tượng Payment mới
         Payment payment = new Payment();
         payment.setBooking(bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new RuntimeException("Booking not found")));
         payment.setMethod(EMethod.TRANSFER);
-        payment.setTotal(depositReqDTO.getDepositedAmount());
-        payment.setTransferId(depositReqDTO.getTransferId());
-//        payment.set
+        payment.setTotal(payment.getTotal());
+        payment.setTransferId(payment.getTransferId());
         paymentRepository.save(payment);
 
 
         // Cập nhật thông tin trong Booking
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new RuntimeException("Booking not found"));
+        payment.setBooking(booking);
+        payment.setMethod(depositReqDTO.getMethod());
+        payment.setNote(depositReqDTO.getNote());
+        if (depositReqDTO.getBank() != null) {
+            payment.setBank(depositReqDTO.getBank());
+        }
+        BigDecimal total = depositReqDTO.getTotal();
+        payment.setTotal(total);
+        Long transferId = depositReqDTO.getTransferId();
+        payment.setTransferId(transferId);
+        payment.setTransferDate(depositReqDTO.getTransferDate());
+        paymentRepository.save(payment);
+
+        // Cập nhật thông tin trong Booking
         BigDecimal depositedNumber = depositReqDTO.getDepositedAmount();
         booking.setDepositedNumber(depositedNumber);
-        booking.setBookingAt(depositReqDTO.getTimeTransfer());
         booking.setDepositedStatus(EDepositedStatus.ACCOMPLISHED);
         booking.setBookingStatus(EBookingStatus.DEPOSITED);
         bookingRepository.save(booking);
-
 
     }
 

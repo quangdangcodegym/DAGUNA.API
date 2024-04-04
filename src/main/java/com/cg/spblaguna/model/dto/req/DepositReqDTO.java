@@ -1,5 +1,5 @@
 package com.cg.spblaguna.model.dto.req;
-
+import com.cg.spblaguna.model.enumeration.EBank;
 import com.cg.spblaguna.model.enumeration.EMethod;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -18,7 +18,8 @@ public class DepositReqDTO {
     private BigDecimal depositedAmount;
     private Long transferId;
     private Long bookingId;
-    private LocalDateTime timeTransfer;
-
-
+    private BigDecimal total;
+    private EBank bank;
+    private LocalDate transferDate;
+    private String note;
 }

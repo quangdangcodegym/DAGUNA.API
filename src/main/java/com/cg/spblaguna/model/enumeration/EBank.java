@@ -1,10 +1,10 @@
 package com.cg.spblaguna.model.enumeration;
 
-public enum EViewType {
-    OTHER(1L, "Other"),GARDEN_VIEW(2L,"Garden View"), SEA_VIEW(3L,"Sea View");
+public enum EBank {
+    ACB(1L, "ACB"), VIETTINBANK(2L, "VIETTINBANK"), VIETCOMBANK(3L, "VIETCOMBANK");
     private Long id;
     private String name;
-    private EViewType(Long id, String name){
+    private EBank(Long id, String name){
         this.id = id;
         this.name = name;
     }
