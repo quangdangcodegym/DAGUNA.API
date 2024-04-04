@@ -16,7 +16,6 @@ public interface IBookingDetailRepository extends JpaRepository<BookingDetail, L
 
     @Query(value = "SELECT new com.cg.spblaguna.model.dto.req.RevenueReqDTO(Sum(b.total)) " +
             " FROM Booking b " +
-            "JOIN BookingDetail bds ON b.id = bds.booking.id " +
             "WHERE" +
             " (b.bookingAt BETWEEN :selectFirstDay  AND  :selectLastDay) " +
             "AND b.bookingStatus = 'PAID' ")
