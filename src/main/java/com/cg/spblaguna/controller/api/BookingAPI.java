@@ -79,6 +79,12 @@ public class BookingAPI {
         return new ResponseEntity<>(bookingResDTO, HttpStatus.OK);
     }
 
+    @DeleteMapping("/{bookingId}/booking-details/{bookingDetailId}/booking-services/{bookingServiceId}")
+    public ResponseEntity<?> updateBooking_DeleteBookingService(@PathVariable Long bookingId, @PathVariable Long bookingDetailId , @PathVariable Long bookingServiceId) {
+        BookingResDTO bookingResDTO = bookingService.saveBookingReqUpdate_BookingServiceDeleteDTO(bookingId, bookingDetailId, bookingServiceId);
+        return new ResponseEntity<>(bookingResDTO, HttpStatus.OK);
+    }
+
     @GetMapping("/show-revenue-by-month")
     public ResponseEntity<?> showRevenue() {
 //        List<RevenueByMonthDTO> revenueByMonthDTOS = bookingService.showRevenue()

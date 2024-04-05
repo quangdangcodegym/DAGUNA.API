@@ -29,7 +29,7 @@ public class BookingDetailResDTO {
     private BigDecimal total;
     private BigDecimal vat;
     private Integer numberAdult;
-    private String childrenAge;
+    private String childrenAges;
     private String discountCode;
     private Boolean checkInStatus;
     private RoomResDTO room;
@@ -38,7 +38,7 @@ public class BookingDetailResDTO {
     private RoomRealResDTO roomReal;
 
     public BookingDetailResDTO(Long bookingDetailId, LocalDateTime checkIn, LocalDateTime checkOut, BigDecimal totalAmount,
-                               BigDecimal total, BigDecimal vat, Integer numberAdult, String childrenAge, String discountCode, Boolean checkInStatus,
+                               BigDecimal total, BigDecimal vat, Integer numberAdult, String childrenAges, String discountCode, Boolean checkInStatus,
                                RoomResDTO room, List<BookingDetailServiceResDTO> bookingDetailServiceResDTOS) {
         this.bookingDetailId = bookingDetailId;
         this.checkIn = checkIn;
@@ -47,14 +47,14 @@ public class BookingDetailResDTO {
         this.total = total;
         this.vat = vat;
         this.numberAdult = numberAdult;
-        this.childrenAge = childrenAge;
+        this.childrenAges = childrenAges;
         this.discountCode = discountCode;
         this.checkInStatus = checkInStatus;
         this.room = room;
         this.bookingDetailServiceResDTOS = bookingDetailServiceResDTOS;
     }
     public BookingDetailResDTO(Long bookingDetailId, LocalDateTime checkIn, LocalDateTime checkOut, BigDecimal totalAmount,
-                               BigDecimal total, BigDecimal vat, Integer numberAdult, String childrenAge, String discountCode, Boolean checkInStatus,
+                               BigDecimal total, BigDecimal vat, Integer numberAdult, String childrenAges, String discountCode, Boolean checkInStatus,
                                RoomResDTO room, List<BookingDetailServiceResDTO> bookingDetailServiceResDTOS,
                                 RoomRealResDTO roomRealResDTO) {
         this.bookingDetailId = bookingDetailId;
@@ -64,7 +64,7 @@ public class BookingDetailResDTO {
         this.total = total;
         this.vat = vat;
         this.numberAdult = numberAdult;
-        this.childrenAge = childrenAge;
+        this.childrenAges = childrenAges;
         this.discountCode = discountCode;
         this.checkInStatus = checkInStatus;
         this.room = room;

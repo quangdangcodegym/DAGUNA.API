@@ -5,6 +5,7 @@ import com.cg.spblaguna.model.dto.req.*;
 import com.cg.spblaguna.model.dto.res.BookingResDTO;
 import com.cg.spblaguna.model.report.RevenueByMonth;
 import com.cg.spblaguna.service.IGeneralService;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,6 +22,9 @@ public interface IBookingService extends IGeneralService<Booking,Long> {
     BookingResDTO saveBookingReqUpdate_BookingServiceAddDTO(BookingReqUpdate_BookingServiceCreUpdateDTO bookingReqUpdateBookingServiceCreUpdateDTO);
 
     BookingResDTO editBookingReqUpdate_BookingServiceEditDTO(BookingReqUpdate_BookingServiceCreUpdateDTO bookingReqUpdateBookingServiceCreUpdateDTO);
+
+    BookingResDTO saveBookingReqUpdate_BookingServiceDeleteDTO(Long bookingId, Long bookingDetailId, Long bookingServiceId);
+
 
     BookingResDTO saveBookingReqUpdate_RoomAddDTO(BookingReqUpdate_RoomAddDTO bookingReqUpdateRoomAddDTO);
 
