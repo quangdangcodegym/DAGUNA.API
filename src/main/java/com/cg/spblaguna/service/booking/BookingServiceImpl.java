@@ -432,6 +432,12 @@ public class BookingServiceImpl implements IBookingService {
         // Tìm kiếm và cập nhật thông tin BookingDetail
         for (BookingDetail bookingDetail : bookingDetails) {
             if (!bookingDetail.getRoom().getId().equals(bookingReqUpdateRoomAddDTO.getBookingDetail().getRoomId())) {
+                //-- Xóa list bookingDetailService
+                List<BookingDetailService> bookingDetailServices = bookingDetailServiceRepository
+                        .findBookingDetailServiceByBookingDetail_Id(bookingDetail.getId());
+
+                bookingDetailServiceRepository.deleteAll(bookingDetailServices);
+
                 // Lấy phòng mới từ ID
                 Room newRoom = roomRepository.findById(bookingReqUpdateRoomAddDTO.getBookingDetail().getRoomId()).get();
 
@@ -442,9 +448,21 @@ public class BookingServiceImpl implements IBookingService {
                 bookingDetail.setNumberAdult(bookingReqUpdateRoomAddDTO.getBookingDetail().getNumberAdult());
                 bookingDetail.setChildrenAges(bookingReqUpdateRoomAddDTO.getBookingDetail().getChildrenAges());
                 bookingDetail.setDiscountCode(bookingReqUpdateRoomAddDTO.getBookingDetail().getDiscountCode());
-                bookingDetail.setTotalAmount(bookingReqUpdateRoomAddDTO.getBookingDetail().getTotalAmount());
-                bookingDetail.setPrice(bookingReqUpdateRoomAddDTO.getBookingDetail().getPrice());
-                bookingDetail.setTotal(bookingReqUpdateRoomAddDTO.getBookingDetail().getTotal());
+                bookingDetail.setPrice(newRoom.getPricePerNight());
+
+                bookingDetail.setNumberAdult(bookingReqUpdateRoomAddDTO.getBookingDetail().getNumberAdult());
+
+                if (bookingReqUpdateRoomAddDTO.getBookingDetail().getChildrenAges() == null) {
+                    bookingDetail.setChildrenAges("[]");
+                } else {
+                    bookingDetail.setChildrenAges(bookingReqUpdateRoomAddDTO.getBookingDetail().getChildrenAges());
+                }
+
+
+                bookingDetail.setTotalAmount(appUtils.calculateVAT(bookingDetail.getPrice(), vatBookingDetail));
+                bookingDetail.setVat(new BigDecimal(vatBookingDetail));
+
+                bookingDetail.setTotal(bookingDetail.getTotalAmount());
 
                 // Lưu cập nhật
                 bookingDetailRepository.save(bookingDetail);
