@@ -28,8 +28,8 @@ public class Payment {
     @Enumerated(EnumType.STRING)
     private EMethod method;
     private BigDecimal total;
-    @Column(name = "transfer_id")
 
+    @Column(name = "transfer_id")
     private Long transferId;
 
     @Enumerated(EnumType.STRING)

@@ -595,12 +595,13 @@ public class BookingServiceImpl implements IBookingService {
                 .orElseThrow(() -> new RuntimeException("Booking not found"));
         payment.setBooking(booking);
         payment.setMethod(depositReqDTO.getMethod());
+        payment.setNote(depositReqDTO.getNote());
         if (depositReqDTO.getBank() != null) {
             payment.setBank(depositReqDTO.getBank());
         }
         BigDecimal total = depositReqDTO.getTotal();
         payment.setTotal(total);
-        Long transferId = depositReqDTO.getTransfer_id();
+        Long transferId = depositReqDTO.getTransferId();
         payment.setTransferId(transferId);
         payment.setTransferDate(depositReqDTO.getTransferDate());
         paymentRepository.save(payment);
@@ -611,7 +612,6 @@ public class BookingServiceImpl implements IBookingService {
         booking.setDepositedStatus(EDepositedStatus.ACCOMPLISHED);
         booking.setBookingStatus(EBookingStatus.DEPOSITED);
         bookingRepository.save(booking);
-
 
     }
 
