@@ -17,7 +17,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-
 public class AuthTokenFilter extends OncePerRequestFilter {
 
     @Autowired
@@ -54,5 +53,4 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         }
         return null;
     }
-
 }

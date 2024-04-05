@@ -1,6 +1,5 @@
 package com.cg.spblaguna.service.utility;
 
-import com.cg.spblaguna.model.User;
 import com.cg.spblaguna.model.Utilitie;
 import com.cg.spblaguna.repository.IUtilityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +24,6 @@ public class UtilityService implements IUtilityService {
 
     @Override
     public Utilitie save(Utilitie utilitie) {
-
         return null;
     }
 

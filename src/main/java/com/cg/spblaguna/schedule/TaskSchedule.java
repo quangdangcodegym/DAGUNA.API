@@ -2,18 +2,13 @@ package com.cg.spblaguna.schedule;
 
 import com.cg.spblaguna.model.Booking;
 import com.cg.spblaguna.model.BookingDetail;
-import com.cg.spblaguna.model.Room;
-import com.cg.spblaguna.repository.IBookingDetailRepository;
 import com.cg.spblaguna.service.booking.IBookingService;
-import com.cg.spblaguna.service.room.IRoomService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Component

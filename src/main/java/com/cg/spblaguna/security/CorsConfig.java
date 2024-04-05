@@ -24,7 +24,6 @@ public class CorsConfig {
 
         config.addAllowedOriginPattern("*");
 //        config.addAllowedOrigin("http://192.168.1.64:3001");
-
         config.setAllowedHeaders(Arrays.asList(
                 HttpHeaders.AUTHORIZATION,
                 HttpHeaders.CONTENT_TYPE,

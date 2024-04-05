@@ -42,5 +42,4 @@ public class RoomReal {
         roomRealResDTO.setFloor(this.getFloor());
         return roomRealResDTO;
     }
-
 }

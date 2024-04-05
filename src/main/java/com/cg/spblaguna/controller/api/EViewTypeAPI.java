@@ -1,8 +1,6 @@
 package com.cg.spblaguna.controller.api;
 
-import com.cg.spblaguna.model.dto.res.EStatusUserResDTO;
 import com.cg.spblaguna.model.dto.res.EViewTypeResDTO;
-import com.cg.spblaguna.model.enumeration.EStatusUser;
 import com.cg.spblaguna.model.enumeration.EViewType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

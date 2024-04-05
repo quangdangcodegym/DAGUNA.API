@@ -3,7 +3,6 @@ package com.cg.spblaguna.model;
 import com.cg.spblaguna.model.dto.res.ImageResDTO;
 import com.cg.spblaguna.model.dto.res.RoomResDTO;
 import com.cg.spblaguna.model.enumeration.ERoomType;
-import com.cg.spblaguna.model.enumeration.EStatusRoom;
 import com.cg.spblaguna.model.enumeration.EViewType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.hypersistence.utils.hibernate.type.json.JsonType;
@@ -35,8 +34,6 @@ public class Room {
     @Column(name = "room_type")
     private ERoomType roomType;
 
-
-
     @Enumerated(EnumType.STRING)
     @Column(name = "view_type")
     private EViewType viewType;
@@ -53,37 +50,23 @@ public class Room {
     private PerType perType;
 
     private Integer quantity;
-
-
-
-    /**
-     * diện tích
-     */
     private BigDecimal acreage;
-
     private Integer sleep;
 
-
+//    @Column(columnDefinition = "TEXT")
     private String description;
 
-
     @OneToMany(mappedBy = "room")
-
-@JsonIgnore
-
-
+    @JsonIgnore
     private List<Image> images;
-
-
 
     @Column(name = "utilitie", columnDefinition = "json", nullable = false)
     @Type(JsonType.class)
     private String utilitie;
 
-
     private Float rate;
 
-    public Room(String name, ERoomType roomType, EViewType viewType,Integer quantity, BigDecimal pricePerNight, BigDecimal acreage, Integer sleep, String description, String utilitie, KindOfRoom kindOfRoom, Float rate, PerType perType) {
+    public Room(String name, ERoomType roomType, EViewType viewType, Integer quantity, BigDecimal pricePerNight, BigDecimal acreage, Integer sleep, String description, String utilitie, KindOfRoom kindOfRoom, Float rate, PerType perType) {
         this.name = name;
         this.roomType = roomType;
         this.viewType = viewType;
@@ -168,9 +151,6 @@ public class Room {
                 .collect(Collectors.toList());
 
         roomResDTO.setImageResDTOS(imageResDTOS);
-
-
         return roomResDTO;
     }
-
 }

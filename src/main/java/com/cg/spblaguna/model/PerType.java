@@ -1,6 +1,5 @@
 package com.cg.spblaguna.model;
 
-import com.cg.spblaguna.model.dto.res.KindOfRoomResDTO;
 import com.cg.spblaguna.model.dto.res.PerTypeResDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

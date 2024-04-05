@@ -1,7 +1,7 @@
 package com.cg.spblaguna.model.enumeration;
 
 public enum EViewType {
-    OTHER(1L, "Other"),GARDEN_VIEW(2L,"Garden View"), SEA_VIEW(3L,"Sea View");
+   GARDEN_VIEW(1L,"Garden View"), SEA_VIEW(2L,"Sea View"), OTHER(3L, "Other");
     private Long id;
     private String name;
     private EViewType(Long id, String name){

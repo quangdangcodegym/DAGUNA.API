@@ -2,7 +2,6 @@ package com.cg.spblaguna.security;
 
 
 import com.cg.spblaguna.model.User;
-import com.cg.spblaguna.model.enumeration.ERole;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,7 +33,6 @@ public class LGNUserDetails implements UserDetails {
                 user.getEmail(),
                 user.getPassword(),
                 authorities);
-
     }
 
     @Override
