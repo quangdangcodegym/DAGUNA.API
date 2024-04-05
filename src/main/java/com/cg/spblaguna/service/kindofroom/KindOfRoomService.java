@@ -1,7 +1,6 @@
 package com.cg.spblaguna.service.kindofroom;
 
 import com.cg.spblaguna.model.KindOfRoom;
-import com.cg.spblaguna.model.User;
 import com.cg.spblaguna.repository.IKindOfRoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +25,6 @@ public class KindOfRoomService implements IKindOfRoomService {
 
     @Override
     public KindOfRoom save(KindOfRoom kindOfRoom) {
-
         return null;
     }
 

@@ -30,10 +30,6 @@ public class Image {
     @Enumerated(EnumType.STRING)
     private EImageType imageType;
 
-//    @Column(name = "id_room_or_id_user")
-//    private Long idResource;
-
-
     @ManyToOne
     @JoinColumn(name = "id_room")
     private Room room;
@@ -61,7 +57,6 @@ public class Image {
         this.imageType = imageType;
         this.user = user;
     }
-
 
     public ImageResDTO toImageResDTO(){
         return new ImageResDTO(this.id, this.fileUrl);

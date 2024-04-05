@@ -1,7 +1,5 @@
 package com.cg.spblaguna.service;
 
-import com.cg.spblaguna.model.User;
-
 import java.util.List;
 import java.util.Optional;
 

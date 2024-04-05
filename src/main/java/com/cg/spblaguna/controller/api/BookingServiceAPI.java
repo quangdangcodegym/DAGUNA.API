@@ -1,6 +1,5 @@
 package com.cg.spblaguna.controller.api;
 
-import com.cg.spblaguna.model.dto.res.BookingResDTO;
 import com.cg.spblaguna.model.dto.res.BookingServiceResDTO;
 import com.cg.spblaguna.service.booking_service.IBookingService;
 import org.springframework.beans.factory.annotation.Autowired;

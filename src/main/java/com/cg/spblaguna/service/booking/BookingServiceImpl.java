@@ -17,7 +17,6 @@ import com.cg.spblaguna.service.cardpayment.ICardPaymentService;
 import com.cg.spblaguna.service.user.IUserService;
 import com.cg.spblaguna.util.AppUtils;
 import com.cg.spblaguna.util.EmailUtil;
-import jakarta.persistence.OneToMany;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,7 +43,6 @@ public class BookingServiceImpl implements IBookingService {
     @Value("13.4")
     private Float vatBookingDetailService;
 
-
     @Autowired
     private IBookingRepository bookingRepository;
 
@@ -69,7 +67,7 @@ public class BookingServiceImpl implements IBookingService {
     @Autowired
     private EmailUtil emailUtil;
 
-
+    @Autowired
     private ICardPaymentService cardPaymentService;
 
     @Autowired
@@ -129,7 +127,6 @@ public class BookingServiceImpl implements IBookingService {
 
         bookingRepository.save(booking);
 
-
         // Lưu booking detail
         BookingDetail bookingDetail = new BookingDetail();
         bookingDetail.setCheckIn(bookingReqCreDTO.getBookingDetail().getCheckIn());
@@ -142,6 +139,7 @@ public class BookingServiceImpl implements IBookingService {
         bookingDetail.setPrice(room.getPricePerNight());
 
         bookingDetail.setNumberAdult(bookingReqCreDTO.getBookingDetail().getNumberAdult());
+
 
         if (bookingReqCreDTO.getBookingDetail().getChildrenAges() == null) {
             bookingDetail.setChildrenAges("[]");
@@ -221,6 +219,10 @@ public class BookingServiceImpl implements IBookingService {
             total = total.add(bds.getTotal());
         }
         BigDecimal moneyBookingDetail = bookingDetail.getTotalAmount();
+
+        BigDecimal moneyVatBookingDetail = appUtils.calculateVAT(moneyBookingDetail, vatBookingDetail);
+
+        bookingDetail.setTotal(moneyVatBookingDetail.add(total));
         bookingDetail.setTotal(moneyBookingDetail.add(total));
         bookingDetailRepository.save(bookingDetail);
 
@@ -247,13 +249,11 @@ public class BookingServiceImpl implements IBookingService {
         return bookingResDTO;
     }
 
-
     @Override
     public BookingResDTO editBookingReqUpdate_BookingServiceEditDTO(BookingReqUpdate_BookingServiceCreUpdateDTO bookingReqUpdateBookingServiceCreUpdateDTO) {
         BookingDetail bookingDetail = bookingDetailRepository.findById(bookingReqUpdateBookingServiceCreUpdateDTO.getBookingDetailId()).get();
         BookingService bookingService = bookingServiceRepository.findById(bookingReqUpdateBookingServiceCreUpdateDTO.getBookingServiceId()).get();
         List<BookingDetailService> bookingDetailServices = bookingDetailServiceRepository.findBookingDetailServiceByBookingDetail_Id(bookingDetail.getId());
-
 
         boolean checkExists = checkBookingServiceIdExistsBookingDetailService(bookingDetailServices, bookingReqUpdateBookingServiceCreUpdateDTO.getBookingServiceId());
 
@@ -279,8 +279,6 @@ public class BookingServiceImpl implements IBookingService {
 
             bookingDetailServiceRepository.save(bookingDetailService);
         }
-
-
         bookingDetailServices = bookingDetailServiceRepository
                 .findBookingDetailServiceByBookingDetail_Id(bookingDetail.getId());
         BigDecimal total = new BigDecimal(0);
@@ -289,6 +287,7 @@ public class BookingServiceImpl implements IBookingService {
         }
 
         BigDecimal moneyBookingDetail = bookingDetail.getTotalAmount();
+
 
         bookingDetail.setTotal(moneyBookingDetail.add(total));
         bookingDetailRepository.save(bookingDetail);
@@ -407,11 +406,8 @@ public class BookingServiceImpl implements IBookingService {
         } else {
             throw new ResourceExistsException("Room is exists in Booking");
         }
-
         bookingDetails = bookingDetailRepository.findBookingDetailsByBooking_Id(booking.getId());
 
-
-        //
         BookingResDTO bookingResDTO = new BookingResDTO();
         bookingResDTO.setBookingId(booking.getId());
         List<BookingDetailResDTO> bookingDetailResDTOS = bookingDetails.stream()
@@ -428,7 +424,6 @@ public class BookingServiceImpl implements IBookingService {
         Booking booking = bookingRepository.findById(bookingReqUpdateRoomAddDTO.getBookingId()).get();
 
         List<BookingDetail> bookingDetails = bookingDetailRepository.findBookingDetailsByBooking_Id(booking.getId());
-
         // Tìm kiếm và cập nhật thông tin BookingDetail
         for (BookingDetail bookingDetail : bookingDetails) {
             if (!bookingDetail.getRoom().getId().equals(bookingReqUpdateRoomAddDTO.getBookingDetail().getRoomId())) {
@@ -440,7 +435,6 @@ public class BookingServiceImpl implements IBookingService {
 
                 // Lấy phòng mới từ ID
                 Room newRoom = roomRepository.findById(bookingReqUpdateRoomAddDTO.getBookingDetail().getRoomId()).get();
-
                 // Cập nhật thông tin cho BookingDetail
                 bookingDetail.setRoom(newRoom);
                 bookingDetail.setCheckIn(bookingReqUpdateRoomAddDTO.getBookingDetail().getCheckIn());
@@ -570,10 +564,8 @@ public class BookingServiceImpl implements IBookingService {
             user.setCountry(bookingReqUpdateCustomerDTO.getCountry());
             user.setEPrefix(bookingReqUpdateCustomerDTO.getEPrefix());
 
-
             userService.save(user);
         }
-
 
         List<BookingDetail> bookingDetails = bookingDetailRepository.findBookingDetailsByBooking_Id(bookingReqUpdateCustomerDTO.getBookingId());
         BookingResDTO bookingResDTO = new BookingResDTO();
@@ -582,7 +574,6 @@ public class BookingServiceImpl implements IBookingService {
                 .map(BookingDetail::toBookingDetailResDTO)
                 .collect(Collectors.toList());
         bookingResDTO.setBookingDetails(bookingDetailResDTOS);
-
         bookingResDTO.setCustomerInfo(user.toCustomerInfoResDTO());
         return null;
     }
@@ -607,7 +598,6 @@ public class BookingServiceImpl implements IBookingService {
         payment.setTransferId(payment.getTransferId());
         paymentRepository.save(payment);
 
-
         // Cập nhật thông tin trong Booking
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new RuntimeException("Booking not found"));
@@ -630,7 +620,6 @@ public class BookingServiceImpl implements IBookingService {
         booking.setDepositedStatus(EDepositedStatus.ACCOMPLISHED);
         booking.setBookingStatus(EBookingStatus.DEPOSITED);
         bookingRepository.save(booking);
-
     }
 
 
@@ -638,7 +627,6 @@ public class BookingServiceImpl implements IBookingService {
     public void updateBooking_Complete(Long bookingId) {
         Booking booking = bookingRepository.findById(bookingId).get();
         booking.setActive(true);
-
         bookingRepository.save(booking);
 
         String emailContent = "" +
@@ -695,7 +683,6 @@ public class BookingServiceImpl implements IBookingService {
         } catch (Exception e) {
             e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Error: Unexpected exception occurred");
-
         }
     }
 }

@@ -32,5 +32,4 @@ public class BookingService {
     public BookingServiceResDTO toBookingServiceDTO(){
         return new BookingServiceResDTO(this.id, this.name, this.description, this.price, this.bookingServiceType, this.fileUrl);
     }
-
 }

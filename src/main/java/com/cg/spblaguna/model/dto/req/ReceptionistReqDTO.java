@@ -20,7 +20,6 @@ import java.util.List;
 public class ReceptionistReqDTO {
     private Long id;
     @NotBlank
-    @Length(min = 5, max = 50)
     private String receptionistName;
     private LocalDate dob;
     @NotBlank(message = "email không được để trống")

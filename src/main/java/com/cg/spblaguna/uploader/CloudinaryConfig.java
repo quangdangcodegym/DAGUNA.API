@@ -21,7 +21,6 @@ public class  CloudinaryConfig {
     @Value("${application.uploader.api-secret}")
     private String apiSecret;
 
-
     @Bean
     public Cloudinary getCloudinary(){
         Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(

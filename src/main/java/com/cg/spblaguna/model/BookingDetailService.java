@@ -56,7 +56,6 @@ public class BookingDetailService {
         bookingDetailServiceResDTO.setNumberPerson(this.numberPerson);
         bookingDetailServiceResDTO.setNumberCar(this.numberCar);
         bookingDetailServiceResDTO.setId(this.id);
-
         return bookingDetailServiceResDTO;
     }
 }

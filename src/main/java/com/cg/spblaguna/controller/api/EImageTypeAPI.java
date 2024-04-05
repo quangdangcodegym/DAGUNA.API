@@ -1,9 +1,7 @@
 package com.cg.spblaguna.controller.api;
 
 import com.cg.spblaguna.model.dto.res.EImageTypeResDTO;
-import com.cg.spblaguna.model.dto.res.ELockResDTO;
 import com.cg.spblaguna.model.enumeration.EImageType;
-import com.cg.spblaguna.model.enumeration.ELockStatus;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
