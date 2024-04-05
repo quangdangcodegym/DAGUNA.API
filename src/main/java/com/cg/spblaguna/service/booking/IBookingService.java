@@ -7,7 +7,6 @@ import com.cg.spblaguna.model.report.RevenueByMonth;
 import com.cg.spblaguna.service.IGeneralService;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -36,7 +35,6 @@ public interface IBookingService extends IGeneralService<Booking,Long> {
     void updateBooking_Complete(Long bookingId);
 
     BookingResDTO updateBooking_AddCustomer(BookingReqUpdate_CustomerDTO bookingReqUpdateCustomerDTO);
-
 
     List<RevenueByMonth> showRevenue();
 

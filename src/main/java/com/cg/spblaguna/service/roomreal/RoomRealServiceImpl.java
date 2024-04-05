@@ -22,22 +22,18 @@ import java.util.Optional;
 public class RoomRealServiceImpl implements IRoomRealService {
     @Autowired
     private IRoomRealRepository roomRealRepository;
-
     @Autowired
     private IRoomRepository roomRepository;
-
 
     @Override
     public List<RoomReal> findAll() {
         return roomRealRepository.findAll();
     }
 
-
     @Override
     public Optional<RoomReal> findById(Long id) {
         return Optional.empty();
     }
-
 
     @Override
     public RoomReal save(RoomReal roomReal) {

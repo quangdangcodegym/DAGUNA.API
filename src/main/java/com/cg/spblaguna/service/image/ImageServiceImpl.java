@@ -1,7 +1,6 @@
 package com.cg.spblaguna.service.image;
 
 import com.cg.spblaguna.model.Image;
-import com.cg.spblaguna.model.User;
 import com.cg.spblaguna.model.dto.res.ImageResDTO;
 import com.cg.spblaguna.repository.IImageRepository;
 import com.cg.spblaguna.util.UploadUtil;
@@ -26,7 +25,6 @@ public class ImageServiceImpl implements IImageService {
     @Autowired
     private IImageRepository iImageRepository;
 
-
     public ImageResDTO saveImage(MultipartFile fileImage) throws IOException {
         var file = new Image();
         iImageRepository.save(file);
@@ -39,8 +37,6 @@ public class ImageServiceImpl implements IImageService {
         file.setFileFolder(UploadUtil.IMAGE_UPLOAD_FOLDER);
         file.setCloudId(file.getFileFolder() + "/" + file.getId());
         iImageRepository.save(file);
-
-
         return file.toImageResDTO();
 
     }
@@ -61,7 +57,6 @@ public class ImageServiceImpl implements IImageService {
 
     @Override
     public Image save(Image image) {
-
         return null;
     }
 

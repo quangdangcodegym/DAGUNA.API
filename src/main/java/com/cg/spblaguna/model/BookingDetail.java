@@ -2,8 +2,6 @@ package com.cg.spblaguna.model;
 
 import com.cg.spblaguna.model.dto.res.BookingDetailResDTO;
 import com.cg.spblaguna.model.dto.res.BookingDetailServiceResDTO;
-import com.cg.spblaguna.model.dto.res.BookingServiceResDTO;
-import com.cg.spblaguna.model.enumeration.EBookingStatus;
 import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -12,7 +10,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -95,20 +92,10 @@ public class BookingDetail {
         if (this.roomReal != null) {
             bookingDetailResDTO.setRoomReal(this.roomReal.toRoomRealResDTO());
         }
-
-
         List<BookingDetailServiceResDTO> bookingDetailServiceResDTOS = this.bookingDetailServices.stream()
                 .map(bookingDetailService -> bookingDetailService.toBookingDetailServiceResDTO())
                 .collect(Collectors.toList());
         bookingDetailResDTO.setBookingDetailServiceResDTOS(bookingDetailServiceResDTOS);
-
         return bookingDetailResDTO;
     }
-//    public void setRoomRealId(Long roomRealId) {
-//        if (this.roomReal == null) {
-//            this.roomReal = new RoomReal();
-//        }
-//        this.roomReal.setId(roomRealId);
-//    }
-
 }

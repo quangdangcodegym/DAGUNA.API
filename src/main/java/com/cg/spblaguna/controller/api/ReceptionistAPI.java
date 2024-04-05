@@ -3,9 +3,7 @@ package com.cg.spblaguna.controller.api;
 import com.cg.spblaguna.model.User;
 import com.cg.spblaguna.model.dto.req.ReceptionistReqDTO;
 import com.cg.spblaguna.model.dto.req.SearchBarReceptionistReqDTO;
-import com.cg.spblaguna.model.dto.req.SearchBarRoomReqDTO;
 import com.cg.spblaguna.model.dto.res.ReceptionistResDTO;
-import com.cg.spblaguna.model.dto.res.RoomResDTO;
 import com.cg.spblaguna.model.enumeration.ELockStatus;
 import com.cg.spblaguna.model.enumeration.ERole;
 import com.cg.spblaguna.service.receptionist.IReceptionistService;
@@ -76,7 +74,6 @@ public class ReceptionistAPI {
 //    }
 
     @PutMapping("/{id}")
-//    @PreAuthorize("hasAnyRole('MODIFIER')")
     public ResponseEntity<?> updateReceptionist(@PathVariable Long id, @RequestBody ReceptionistReqDTO receptionistReqDTO) {
         receptionistReqDTO.setId(id);
         return new ResponseEntity<>(receptionistService.update(receptionistReqDTO), HttpStatus.OK);

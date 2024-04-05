@@ -31,7 +31,6 @@ public class ReceptionistServiceImpl implements IReceptionistService {
     private IReceptionistRepository receptionistRepository;
     @Autowired
     private IUserService userService;
-
     @Autowired
     private IImageRepository imageRepository;
 
@@ -64,12 +63,6 @@ public class ReceptionistServiceImpl implements IReceptionistService {
         return user.toReceptionistResDTO();
     }
 
-//    @Override
-//    public Page<User> findUsersByRole(ERole eRole, Pageable pageable) {
-//        return receptionistRepository.findUsersByERole(eRole, pageable);
-//    }
-
-
     @Override
     public Page<ReceptionistResDTO> findReceptionistResDTOByRole(ERole role, Pageable pageable) {
         Page<ReceptionistResDTO> userList = receptionistRepository.findUsersDTOByERole(role, pageable);
@@ -81,7 +74,6 @@ public class ReceptionistServiceImpl implements IReceptionistService {
         });
         return userList;
     }
-
 
     @Override
     public ReceptionistResDTO create(ReceptionistReqDTO receptionistReqDTO) {
@@ -130,8 +122,6 @@ public class ReceptionistServiceImpl implements IReceptionistService {
         return receptionistResDTO;
     }
 
-
-
     @Override
     public Optional<User> findById(Long id) {
         return Optional.empty();
@@ -139,7 +129,6 @@ public class ReceptionistServiceImpl implements IReceptionistService {
 
     @Override
     public User save(User user) {
-
         return user;
     }
 
@@ -151,7 +140,6 @@ public class ReceptionistServiceImpl implements IReceptionistService {
     public void changeUser(User user) {
         receptionistRepository.save(user);
     }
-
 
     public ReceptionistResDTO findReceptionistByIdDTO(Long id) {
         User user = receptionistRepository.findById(id).orElse(null);

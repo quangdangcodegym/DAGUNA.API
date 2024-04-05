@@ -1,9 +1,7 @@
 package com.cg.spblaguna.controller.api;
 
 import com.cg.spblaguna.model.dto.res.ELockResDTO;
-import com.cg.spblaguna.model.dto.res.EMethodResDTO;
 import com.cg.spblaguna.model.enumeration.ELockStatus;
-import com.cg.spblaguna.model.enumeration.EMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;

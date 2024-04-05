@@ -3,12 +3,10 @@ package com.cg.spblaguna.model;
 import com.cg.spblaguna.model.dto.res.CustomerInfoResDTO;
 import com.cg.spblaguna.model.dto.res.ImageResDTO;
 import com.cg.spblaguna.model.dto.res.ReceptionistResDTO;
-import com.cg.spblaguna.model.enumeration.EBookingStatus;
 import com.cg.spblaguna.model.enumeration.ELockStatus;
 import com.cg.spblaguna.model.enumeration.EPrefix;
 import com.cg.spblaguna.model.enumeration.ERole;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,11 +33,8 @@ public class User {
     private String email;
 
     private String password;
-//    @NotEmpty(message = "Tên lễ tân không được trống")
     @Column(name = "receptionist_name")
     private String receptionistName;
-
-
     @Column(name = "prefix")
     @Enumerated(EnumType.STRING)
     private EPrefix ePrefix;
@@ -49,12 +44,8 @@ public class User {
 
     @Column(name = "last_name")
     private String lastName;
-
     private String phone;
-
     private String address;
-
-
     private String country;
 
     @Column(name = "zip_code")
@@ -67,9 +58,6 @@ public class User {
     @Column(name = "deleted", columnDefinition = "boolean default false")
     private Boolean deleted;
 
-
-
-
     @Column(name = "receptionist_info", columnDefinition = "LONGTEXT")
     private String receptionistInfo;
 
@@ -77,13 +65,8 @@ public class User {
     @JoinColumn(name = "cardpayment_id", nullable = true)
     private CardPayment cardPayment;
 
-
-//    @Enumerated(EnumType.STRING)
-//    private EBookingStatus eBookStatubookStatus;
-
     @OneToMany(mappedBy = "user")
     private List<Image> userImages;
-
 
     @Column(name="un_lock")
     private boolean unlock = true;
@@ -95,10 +78,8 @@ public class User {
     @Enumerated(EnumType.STRING)
     private ERole eRole;
 
-
     @OneToMany(mappedBy = "user")
     private List<Booking> bookings;
-
 
     public ReceptionistResDTO toReceptionistResDTO(){
         ReceptionistResDTO receptionistResDTO = new ReceptionistResDTO();
@@ -125,7 +106,6 @@ public class User {
         return receptionistResDTO;
     }
 
-
     public CustomerInfoResDTO toCustomerInfoResDTO(){
 
         CustomerInfoResDTO customerInfoResDTO = new CustomerInfoResDTO();
@@ -144,6 +124,4 @@ public class User {
         customerInfoResDTO.setCvv(this.getCardPayment().getCvv());
         return null;
     }
-
-
 }

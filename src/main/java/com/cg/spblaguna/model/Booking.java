@@ -8,7 +8,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -28,7 +27,6 @@ public class Booking {
     @Column(name = "booking_at")
     private LocalDateTime bookingAt;
 
-
     /**
      * total: is full total_booking_details
      */
@@ -45,7 +43,6 @@ public class Booking {
     @Enumerated(EnumType.STRING)
     @Column(name = "deposited_status")
    private EDepositedStatus depositedStatus;
-
 
     @Column(name = "deleted", columnDefinition = "boolean default false")
     private Boolean deleted;
@@ -64,5 +61,4 @@ public class Booking {
 
     @Column(name = "active", columnDefinition = "boolean default false")
     private Boolean active;
-
 }

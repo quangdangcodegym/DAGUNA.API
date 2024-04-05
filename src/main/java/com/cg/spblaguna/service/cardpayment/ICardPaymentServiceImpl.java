@@ -1,7 +1,6 @@
 package com.cg.spblaguna.service.cardpayment;
 
 import com.cg.spblaguna.model.CardPayment;
-import com.cg.spblaguna.model.User;
 import com.cg.spblaguna.model.enumeration.ECardType;
 import com.cg.spblaguna.repository.ICardPaymentRepository;
 import jakarta.transaction.Transactional;
@@ -30,7 +29,6 @@ public class ICardPaymentServiceImpl implements ICardPaymentService {
     public CardPayment save(CardPayment cardPayment) {
         return cardPaymentRepository.save(cardPayment);
     }
-
 
     @Override
     public void deleteById(Long id) {

@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,22 +32,16 @@ public class RoomServiceImpl implements IRoomService {
     private IRoomRepository roomRepository;
     @Autowired
     private IRoomPagingAndSortingRepository roomPagingAndSortingRepository;
-
     @Autowired
     private IKindOfRoomRepository kindOfRoomRepository;
-
     @Autowired
     private IPerTypeRepository perTypeRepository;
-
     @Autowired
     private IUserRepository userRepository;
-
     @Autowired
     private IRoomRealRepository roomRealRepository;
-
     @Autowired
     private IImageRepository imageRepository;
-
     @Autowired
     private IRoomRealService roomRealService;
 
@@ -64,16 +57,13 @@ public class RoomServiceImpl implements IRoomService {
     public RoomResDTO save(RoomReqDTO roomReqDTO) throws RuntimeException {
         KindOfRoom kindOfRoom = kindOfRoomRepository.findById(roomReqDTO.getKindOfRoomId())
                 .orElseThrow(() -> new ResourceNotFoundException("KindOfRoom not found"));
-
         PerType perType = perTypeRepository.findById(roomReqDTO.getPerTypId())
                 .orElseThrow(() -> new ResourceNotFoundException("PerType not found"));
-
         Room room = new Room(roomReqDTO.getName(), roomReqDTO.getRoomType(),
                 roomReqDTO.getQuantity(), roomReqDTO.getViewType(), roomReqDTO.getPricePerNight(),
                 roomReqDTO.getAcreage(), roomReqDTO.getSleep(), roomReqDTO.getDescription(),
                 roomReqDTO.getUtilitie(), kindOfRoom, perType);
         Room roomUpdated = roomRepository.save(room);
-
         for (int i = 0; i < roomReqDTO.getQuantity(); i++) {
             RoomReal roomReal = new RoomReal();
             roomReal.setRoomId(roomUpdated);
@@ -110,7 +100,6 @@ public class RoomServiceImpl implements IRoomService {
         room.setKindOfRoom(kindOfRoom);
         room.setPerType(perType);
         room.setSleep(roomReqDTO.getSleep());
-
         Room roomUpdated = roomRepository.save(room);
 
         List<Image> images = new ArrayList<>();
@@ -119,36 +108,27 @@ public class RoomServiceImpl implements IRoomService {
             image.setImageType(EImageType.ROOM);
             image.setRoom(roomUpdated);
             imageRepository.save(image);
-
             images.add(image);
         });
-
-        List<RoomReal> roomReals = new ArrayList<>();
-
-
         room.setImages(images);
         return room.toRoomResDto();
     }
 
     public void delete(Long id) {
         Room room = roomRepository.findById(id).get();
-
         List<Image> images = room.getImages();
         imageRepository.deleteAll(images);
-
         roomRepository.delete(room);
     }
 
 
     @Override
     public Room save(Room room) {
-
         return null;
     }
 
     @Override
     public void deleteById(Long id) {
-
     }
 
     public List<Room> findAll() {
@@ -169,7 +149,6 @@ public class RoomServiceImpl implements IRoomService {
         return roomPagingAndSortingRepository.filterRoomsByPrice(kw, eRoomType, minPrice, maxPrice, pagingSort);
 
     }
-
 
     public Page<RoomResDTO> searchBarRoomReqDTO(SearchBarRoomReqDTO searchBarRoomReqDTO, Pageable pageable) {
 //        int actualChildren = (int) Math.ceil((searchBarRoomReqDTO.getGuest().getNumberChildren() + 1) / 2);
@@ -203,7 +182,6 @@ public class RoomServiceImpl implements IRoomService {
 
     }
 
-
     public RoomResDTO findByIdDTO(Long id) {
         Room room = roomRepository.findById(id).orElse(null);
         if (room == null) {
@@ -236,13 +214,11 @@ public class RoomServiceImpl implements IRoomService {
 
             RoomReal roomReal = roomRealRepository.findById(roomRealId).orElseThrow(() -> new RuntimeException("RoomReal not found with id: " + roomRealId));
             roomReal.setStatusRoom((roomRealReqDTO.getStatusRoom()));
-
             roomReal.setRoomCode(roomCode);
             roomReal.setERangeRoom(roomRealReqDTO.getRangeRoom());
             roomReal.setStatusRoom(roomRealReqDTO.getStatusRoom());
             roomReal.setFloor(floor);
             roomReal.setRoomId(room);
-
             roomRealRepository.save(roomReal);
         }
         return new RoomResDTO(room);
@@ -268,7 +244,6 @@ public class RoomServiceImpl implements IRoomService {
 //
 //    }
 
-
     @Override
     public List<RoomFindAvailableRoom> findAvailableRoom(LocalDateTime selectFirstDay, LocalDateTime selectLastDay) {
         try {
@@ -284,9 +259,9 @@ public class RoomServiceImpl implements IRoomService {
     }
 
     @Override
-    public  List<RoomFindAvailableRoom> findAvailableRoomHavePer(LocalDateTime selectFirstDay, LocalDateTime selectLastDay,Long current){
+    public List<RoomFindAvailableRoom> findAvailableRoomHavePer(LocalDateTime selectFirstDay, LocalDateTime selectLastDay, Long current) {
         try {
-            List<RoomFindAvailableRoom> roomReqDTOS = roomRepository.findAvailableRoomHavePer(selectFirstDay, selectLastDay,current);
+            List<RoomFindAvailableRoom> roomReqDTOS = roomRepository.findAvailableRoomHavePer(selectFirstDay, selectLastDay, current);
             if (roomReqDTOS == null || roomReqDTOS.isEmpty()) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "room cannot be null or empty");
             }
@@ -297,16 +272,15 @@ public class RoomServiceImpl implements IRoomService {
         }
     }
 
-
     @Override
-    public Page<RoomResDTO> findAvailableRoomHavePerWithPageable(LocalDateTime selectFirstDay, LocalDateTime selectLastDay,BigDecimal minPrice,BigDecimal maxPrice,
+    public Page<RoomResDTO> findAvailableRoomHavePerWithPageable(LocalDateTime selectFirstDay, LocalDateTime selectLastDay, BigDecimal minPrice, BigDecimal maxPrice,
                                                                  EViewType view,
                                                                  String sort,
                                                                  Long current, Pageable pageable) {
         try {
-            Page<RoomResDTO> romRoomResDTOS = roomRepository.findAvailableRoomHavePerWithPageable(selectFirstDay, selectLastDay,minPrice,maxPrice,view
-                    ,sort
-                    ,current, pageable);
+            Page<RoomResDTO> romRoomResDTOS = roomRepository.findAvailableRoomHavePerWithPageable(selectFirstDay, selectLastDay, minPrice, maxPrice, view
+                    , sort
+                    , current, pageable);
             if (romRoomResDTOS == null || romRoomResDTOS.isEmpty()) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "room cannot be null or empty");
             }
@@ -316,5 +290,4 @@ public class RoomServiceImpl implements IRoomService {
             throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Error: Unexpected exception occurred");
         }
     }
-
 }

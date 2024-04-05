@@ -1,22 +1,16 @@
 package com.cg.spblaguna.controller.api;
 
 import com.cg.spblaguna.model.dto.req.*;
-import com.cg.spblaguna.model.dto.res.BookingDetailResDTO;
 import com.cg.spblaguna.model.dto.res.BookingResDTO;
-import com.cg.spblaguna.model.report.RevenueByMonthDTO;
-import com.cg.spblaguna.model.enumeration.ERoomType;
 import com.cg.spblaguna.service.booking.IBookingService;
-import com.cg.spblaguna.service.cardpayment.ICardPaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/bookings")
@@ -25,8 +19,6 @@ public class BookingAPI {
     @Autowired
     private IBookingService bookingService;
 
-    @Autowired
-    private ICardPaymentService cardPayment;
 
     @GetMapping
     public ResponseEntity<?> getAllBooking() {
