@@ -70,9 +70,9 @@ public class BookingDetail {
     @Column(name = "number_adult")
     private Integer numberAdult;
 
-    @Column(name = "children_age", columnDefinition = "json", nullable = false)
+    @Column(name = "children_ages", columnDefinition = "json", nullable = false)
     @Type(JsonType.class)
-    private String childrenAge;
+    private String childrenAges;
 
     @Column(name = "discount_code")
     private String discountCode;
@@ -86,7 +86,7 @@ public class BookingDetail {
         bookingDetailResDTO.setCheckOut(this.getCheckOut());
         bookingDetailResDTO.setCheckIn(this.getCheckIn());
         bookingDetailResDTO.setNumberAdult(this.getNumberAdult());
-        bookingDetailResDTO.setChildrenAge(this.getChildrenAge());
+        bookingDetailResDTO.setChildrenAges(this.getChildrenAges());
         bookingDetailResDTO.setTotalAmount(this.getTotalAmount());
         bookingDetailResDTO.setTotal(this.getTotal());
         bookingDetailResDTO.setVat(this.getVat());
