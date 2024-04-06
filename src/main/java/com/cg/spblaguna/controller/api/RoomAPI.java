@@ -216,6 +216,7 @@ public class RoomAPI {
        LocalDateTime selectFirstDay = roomFindForCheckInAndCheckOutReqDTO.getSelectFirstDay();
         LocalDateTime selectLastDay = roomFindForCheckInAndCheckOutReqDTO.getSelectLastDay();
 
+        System.out.println(selectFirstDay);
         Page<RoomResDTO> roomResDTOPage = roomService.findAvailableRoomHavePerWithPageable(selectFirstDay, selectLastDay, minPrice, maxPrice, view,
                 sort,
                 current, pageable);
