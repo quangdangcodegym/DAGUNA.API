@@ -17,6 +17,7 @@ import com.cg.spblaguna.service.cardpayment.ICardPaymentService;
 import com.cg.spblaguna.service.user.IUserService;
 import com.cg.spblaguna.util.AppUtils;
 import com.cg.spblaguna.util.EmailUtil;
+import jakarta.persistence.OneToMany;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,6 +29,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -42,6 +44,7 @@ public class BookingServiceImpl implements IBookingService {
     private Float vatBookingDetail;
     @Value("13.4")
     private Float vatBookingDetailService;
+
 
     @Autowired
     private IBookingRepository bookingRepository;
@@ -67,7 +70,7 @@ public class BookingServiceImpl implements IBookingService {
     @Autowired
     private EmailUtil emailUtil;
 
-    @Autowired
+
     private ICardPaymentService cardPaymentService;
 
     @Autowired
@@ -127,11 +130,14 @@ public class BookingServiceImpl implements IBookingService {
 
         bookingRepository.save(booking);
 
+
         // Lưu booking detail
         BookingDetail bookingDetail = new BookingDetail();
         bookingDetail.setCheckIn(bookingReqCreDTO.getBookingDetail().getCheckIn());
         bookingDetail.setCheckOut(bookingReqCreDTO.getBookingDetail().getCheckOut());
         bookingDetail.setCheckInStatus(true);
+
+
 
         Room room = roomRepository.findById(bookingReqCreDTO.getBookingDetail().getRoomId()).get();
         bookingDetail.setRoom(room);
@@ -140,19 +146,21 @@ public class BookingServiceImpl implements IBookingService {
 
         bookingDetail.setNumberAdult(bookingReqCreDTO.getBookingDetail().getNumberAdult());
 
-
         if (bookingReqCreDTO.getBookingDetail().getChildrenAges() == null) {
             bookingDetail.setChildrenAges("[]");
         } else {
             bookingDetail.setChildrenAges(bookingReqCreDTO.getBookingDetail().getChildrenAges());
         }
 
+        long totalDays = ChronoUnit.DAYS.between(bookingDetail.getCheckIn(), bookingDetail.getCheckOut());
+
         bookingDetail.setDiscountCode(bookingReqCreDTO.getBookingDetail().getDiscountCode());
-        bookingDetail.setTotalAmount(appUtils.calculateVAT(bookingDetail.getPrice(), vatBookingDetail));
+        bookingDetail.setTotalAmount(appUtils.calculateVAT(bookingDetail.getPrice(), vatBookingDetail).multiply(new BigDecimal(totalDays)));
+
         bookingDetail.setVat(new BigDecimal(vatBookingDetail));
 
         BigDecimal money = room.getPricePerNight();
-        bookingDetail.setTotal(appUtils.calculateVAT(money, vatBookingDetail));
+        bookingDetail.setTotal(bookingDetail.getTotalAmount());
 
         bookingDetailRepository.save(bookingDetail);
 
@@ -219,10 +227,6 @@ public class BookingServiceImpl implements IBookingService {
             total = total.add(bds.getTotal());
         }
         BigDecimal moneyBookingDetail = bookingDetail.getTotalAmount();
-
-        BigDecimal moneyVatBookingDetail = appUtils.calculateVAT(moneyBookingDetail, vatBookingDetail);
-
-        bookingDetail.setTotal(moneyVatBookingDetail.add(total));
         bookingDetail.setTotal(moneyBookingDetail.add(total));
         bookingDetailRepository.save(bookingDetail);
 
@@ -249,11 +253,13 @@ public class BookingServiceImpl implements IBookingService {
         return bookingResDTO;
     }
 
+
     @Override
     public BookingResDTO editBookingReqUpdate_BookingServiceEditDTO(BookingReqUpdate_BookingServiceCreUpdateDTO bookingReqUpdateBookingServiceCreUpdateDTO) {
         BookingDetail bookingDetail = bookingDetailRepository.findById(bookingReqUpdateBookingServiceCreUpdateDTO.getBookingDetailId()).get();
         BookingService bookingService = bookingServiceRepository.findById(bookingReqUpdateBookingServiceCreUpdateDTO.getBookingServiceId()).get();
         List<BookingDetailService> bookingDetailServices = bookingDetailServiceRepository.findBookingDetailServiceByBookingDetail_Id(bookingDetail.getId());
+
 
         boolean checkExists = checkBookingServiceIdExistsBookingDetailService(bookingDetailServices, bookingReqUpdateBookingServiceCreUpdateDTO.getBookingServiceId());
 
@@ -279,6 +285,8 @@ public class BookingServiceImpl implements IBookingService {
 
             bookingDetailServiceRepository.save(bookingDetailService);
         }
+
+
         bookingDetailServices = bookingDetailServiceRepository
                 .findBookingDetailServiceByBookingDetail_Id(bookingDetail.getId());
         BigDecimal total = new BigDecimal(0);
@@ -287,7 +295,6 @@ public class BookingServiceImpl implements IBookingService {
         }
 
         BigDecimal moneyBookingDetail = bookingDetail.getTotalAmount();
-
 
         bookingDetail.setTotal(moneyBookingDetail.add(total));
         bookingDetailRepository.save(bookingDetail);
@@ -385,13 +392,15 @@ public class BookingServiceImpl implements IBookingService {
             } else {
                 bookingDetail.setChildrenAges(bookingReqUpdateRoomAddDTO.getBookingDetail().getChildrenAges());
             }
+            long totalDays = ChronoUnit.DAYS.between(bookingDetail.getCheckIn(), bookingDetail.getCheckOut());
             bookingDetail.setDiscountCode(bookingReqUpdateRoomAddDTO.getBookingDetail().getDiscountCode());
-            bookingDetail.setTotalAmount(room.getPricePerNight());
+            bookingDetail.setTotalAmount(appUtils.calculateVAT(bookingDetail.getPrice(), vatBookingDetail).multiply(new BigDecimal(totalDays)));
             bookingDetail.setVat(new BigDecimal(vatBookingDetail));
             bookingDetail.setPrice(room.getPricePerNight());
-            bookingDetail.setTotal(room.getPricePerNight().add(room.getPricePerNight().multiply(new BigDecimal(vatBookingDetail)).divide(new BigDecimal(100))));
+            bookingDetail.setTotal(bookingDetail.getTotalAmount());
 
             bookingDetailRepository.save(bookingDetail);
+
 
             BigDecimal totalBookingDetail = BigDecimal.ZERO;
             List<BookingDetail> bookingDetailss = bookingDetailRepository.findBookingDetailsByBooking_Id(booking.getId());
@@ -406,8 +415,11 @@ public class BookingServiceImpl implements IBookingService {
         } else {
             throw new ResourceExistsException("Room is exists in Booking");
         }
+
         bookingDetails = bookingDetailRepository.findBookingDetailsByBooking_Id(booking.getId());
 
+
+        //
         BookingResDTO bookingResDTO = new BookingResDTO();
         bookingResDTO.setBookingId(booking.getId());
         List<BookingDetailResDTO> bookingDetailResDTOS = bookingDetails.stream()
@@ -424,6 +436,7 @@ public class BookingServiceImpl implements IBookingService {
         Booking booking = bookingRepository.findById(bookingReqUpdateRoomAddDTO.getBookingId()).get();
 
         List<BookingDetail> bookingDetails = bookingDetailRepository.findBookingDetailsByBooking_Id(booking.getId());
+
         // Tìm kiếm và cập nhật thông tin BookingDetail
         for (BookingDetail bookingDetail : bookingDetails) {
             if (!bookingDetail.getRoom().getId().equals(bookingReqUpdateRoomAddDTO.getBookingDetail().getRoomId())) {
@@ -435,6 +448,7 @@ public class BookingServiceImpl implements IBookingService {
 
                 // Lấy phòng mới từ ID
                 Room newRoom = roomRepository.findById(bookingReqUpdateRoomAddDTO.getBookingDetail().getRoomId()).get();
+
                 // Cập nhật thông tin cho BookingDetail
                 bookingDetail.setRoom(newRoom);
                 bookingDetail.setCheckIn(bookingReqUpdateRoomAddDTO.getBookingDetail().getCheckIn());
@@ -452,8 +466,8 @@ public class BookingServiceImpl implements IBookingService {
                     bookingDetail.setChildrenAges(bookingReqUpdateRoomAddDTO.getBookingDetail().getChildrenAges());
                 }
 
-
-                bookingDetail.setTotalAmount(appUtils.calculateVAT(bookingDetail.getPrice(), vatBookingDetail));
+                long totalDays = ChronoUnit.DAYS.between(bookingDetail.getCheckIn(), bookingDetail.getCheckOut());
+                bookingDetail.setTotalAmount(appUtils.calculateVAT(bookingDetail.getPrice(), vatBookingDetail).multiply(new BigDecimal(totalDays)));
                 bookingDetail.setVat(new BigDecimal(vatBookingDetail));
 
                 bookingDetail.setTotal(bookingDetail.getTotalAmount());
@@ -564,8 +578,10 @@ public class BookingServiceImpl implements IBookingService {
             user.setCountry(bookingReqUpdateCustomerDTO.getCountry());
             user.setEPrefix(bookingReqUpdateCustomerDTO.getEPrefix());
 
+
             userService.save(user);
         }
+
 
         List<BookingDetail> bookingDetails = bookingDetailRepository.findBookingDetailsByBooking_Id(bookingReqUpdateCustomerDTO.getBookingId());
         BookingResDTO bookingResDTO = new BookingResDTO();
@@ -574,6 +590,7 @@ public class BookingServiceImpl implements IBookingService {
                 .map(BookingDetail::toBookingDetailResDTO)
                 .collect(Collectors.toList());
         bookingResDTO.setBookingDetails(bookingDetailResDTOS);
+
         bookingResDTO.setCustomerInfo(user.toCustomerInfoResDTO());
         return null;
     }
@@ -598,6 +615,7 @@ public class BookingServiceImpl implements IBookingService {
         payment.setTransferId(payment.getTransferId());
         paymentRepository.save(payment);
 
+
         // Cập nhật thông tin trong Booking
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new RuntimeException("Booking not found"));
@@ -620,6 +638,7 @@ public class BookingServiceImpl implements IBookingService {
         booking.setDepositedStatus(EDepositedStatus.ACCOMPLISHED);
         booking.setBookingStatus(EBookingStatus.DEPOSITED);
         bookingRepository.save(booking);
+
     }
 
 
@@ -627,6 +646,7 @@ public class BookingServiceImpl implements IBookingService {
     public void updateBooking_Complete(Long bookingId) {
         Booking booking = bookingRepository.findById(bookingId).get();
         booking.setActive(true);
+
         bookingRepository.save(booking);
 
         String emailContent = "" +
@@ -652,13 +672,13 @@ public class BookingServiceImpl implements IBookingService {
                 "                    style=\"font-size:12.0pt;font-family:Arial,sans-serif;color:black\"><u></u><u></u></span>\n" +
                 "            </p>\n" +
                 "            <p style=\"margin:0in;margin-bottom:.0001pt;text-align:justify\"><span\n" +
-                "                    style=\"font-size:12.0pt;font-family:Arial,sans-serif;color:black\">Cảm ơn Anh và gia đình\n" +
+                "                    style=\"font-size:12.0pt;font-family:Arial,sans-serif;color:black\">Cảm ơn chị và gia đình\n" +
                 "                    đã lựa chọn Daguna resort &amp; spa cho kỳ nghỉ.<u></u><u></u></span></p>\n" +
                 "            <p style=\"margin:0in;margin-bottom:.0001pt;text-align:justify\"><span\n" +
                 "                    style=\"font-size:12.0pt;font-family:Arial,sans-serif;color:black\">&nbsp;<u></u><u></u></span>\n" +
                 "            </p>\n" +
                 "            <p style=\"margin:0in;margin-bottom:.0001pt;text-align:justify\"><span\n" +
-                "                    style=\"font-size:12.0pt;font-family:Arial,sans-serif;color:black\">Như trao đổi với Anh\n" +
+                "                    style=\"font-size:12.0pt;font-family:Arial,sans-serif;color:black\">Như trao đổi với chị\n" +
                 "                    qua Facebook, em gửi <b>xác nhận đặt phòng </b>như bên dưới:<u></u><u></u></span></p>\n" +
                 "            <p style=\"margin:0in;margin-bottom:.0001pt;text-align:justify\"><span\n" +
                 "                    style=\"font-size:12.0pt;font-family:Arial,sans-serif;color:black\">&nbsp;<br><b>Tên\n" +
@@ -989,6 +1009,7 @@ public class BookingServiceImpl implements IBookingService {
         } catch (Exception e) {
             e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Error: Unexpected exception occurred");
+
         }
     }
 }
